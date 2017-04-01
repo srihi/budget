@@ -50,7 +50,7 @@ public class CategoryManagementActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(R.string.categories_string);
+        toolbar.setTitle(getResources().getString(R.string.categories_string));
         setSupportActionBar(toolbar);
         //display back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

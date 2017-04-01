@@ -79,6 +79,7 @@ public class CategoryExpenseFragment extends Fragment {
                         //add the category in database
                         Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(),etAddLibelleCategorie.getText().toString(),false);
                         databaseHandler.addCategory(categoryToAdd);
+                        categoriesExpenseAdapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.annuler), new DialogInterface.OnClickListener() {

@@ -78,6 +78,7 @@ public class CategoryIncomeFragment extends Fragment {
                         //add the category in database
                         Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(),etAddLibelleCategorie.getText().toString(),true);
                         databaseHandler.addCategory(categoryToAdd);
+                        categoriesIncomeAdapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.annuler), new DialogInterface.OnClickListener() {

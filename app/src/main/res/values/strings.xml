@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Budget</string>
+
+    <string name="UnknownUser">Utilisateur inconnu</string>
+    <!-- navigation view -->
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+
+    <!-- view pager -->
+    <string name="depenses">Dépenses</string>
+    <string name="revenus">Revenus</string>
+    <string name="statistiques">Statistiques</string>
+
+    <!-- titles -->
+    <string name="settings_string">Réglages</string>
+    <string name="categories_string">Gestion des catégories</string>
+    <string name="save_and_restore_string">Sauvegarder &amp; restaurer</string>
+    <string name="category_expense">Catégories dépenses</string>
+    <string name="category_income">Catégories revenus</string>
+    <string name="details">Détails</string>
+
+    <!-- activity_category_management -->
+    <string name="tvCategories_revenus">Catégories revenus : </string>
+    <string name="tvCategories_depenses">Catégories dépenses : </string>
+    <string name="ajouter_categorie">Ajouter une catégorie : </string>
+
+    <!-- alert_dialog -->
+    <string name="confirmer">Confirmer </string>
+    <string name="annuler">Annuler </string>
+
+    <!-- alert_dialog_add_category -->
+    <string name="tvLibelle">Libellé : </string>
+    <string name="rbDepense">Dépense </string>
+    <string name="rbRevenu">Revenu </string>
+
+    <!-- alert_dialog_add_amount & income -->
+    <string name="tvCategorie">Catégorie : </string>
+    <string name="tvMontant">Montant : </string>
+    <string name="facultatif">(facultatif) </string>
+    <string name="tvJour">Jour : </string>
+
+    <!-- alert_dialog_update_category-->
+    <string name="tvNouveauLibelle">Nouveau libellé : </string>
+
+    <!-- fragment_statistic-->
+    <string name="tvLiquidites">Liquidités : </string>
+    <string name="tvPourcentage">Pourcentage du revenu dépensé : </string>
+    <string name="pourcentage"> %1$s %%</string>
+    <string name="tvDepensesTotales">Dépenses totales : </string>
+    <string name="tvRevenuTotal">Revenu total : </string>
+
+    <!-- fragment_expense-->
+    <string name="tvDepensesTotalesWithMontant">Dépenses totales : %1$s €</string>
+
+    <!-- fragment_income-->
+    <string name="tvRevenuTotalWithMontant">Revenu total : %1$s €</string>
+
+    <!-- row_category -->
+    <string name="imageCategorie">Image catégorie</string>
+
+    <!-- CategoriesAdapter -->
+    <string name="amount">%1$s €</string>
+
+    <!-- Depense & RevenuAdapter -->
+    <string name="date">le %1$d/%2$d/%3$d</string>
+
+    <string name="devise">€</string>
+
+    <!-- -->
+    <string name="error">Error</string>
+
+    <!-- Months -->
+
+    <string name="january"> Janvier </string>
+    <string name="february"> Février </string>
+    <string name="march"> Mars </string>
+    <string name="april"> Avril </string>
+    <string name="may"> Mai </string>
+    <string name="june"> Juin </string>
+    <string name="july"> Juillet </string>
+    <string name="august"> Août </string>
+    <string name="september"> Septembre </string>
+    <string name="october"> Octobre </string>
+    <string name="november"> Novembre </string>
+    <string name="december"> Décembre </string>
+
+
+
+    <string name="preferences_backup_google_drive">Google Drive</string>
+    <string name="title_activity_backup_drive">Google Drive Backup</string>
+    <string name="activity_main_dialog_backup_export_title">Backup &amp; Export</string>
+    <string name="sidebar_backup_export">Backup &amp; Export</string>
+    <string name="menu_backup_backup">Backup on Google Drive</string>
+    <string name="menu_backup_restore">Restore</string>
+    <string name="menu_backup_csv">CSV export</string>
+    <string name="activity_backup_drive_automatic">Automatic budgetBackup</string>
+    <string name="activity_backup_drive_desc">Backing up your data to Google Drive allows you to restore all your readings in case you lose or change devices.</string>
+    <string name="activity_backup_drive_message_restart">Restarting to apply changes...</string>
+    <string name="activity_backup_drive_desc_1">Sync Glucosio\'s database in the cloud with Google Drive.</string>
+    <string name="activity_backup_drive_desc_2">You\'ll be able to restore all your readings if you lost or change phone or sync Glucosio\'s data between your devices.</string>
+    <string name="activity_backup_drive_success">Database successfully backed up to Drive</string>
+    <string name="activity_backup_drive_restore_success">Successfully restored database from Drive</string>
+    <string name="activity_backup_drive_failed">Something went wrong. Please try again :/</string>
+    <string name="activity_backup_drive_last">Last budgetBackup:</string>
+    <string name="activity_backup_drive_folder">Backup folder</string>
+    <string name="activity_backup_drive_folder_not_set">Not set</string>
+    <string name="activity_backup_drive_button_backup">Backup now</string>
+    <string name="activity_backup_drive_recent">Recent backups</string>
+    <string name="activity_backup_drive_more">See more Backups</string>
+    <string name="activity_backup_drive_dialog_restore_title">Revert to previous version</string>
+    <string name="activity_backup_drive_dialog_restore_desc">Restoring the budgetBackup will overwrite all the existing data with the budgetBackup.</string>
+    <string name="activity_backup_drive_dialog_restore_details">Backup details</string>
+    <string name="activity_backup_drive_dialog_restore_button_cancel">Cancel</string>
+    <string name="activity_backup_drive_dialog_restore_button_restore">Restore budgetBackup</string>
+    <string name="activity_backup_drive_button_restore">Restore from Drive</string>
+    <string name="activity_backup_drive_error_restore">Unable to find a valid budgetBackup to restore from Drive</string>
+    <string name="activity_backup_drive_button_open_drive">Manage on Drive</string>
+</resources>

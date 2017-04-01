@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/row_amount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/row_amount_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/row_amount_label"
+        android:layout_below="@+id/row_amount_label"
+        />
+
+    <TextView
+        android:id="@+id/row_amount_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/row_amount_amount"
+        android:layout_below="@+id/row_amount_label"
+        android:layout_marginStart="10dp"
+        />
+
+    <Button
+        android:id="@+id/row_amount_delete"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/ic_delete"
+        android:backgroundTint="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/row_amount_update"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@id/row_amount_delete"
+        android:background="@drawable/ic_edit"
+        android:backgroundTint="@color/PrimaryColor" />
+
+</RelativeLayout>

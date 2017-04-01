@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.benjamin.ledet.budget"  >
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".BudgetApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_attach_money"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name="com.benjamin.ledet.budget.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.SettingActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,5 +1,6 @@
 package com.benjamin.ledet.budget.activity;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,25 +10,23 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.FormatDateTime;
+import com.benjamin.ledet.budget.adapter.BackupArrayAdapter;
 import com.benjamin.ledet.budget.backup.Backup;
 import com.benjamin.ledet.budget.model.BudgetBackup;
+import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -44,6 +43,8 @@ import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
+import com.google.android.gms.drive.query.SortOrder;
+import com.google.android.gms.drive.query.SortableField;
 import com.google.firebase.crash.FirebaseCrash;
 
 import java.io.Closeable;
@@ -54,6 +55,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -61,114 +63,99 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 
 /**
- * Created by benjamin on 02/04/2017.
+ * Created by benjaminledet on 15/03/2017.
  */
 
-public class BackupActivity extends AppCompatActivity {
+public class BackupDriveActivity extends AppCompatActivity {
 
-    @BindView(R.id.cl_activity_backup)
-    CoordinatorLayout clPrincipal;
+    private static final int REQUEST_CODE_PICKER = 2;
+    private static final int REQUEST_CODE_PICKER_FOLDER = 4;
+
+    private static final String TAG = "budget_drive_backup";
+    private static final String BACKUP_FOLDER_KEY = "backup_folder";
+
+    private Backup backup;
+    private GoogleApiClient mGoogleApiClient;
+    private TextView folderTextView;
+    private IntentSender intentPicker;
+    private Realm realm;
+    private String backupFolder;
+    private ExpandableHeightListView backupListView;
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.rl_backup)
-    RelativeLayout rlBackup;
-
-    @BindView(R.id.rl_restore)
-    RelativeLayout rlRestore;
-
-    @BindView(R.id.bt_backup_folder)
-    Button btFolder;
-
-    @BindView(R.id.tv_backup_folder_description)
-    TextView tvFolder;
-
-    @BindView(R.id.switch_backup)
-    Switch aSwitch;
-
-    @BindView(R.id.tv_last_backup_description)
-    TextView tvLastBackup;
-
-    private static final String TAG = "budget_drive_backup";
-
-    private Backup backup;
-    private BudgetBackup budgetBackup;
-    private GoogleApiClient mGoogleApiClient;
-    private IntentSender intentPicker;
-    private Realm realm;
-    private String backupFolder;
-    private SharedPreferences sharedPreferences;
-
-    //return to the previous activity
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //Snackbar snackbar = Snackbar.make(clPrincipal , "test" , Snackbar.LENGTH_SHORT);
-    //snackbar.getView().setBackgroundColor(ContextCompat.getColor(v.getContext(),R.color.PrimaryColor));
-    //snackbar.show();
+    private SharedPreferences sharedPref;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_backup);
+        setContentView(R.layout.activity_backup_drive);
 
         ButterKnife.bind(this);
+
+        BudgetApplication budgetApplication = (BudgetApplication) getApplicationContext();
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        realm = budgetApplication.getDBHandler().getRealmInstance();
 
         //display toolbar
         toolbar.setTitle(getResources().getString(R.string.save_and_restore_string));
         setSupportActionBar(toolbar);
+
         //display back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BudgetApplication budgetApplication = (BudgetApplication) getApplicationContext();
-        realm = budgetApplication.getDBHandler().getRealmInstance();
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         backup = budgetApplication.getBackup();
         backup.init(this);
-        backup.start();
+        connectClient();
         mGoogleApiClient = backup.getClient();
 
-        btFolder.setOnClickListener(new View.OnClickListener() {
+        Button backupButton = (Button) findViewById(R.id.activity_backup_drive_button_backup);
+        TextView manageButton = (TextView) findViewById(R.id.activity_backup_drive_button_manage_drive);
+        folderTextView = (TextView) findViewById(R.id.activity_backup_drive_textview_folder);
+        LinearLayout selectFolderButton = (LinearLayout) findViewById(R.id.activity_backup_drive_button_folder);
+        backupListView = (ExpandableHeightListView) findViewById(R.id.activity_backup_drive_listview_restore);
+
+        backupListView.setExpanded(true);
+
+        backupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFolderPicker();
-
+                // Open Folder picker, then upload the file on Drive
+                openFolderPicker(true);
             }
         });
 
-        rlBackup.setOnClickListener(new View.OnClickListener() {
+        selectFolderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadToDrive(DriveId.decodeFromString(backupFolder));
+                // Check first if a folder is already selected
+                if (!"".equals(backupFolder)) {
+                    //Start the picker to choose a folder
+                    //False because we don't want to upload the backup on drive then
+                    openFolderPicker(false);
+                }
             }
         });
 
-
-        rlRestore.setOnClickListener(new View.OnClickListener() {
+        manageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openOnDrive(DriveId.decodeFromString(backupFolder));
             }
         });
 
         // Show backup folder, if exists
-        backupFolder = sharedPreferences.getString("backup_folder", "");
+        backupFolder = sharedPref.getString(BACKUP_FOLDER_KEY, "");
         if (!("").equals(backupFolder)) {
             setBackupFolderTitle(DriveId.decodeFromString(backupFolder));
-            btFolder.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.PrimaryColor));
-            findBackupFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
+            manageButton.setVisibility(View.VISIBLE);
         }
 
+        // Populate backup list
+        if (!("").equals(backupFolder)) {
+            getBackupsFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
+        }
     }
 
     private void setBackupFolderTitle(DriveId id) {
@@ -181,25 +168,46 @@ public class BackupActivity extends AppCompatActivity {
                             return;
                         }
                         Metadata metadata = result.getMetadata();
-                        tvFolder.setText(metadata.getTitle());
+                        folderTextView.setText(metadata.getTitle());
                     }
                 }
         );
     }
 
-    private void openFolderPicker() {
-        try {
-            intentPicker = null;
-            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-                if (intentPicker == null)
-                    intentPicker = buildIntent();
-                //Start the picker to choose a folder
-                startIntentSenderForResult(
-                        intentPicker, 4, null, 0, 0, 0);
+    private void openFolderPicker(boolean uploadToDrive) {
+        if (uploadToDrive) {
+            // First we check if a backup folder is set
+            if (TextUtils.isEmpty(backupFolder)) {
+                try {
+                    if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                        Log.e("test", 4 + "");
+                        if (intentPicker == null)
+                            intentPicker = buildIntent();
+                        //Start the picker to choose a folder
+                        startIntentSenderForResult(
+                                intentPicker, REQUEST_CODE_PICKER, null, 0, 0, 0);
+                    }
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(TAG, "Unable to send intent", e);
+                    showErrorDialog();
+                }
+            } else {
+                uploadToDrive(DriveId.decodeFromString(backupFolder));
             }
-        } catch (IntentSender.SendIntentException e) {
-            Log.e(TAG, "Unable to send intent", e);
-            showErrorDialog();
+        } else {
+            try {
+                intentPicker = null;
+                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                    if (intentPicker == null)
+                        intentPicker = buildIntent();
+                    //Start the picker to choose a folder
+                    startIntentSenderForResult(
+                            intentPicker, REQUEST_CODE_PICKER_FOLDER, null, 0, 0, 0);
+                }
+            } catch (IntentSender.SendIntentException e) {
+                Log.e(TAG, "Unable to send intent", e);
+                showErrorDialog();
+            }
         }
     }
 
@@ -210,59 +218,34 @@ public class BackupActivity extends AppCompatActivity {
                 .build(mGoogleApiClient);
     }
 
-    private void findBackupFromDrive(DriveFolder folder){
+    private void getBackupsFromDrive(DriveFolder folder) {
+        final Activity activity = this;
+        SortOrder sortOrder = new SortOrder.Builder()
+                .addSortDescending(SortableField.MODIFIED_DATE).build();
         Query query = new Query.Builder()
                 .addFilter(Filters.eq(SearchableField.TITLE, "budget.realm"))
                 .addFilter(Filters.eq(SearchableField.TRASHED, false))
+                .setSortOrder(sortOrder)
                 .build();
-
         folder.queryChildren(mGoogleApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+
+                    private ArrayList<BudgetBackup> backupsArray = new ArrayList<>();
 
                     @Override
                     public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         MetadataBuffer buffer = result.getMetadataBuffer();
-                        BudgetBackup budgetBackup = null;
-                        if (buffer.getCount() != 0){
-                            Metadata metadata = buffer.get(0);
+                        int size = buffer.getCount();
+                        for (int i = 0; i < size; i++) {
+                            Metadata metadata = buffer.get(i);
                             DriveId driveId = metadata.getDriveId();
                             Date modifiedDate = metadata.getModifiedDate();
                             long backupSize = metadata.getFileSize();
-                            budgetBackup = new BudgetBackup(driveId, modifiedDate, backupSize);
+                            backupsArray.add(new BudgetBackup(driveId, modifiedDate, backupSize));
                         }
-                        setBackupFile(budgetBackup);
-                        if (budgetBackup != null){
-                            setTvLastBackup();
-                        }
-
+                        backupListView.setAdapter(new BackupArrayAdapter(activity, R.layout.activity_backup_drive_restore_item, backupsArray));
                     }
                 });
-    }
-
-    private void setBackupFile(BudgetBackup budgetBackup){
-        this.budgetBackup = budgetBackup;
-    }
-
-    private void deleteBackupFromDrive(DriveFolder folder){
-        Query query = new Query.Builder()
-                .addFilter(Filters.eq(SearchableField.TITLE, "budget.realm"))
-                .addFilter(Filters.eq(SearchableField.TRASHED, false))
-                .build();
-
-        folder.queryChildren(mGoogleApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        MetadataBuffer buffer = result.getMetadataBuffer();
-                        buffer.get(0).getDriveId().asDriveFile().delete(mGoogleApiClient);
-                    }
-                });
-    }
-
-    private void setTvLastBackup(){
-        FormatDateTime formatDateTime = new FormatDateTime(this);
-        tvLastBackup.setText("Le " + formatDateTime.formatDate(budgetBackup.getModifiedDate()));
     }
 
     public void downloadFromDrive(DriveFile file) {
@@ -359,7 +342,7 @@ public class BackupActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                    final byte[] buf = new byte[1024];
+                                    byte[] buf = new byte[1024];
                                     int bytesRead;
                                     try {
                                         if (inputStream != null) {
@@ -373,9 +356,6 @@ public class BackupActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                    if (budgetBackup != null){
-                                        deleteBackupFromDrive(folder);
-                                    }
 
                                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                                             .setTitle("budget.realm")
@@ -393,11 +373,8 @@ public class BackupActivity extends AppCompatActivity {
                                                         finish();
                                                         return;
                                                     }
-                                                    // Restart activity to apply changes
-                                                    Intent intent = getIntent();
-                                                    finish();
-                                                    startActivity(intent);
                                                     showSuccessDialog();
+                                                    finish();
                                                 }
                                             });
                                 }
@@ -482,8 +459,8 @@ public class BackupActivity extends AppCompatActivity {
     }
 
     private void saveBackupFolder(String folderPath) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("backup_folder", folderPath);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(BACKUP_FOLDER_KEY, folderPath);
         editor.apply();
     }
 
@@ -499,4 +476,18 @@ public class BackupActivity extends AppCompatActivity {
         FirebaseCrash.log(message);
         FirebaseCrash.report(e);
     }
+
+    public void connectClient() {
+        backup.start();
+    }
+
+    public void disconnectClient() {
+        backup.stop();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
+    }
+
 }

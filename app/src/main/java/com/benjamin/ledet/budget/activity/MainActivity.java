@@ -18,13 +18,14 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.TextView;
+
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
-import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
+import com.benjamin.ledet.budget.model.Month;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -32,8 +33,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -73,13 +76,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private int actualYear = calendar.get(Calendar.YEAR);
     private int actualMonth = calendar.get(Calendar.MONTH) + 1;
     private DatabaseHandler databaseHandler;
+    private BudgetApplication application;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BudgetApplication application = (BudgetApplication) getApplication();
+        application = (BudgetApplication) getApplication();
 
         setContentView(R.layout.activity_main);
 

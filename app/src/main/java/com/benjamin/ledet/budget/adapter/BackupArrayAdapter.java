@@ -13,8 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.FormatDateTime;
+import com.benjamin.ledet.budget.activity.BackupDriveActivity;
 import com.benjamin.ledet.budget.model.BudgetBackup;
-import com.benjamin.ledet.budget.activity.BackupActivity;
 import com.google.android.gms.drive.DriveId;
 
 
@@ -58,7 +58,7 @@ public class BackupArrayAdapter extends ArrayAdapter<BudgetBackup> {
                 public void onClick(View v) {
                     // Show custom dialog
                     final Dialog dialog = new Dialog(context);
-                    dialog.setContentView(R.layout.dialog_backup_restore);
+                    dialog.setContentView(R.layout.alert_dialog_backup_restore);
                     TextView createdTextView = (TextView) dialog.findViewById(R.id.dialog_backup_restore_created);
                     TextView sizeTextView = (TextView) dialog.findViewById(R.id.dialog_backup_restore_size);
                     Button restoreButton = (Button) dialog.findViewById(R.id.dialog_backup_restore_button_restore);
@@ -70,7 +70,7 @@ public class BackupArrayAdapter extends ArrayAdapter<BudgetBackup> {
                     restoreButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((BackupActivity) context).downloadFromDrive(driveId.asDriveFile());
+                            ((BackupDriveActivity) context).downloadFromDrive(driveId.asDriveFile());
                         }
                     });
 

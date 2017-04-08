@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cl_activity_backup">
+
+        <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.v7.widget.Toolbar
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_main_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:background="@color/PrimaryColor" />
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="?attr/actionBarSize">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tv_backup_folder_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Dossier de sauvegarde"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_backup_folder_description"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tv_backup_folder_label"
+                    android:layout_below="@+id/tv_backup_folder_label"
+                    android:paddingStart="10dp"
+                    android:text="Sélectionnez le dossier de sauvegarde de votre drive." />
+
+                <Button
+                    android:id="@+id/bt_backup_folder"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/tv_backup_folder_label"
+                    android:background="@drawable/ic_folder"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:paddingBottom="25dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="25dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:id="@+id/rl_backup"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tv_backup_now_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Sauvegarder maintenant"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_backup_now_description"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tv_backup_now_label"
+                    android:layout_below="@+id/tv_backup_now_label"
+                    android:paddingStart="10dp"
+                    android:text="Sauvegarde immédiatement les données." />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tv_backup_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Sauvegarde automatique"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_backup_description"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tv_backup_label"
+                    android:layout_below="@+id/tv_backup_label"
+                    android:paddingStart="10dp"
+                    android:text="Vos données seront sauvegardées automatiquement tous les jours dans votre dossier." />
+
+                <Switch
+                    android:id="@+id/switch_backup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingBottom="25dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="25dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tv_last_backup_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Dernière sauvegarde"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_last_backup_description"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tv_last_backup_label"
+                android:layout_below="@+id/tv_last_backup_label"
+                android:paddingStart="10dp"
+                android:text="Aucune sauvegarde trouvée" />
+
+            </RelativeLayout>
+
+            <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:id="@+id/rl_restore"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tv_restore_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Restaurer"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_restore_description"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tv_restore_label"
+                    android:layout_below="@+id/tv_restore_label"
+                    android:paddingStart="10dp"
+                    android:text="Restaure les données." />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.DrawerLayout>

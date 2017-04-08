@@ -147,7 +147,7 @@ public class ExpenseFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //get the month from the id givent by mainActivity
+        //get the month from the id given by mainActivity
         id = this.getArguments().getString("id");
         month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
 

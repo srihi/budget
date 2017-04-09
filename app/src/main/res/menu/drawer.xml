@@ -7,7 +7,7 @@
             android:id="@+id/category_management"
             android:checked="false"
             android:icon="@drawable/ic_edit"
-            android:title="@string/categories_string" />
+            android:title="@string/title_category_management" />
 
         <item
             android:orderInCategory="2"
@@ -21,7 +21,7 @@
             android:id="@+id/parameter"
             android:checked="false"
             android:icon="@drawable/ic_settings"
-            android:title="@string/settings_string" />
+            android:title="@string/title_settings" />
 
     </group>
 </menu>

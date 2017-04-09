@@ -32,7 +32,7 @@
         android:id="@+id/header_email"
         android:gravity="start"
         android:layout_marginBottom="8dp"
-        android:text="@string/UnknownUser"
+        android:text="@string/header_unknown_user"
         android:textSize="14sp"
         android:textColor="#fff"
         android:layout_alignParentBottom="true"

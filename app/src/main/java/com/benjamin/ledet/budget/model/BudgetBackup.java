@@ -1,7 +1,6 @@
 package com.benjamin.ledet.budget.model;
 
 import com.google.android.gms.drive.DriveId;
-import java.util.Date;
 
 /**
  * Created by benjaminledet on 15/03/2017.
@@ -9,10 +8,10 @@ import java.util.Date;
 
 public class BudgetBackup {
     private DriveId driveId;
-    private Date modifiedDate;
+    private long modifiedDate;
     private long backupSize;
 
-    public BudgetBackup(DriveId driveId, Date modifiedDate, long backupSize) {
+    public BudgetBackup(DriveId driveId, long modifiedDate, long backupSize) {
         this.driveId = driveId;
         this.modifiedDate = modifiedDate;
         this.backupSize = backupSize;
@@ -26,11 +25,11 @@ public class BudgetBackup {
         this.driveId = driveId;
     }
 
-    public Date getModifiedDate() {
+    public long getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(long modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

@@ -1,19 +1,21 @@
 <resources>
+
     <string name="app_name">Budget</string>
 
-    <string name="UnknownUser">Utilisateur inconnu</string>
+    <!-- header !-->
+    <string name="header_unknown_user">Utilisateur inconnu</string>
+
     <!-- navigation view -->
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
 
-    <!-- view pager -->
-    <string name="depenses">Dépenses</string>
-    <string name="revenus">Revenus</string>
-    <string name="statistiques">Statistiques</string>
+    <!-- fragments -->
+    <string name="fragment_expense_name">Dépenses</string>
+    <string name="fragment_income_name">Revenus</string>
 
     <!-- titles -->
-    <string name="settings_string">Réglages</string>
-    <string name="categories_string">Gestion des catégories</string>
+    <string name="title_settings">Réglages</string>
+    <string name="title_category_management">Gestion des catégories</string>
     <string name="save_and_restore_string">Sauvegarder &amp; restaurer</string>
     <string name="category_expense">Catégories dépenses</string>
     <string name="category_income">Catégories revenus</string>
@@ -70,7 +72,6 @@
     <string name="error">Error</string>
 
     <!-- Months -->
-
     <string name="january"> Janvier </string>
     <string name="february"> Février </string>
     <string name="march"> Mars </string>
@@ -85,34 +86,4 @@
     <string name="december"> Décembre </string>
 
 
-
-    <string name="preferences_backup_google_drive">Google Drive</string>
-    <string name="title_activity_backup_drive">Google Drive Backup</string>
-    <string name="activity_main_dialog_backup_export_title">Backup &amp; Export</string>
-    <string name="sidebar_backup_export">Backup &amp; Export</string>
-    <string name="menu_backup_backup">Backup on Google Drive</string>
-    <string name="menu_backup_restore">Restore</string>
-    <string name="menu_backup_csv">CSV export</string>
-    <string name="activity_backup_drive_automatic">Automatic budgetBackup</string>
-    <string name="activity_backup_drive_desc">Backing up your data to Google Drive allows you to restore all your readings in case you lose or change devices.</string>
-    <string name="activity_backup_drive_message_restart">Restarting to apply changes...</string>
-    <string name="activity_backup_drive_desc_1">Sync Glucosio\'s database in the cloud with Google Drive.</string>
-    <string name="activity_backup_drive_desc_2">You\'ll be able to restore all your readings if you lost or change phone or sync Glucosio\'s data between your devices.</string>
-    <string name="activity_backup_drive_success">Database successfully backed up to Drive</string>
-    <string name="activity_backup_drive_restore_success">Successfully restored database from Drive</string>
-    <string name="activity_backup_drive_failed">Something went wrong. Please try again :/</string>
-    <string name="activity_backup_drive_last">Last budgetBackup:</string>
-    <string name="activity_backup_drive_folder">Backup folder</string>
-    <string name="activity_backup_drive_folder_not_set">Not set</string>
-    <string name="activity_backup_drive_button_backup">Backup now</string>
-    <string name="activity_backup_drive_recent">Recent backups</string>
-    <string name="activity_backup_drive_more">See more Backups</string>
-    <string name="activity_backup_drive_dialog_restore_title">Revert to previous version</string>
-    <string name="activity_backup_drive_dialog_restore_desc">Restoring the budgetBackup will overwrite all the existing data with the budgetBackup.</string>
-    <string name="activity_backup_drive_dialog_restore_details">Backup details</string>
-    <string name="activity_backup_drive_dialog_restore_button_cancel">Cancel</string>
-    <string name="activity_backup_drive_dialog_restore_button_restore">Restore budgetBackup</string>
-    <string name="activity_backup_drive_button_restore">Restore from Drive</string>
-    <string name="activity_backup_drive_error_restore">Unable to find a valid budgetBackup to restore from Drive</string>
-    <string name="activity_backup_drive_button_open_drive">Manage on Drive</string>
 </resources>

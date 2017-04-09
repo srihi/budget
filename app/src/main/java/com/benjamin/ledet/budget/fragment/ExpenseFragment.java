@@ -187,7 +187,7 @@ public class ExpenseFragment extends Fragment {
 
     }
 
-    //total des revenus du mois
+    //total des fragment_income_name du mois
     private void setTotalRevenus(){
         totalRevenu =  databaseHandler.getSumIncomesOfMonth(month);
         DecimalFormat df = new DecimalFormat("#.##");

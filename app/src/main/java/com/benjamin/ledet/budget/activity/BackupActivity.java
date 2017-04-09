@@ -6,26 +6,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.FormatDateTime;
 import com.benjamin.ledet.budget.backup.Backup;
 import com.benjamin.ledet.budget.model.BudgetBackup;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,6 +53,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -72,14 +72,17 @@ public class BackupActivity extends AppCompatActivity {
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.rl_folder)
+    RelativeLayout rlFolder;
+
     @BindView(R.id.rl_backup)
     RelativeLayout rlBackup;
 
     @BindView(R.id.rl_restore)
     RelativeLayout rlRestore;
 
-    @BindView(R.id.bt_backup_folder)
-    Button btFolder;
+    @BindView(R.id.iv_backup_folder)
+    ImageView ivFolder;
 
     @BindView(R.id.tv_backup_folder_description)
     TextView tvFolder;
@@ -89,6 +92,9 @@ public class BackupActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_last_backup_description)
     TextView tvLastBackup;
+
+    @BindView(R.id.tv_last_restore_description)
+    TextView tvLastRestore;
 
     private static final String TAG = "budget_drive_backup";
 
@@ -112,10 +118,6 @@ public class BackupActivity extends AppCompatActivity {
         }
     }
 
-    //Snackbar snackbar = Snackbar.make(clPrincipal , "test" , Snackbar.LENGTH_SHORT);
-    //snackbar.getView().setBackgroundColor(ContextCompat.getColor(v.getContext(),R.color.PrimaryColor));
-    //snackbar.show();
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +140,7 @@ public class BackupActivity extends AppCompatActivity {
         backup.start();
         mGoogleApiClient = backup.getClient();
 
-        btFolder.setOnClickListener(new View.OnClickListener() {
+        rlFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFolderPicker();
@@ -149,7 +151,13 @@ public class BackupActivity extends AppCompatActivity {
         rlBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadToDrive(DriveId.decodeFromString(backupFolder));
+                if (!backupFolder.equals("")){
+                    uploadToDrive(DriveId.decodeFromString(backupFolder));
+                }
+                else{
+                    showFolderErrorDialog();
+                }
+
             }
         });
 
@@ -157,18 +165,31 @@ public class BackupActivity extends AppCompatActivity {
         rlRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!backupFolder.equals("")){
+                    if (budgetBackup != null)
+                    downloadFromDrive(budgetBackup.getDriveId().asDriveFile());
+                    else{
+                        showBackupErrorDialog();
+                    }
+                }else{
+                    showFolderErrorDialog();
+                }
 
             }
         });
 
-        // Show backup folder, if exists
-        backupFolder = sharedPreferences.getString("backup_folder", "");
-        if (!("").equals(backupFolder)) {
-            setBackupFolderTitle(DriveId.decodeFromString(backupFolder));
-            btFolder.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.PrimaryColor));
-            findBackupFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
-        }
+        setAfterBackupFolder();
 
+    }
+
+    private void setAfterBackupFolder(){
+        backupFolder = sharedPreferences.getString("backup_folder", "");
+        if (!backupFolder.equals("")){
+            setBackupFolderTitle(DriveId.decodeFromString(backupFolder));
+            ivFolder.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.PrimaryColor));
+            findBackupFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
+            setTvLastRestore();
+        }
     }
 
     private void setBackupFolderTitle(DriveId id) {
@@ -228,12 +249,10 @@ public class BackupActivity extends AppCompatActivity {
                             DriveId driveId = metadata.getDriveId();
                             Date modifiedDate = metadata.getModifiedDate();
                             long backupSize = metadata.getFileSize();
-                            budgetBackup = new BudgetBackup(driveId, modifiedDate, backupSize);
+                            budgetBackup = new BudgetBackup(driveId, modifiedDate.getTime(), backupSize);
                         }
                         setBackupFile(budgetBackup);
-                        if (budgetBackup != null){
-                            setTvLastBackup();
-                        }
+                        setTvLastBackup();
 
                     }
                 });
@@ -261,8 +280,22 @@ public class BackupActivity extends AppCompatActivity {
     }
 
     private void setTvLastBackup(){
-        FormatDateTime formatDateTime = new FormatDateTime(this);
-        tvLastBackup.setText("Le " + formatDateTime.formatDate(budgetBackup.getModifiedDate()));
+        if (budgetBackup != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(budgetBackup.getModifiedDate());
+            tvLastBackup.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
+        }else{
+            tvLastBackup.setText("Aucune sauvegarde trouvée.");
+        }
+    }
+
+    private void setTvLastRestore(){
+        long date = sharedPreferences.getLong("last_restore",0);
+        if (date != 0){
+            Calendar calendar =  Calendar.getInstance();
+            calendar.setTimeInMillis(date);
+            tvLastRestore.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
+        }
     }
 
     public void downloadFromDrive(DriveFile file) {
@@ -306,7 +339,9 @@ public class BackupActivity extends AppCompatActivity {
                             safeCloseClosable(input);
                         }
 
-                        Toast.makeText(getApplicationContext(), R.string.activity_backup_drive_message_restart, Toast.LENGTH_LONG).show();
+                        saveLastRestore(System.currentTimeMillis());
+                        setTvLastRestore();
+
 
                         // Reboot app
                         Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
@@ -315,6 +350,8 @@ public class BackupActivity extends AppCompatActivity {
                         AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                         System.exit(0);
+
+
                     }
                 });
     }
@@ -393,11 +430,10 @@ public class BackupActivity extends AppCompatActivity {
                                                         finish();
                                                         return;
                                                     }
-                                                    // Restart activity to apply changes
-                                                    Intent intent = getIntent();
-                                                    finish();
-                                                    startActivity(intent);
-                                                    showSuccessDialog();
+                                                    setTvLastBackup();
+                                                    findBackupFromDrive(folder);
+                                                    showBackupSuccessDialog();
+
                                                 }
                                             });
                                 }
@@ -405,25 +441,6 @@ public class BackupActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
-
-    private void openOnDrive(DriveId driveId) {
-        driveId.asDriveFolder().getMetadata((mGoogleApiClient)).setResultCallback(
-                new ResultCallback<DriveResource.MetadataResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveResource.MetadataResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            showErrorDialog();
-                            return;
-                        }
-                        Metadata metadata = result.getMetadata();
-                        String url = metadata.getAlternateLink();
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                    }
-                }
-        );
     }
 
     @Override
@@ -442,8 +459,6 @@ public class BackupActivity extends AppCompatActivity {
                     //Get the folder drive id
                     DriveId mFolderDriveId = data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
-
-                    saveBackupFolder(mFolderDriveId.encodeToString());
 
                     uploadToDrive(mFolderDriveId);
                 }
@@ -472,10 +487,8 @@ public class BackupActivity extends AppCompatActivity {
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
                     saveBackupFolder(mFolderDriveId.encodeToString());
-                    // Restart activity to apply changes
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    showFolderSuccessDialog();
+                    setAfterBackupFolder();
                 }
                 break;
         }
@@ -487,12 +500,40 @@ public class BackupActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void showSuccessDialog() {
-        Toast.makeText(getApplicationContext(), R.string.activity_backup_drive_success, Toast.LENGTH_SHORT).show();
+    private void saveLastRestore(long date){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("last_restore", date);
+        editor.apply();
+    }
+
+    private void showBackupSuccessDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , "Sauvegarde correctement effectuée" , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
+        snackbar.show();
+    }
+
+    private void showFolderSuccessDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , "Le dossier a correctement été enregisté." , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
+        snackbar.show();
     }
 
     private void showErrorDialog() {
-        Toast.makeText(getApplicationContext(), R.string.activity_backup_drive_failed, Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(clPrincipal , "Quelque chose c'est mal passé, veuillez réessayer." , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(Color.RED);
+        snackbar.show();
+    }
+
+    private void showFolderErrorDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , "Vous devez d'abord sélectionner un dosser!" , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(Color.RED);
+        snackbar.show();
+    }
+
+    private void showBackupErrorDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , "Il n'y a pas de sauvegarde à restaurer!" , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(Color.RED);
+        snackbar.show();
     }
 
     private void reportToFirebase(Exception e, String message) {

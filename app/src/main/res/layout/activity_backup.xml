@@ -36,7 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="10dp">
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:id="@+id/rl_folder"
+                android:background="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:id="@+id/tv_backup_folder_label"
@@ -58,8 +61,8 @@
                     android:paddingStart="10dp"
                     android:text="Sélectionnez le dossier de sauvegarde de votre drive." />
 
-                <Button
-                    android:id="@+id/bt_backup_folder"
+                <ImageView
+                    android:id="@+id/iv_backup_folder"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
@@ -79,13 +82,13 @@
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_backup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:id="@+id/rl_backup"
-                android:background="?android:attr/selectableItemBackground">
+                android:paddingBottom="10dp">
 
                 <TextView
                     android:id="@+id/tv_backup_now_label"
@@ -180,7 +183,7 @@
                 android:layout_alignStart="@+id/tv_last_backup_label"
                 android:layout_below="@+id/tv_last_backup_label"
                 android:paddingStart="10dp"
-                android:text="Aucune sauvegarde trouvée" />
+                android:text="Aucune sauvegarde trouvée." />
 
             </RelativeLayout>
 
@@ -216,7 +219,40 @@
                     android:layout_alignStart="@+id/tv_restore_label"
                     android:layout_below="@+id/tv_restore_label"
                     android:paddingStart="10dp"
-                    android:text="Restaure les données." />
+                    android:text="Restaure les données à partir de la dernière sauvegarde." />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tv_last_restore_label"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Dernière restauration"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_last_restore_description"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tv_last_restore_label"
+                    android:layout_below="@+id/tv_last_restore_label"
+                    android:paddingStart="10dp"
+                    android:text="Vous n'avez pas encore effectué de restauration sur cet appareil." />
 
             </RelativeLayout>
 

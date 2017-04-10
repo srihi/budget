@@ -47,8 +47,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Dossier de sauvegarde"
+                    android:text="@string/activity_backup_backup_folder_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -59,7 +60,8 @@
                     android:layout_alignStart="@+id/tv_backup_folder_label"
                     android:layout_below="@+id/tv_backup_folder_label"
                     android:paddingStart="10dp"
-                    android:text="Sélectionnez le dossier de sauvegarde de votre drive." />
+                    android:paddingEnd="0dp"
+                    android:text="@string/activity_backup_backup_folder_description" />
 
                 <ImageView
                     android:id="@+id/iv_backup_folder"
@@ -71,8 +73,10 @@
                     android:background="@drawable/ic_folder"
                     android:backgroundTint="@android:color/darker_gray"
                     android:paddingBottom="25dp"
+                    android:paddingStart="0dp"
                     android:paddingEnd="10dp"
-                    android:paddingTop="25dp" />
+                    android:paddingTop="25dp"
+                    android:contentDescription="@string/activity_backup_backup_folder_label"/>
 
             </RelativeLayout>
 
@@ -96,8 +100,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Sauvegarder maintenant"
+                    android:text="@string/activity_backup_backup_now_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -108,7 +113,8 @@
                     android:layout_alignStart="@+id/tv_backup_now_label"
                     android:layout_below="@+id/tv_backup_now_label"
                     android:paddingStart="10dp"
-                    android:text="Sauvegarde immédiatement les données." />
+                    android:paddingEnd="0dp"
+                    android:text="@string/activity_backup_backup_now_description" />
 
             </RelativeLayout>
 
@@ -124,24 +130,26 @@
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:id="@+id/tv_backup_label"
+                    android:id="@+id/tv_auto_backup_label"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Sauvegarde automatique"
+                    android:text="@string/activity_backup_auto_backup_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_backup_description"
+                    android:id="@+id/tv_auto_backup_description"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/tv_backup_label"
-                    android:layout_below="@+id/tv_backup_label"
+                    android:layout_alignStart="@+id/tv_auto_backup_label"
+                    android:layout_below="@+id/tv_auto_backup_label"
                     android:paddingStart="10dp"
-                    android:text="Vos données seront sauvegardées automatiquement tous les jours dans votre dossier." />
+                    android:paddingEnd="0dp"
+                    android:text="@string/soon_available" />
 
                 <Switch
                     android:id="@+id/switch_backup"
@@ -149,6 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:paddingBottom="25dp"
+                    android:paddingStart="0dp"
                     android:paddingEnd="10dp"
                     android:paddingTop="25dp" />
 
@@ -171,8 +180,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Dernière sauvegarde"
+                    android:text="@string/activity_backup_last_backup_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -183,7 +193,8 @@
                 android:layout_alignStart="@+id/tv_last_backup_label"
                 android:layout_below="@+id/tv_last_backup_label"
                 android:paddingStart="10dp"
-                android:text="Aucune sauvegarde trouvée." />
+                android:paddingEnd="0dp"
+                android:text="@string/activity_backup_last_backup_description" />
 
             </RelativeLayout>
 
@@ -207,8 +218,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Restaurer"
+                    android:text="@string/activity_backup_restore_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -219,7 +231,8 @@
                     android:layout_alignStart="@+id/tv_restore_label"
                     android:layout_below="@+id/tv_restore_label"
                     android:paddingStart="10dp"
-                    android:text="Restaure les données à partir de la dernière sauvegarde." />
+                    android:paddingEnd="0dp"
+                    android:text="@string/activity_backup_restore_description" />
 
             </RelativeLayout>
 
@@ -240,8 +253,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:paddingTop="10dp"
-                    android:text="Dernière restauration"
+                    android:text="@string/activity_backup_last_restore_label"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -252,7 +266,8 @@
                     android:layout_alignStart="@+id/tv_last_restore_label"
                     android:layout_below="@+id/tv_last_restore_label"
                     android:paddingStart="10dp"
-                    android:text="Vous n'avez pas encore effectué de restauration sur cet appareil." />
+                    android:paddingEnd="0dp"
+                    android:text="@string/activity_backup_last_restore_description" />
 
             </RelativeLayout>
 

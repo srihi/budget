@@ -12,10 +12,6 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
-/**
- * Created by benjaminledet on 05/03/2017.
- */
-
 public class DatabaseHandler {
 
     private static RealmConfiguration mRealmConfig;
@@ -28,7 +24,7 @@ public class DatabaseHandler {
         this.realm = getNewRealmInstance();
     }
 
-    public Realm getNewRealmInstance() {
+    private Realm getNewRealmInstance() {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()

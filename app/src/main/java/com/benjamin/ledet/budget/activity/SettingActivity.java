@@ -36,7 +36,9 @@ public class SettingActivity extends AppCompatActivity {
         toolbar.setTitle("Réglages");
         setSupportActionBar(toolbar);
         //display back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
     }
 

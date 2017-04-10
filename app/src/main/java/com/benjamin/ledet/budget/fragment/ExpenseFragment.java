@@ -27,8 +27,6 @@ import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,16 +41,16 @@ public class ExpenseFragment extends Fragment {
     @BindView(R.id.rv_category_expense)
     RecyclerView categoriesExpenseRecyclerView;
 
-    @BindView(R.id.tv_total_depenses_2)
+    //@BindView(R.id.tv_total_depenses_2)
     TextView tvTotalDepenses;
 
-    @BindView(R.id.tv_total_revenu_2)
+    //@BindView(R.id.tv_total_revenu_2)
     TextView tvTotalRevenu;
 
-    @BindView(R.id.tv_liquidites_2)
+    //@BindView(R.id.tv_liquidites_2)
     TextView tvLiquidites;
 
-    @BindView(R.id.tv_pourcentage_2)
+    //@BindView(R.id.tv_pourcentage_2)
     TextView tvPourcentage;
 
     private DatabaseHandler databaseHandler;
@@ -60,7 +58,6 @@ public class ExpenseFragment extends Fragment {
     private List<Category> categoriesExpenseNotEmpty;
     private List<Category> categoriesExpense;
     private CategoryRecyclerViewAdapter categoriesExpenseAdapter;
-    private RecyclerView.LayoutManager layoutManagerCategoriesExpense;
     private CategorySpinAdapter categoriesSpinAdapter;
 
     private int day;
@@ -148,8 +145,10 @@ public class ExpenseFragment extends Fragment {
         super.onStart();
 
         //get the month from the id given by mainActivity
-        id = this.getArguments().getString("id");
-        month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
+        String  id = this.getArguments().getString("id");
+        if (id != null){
+            month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
+        }
 
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
@@ -157,7 +156,7 @@ public class ExpenseFragment extends Fragment {
         //setup RecyclerView for categories expense
         categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
 
-        layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
         categoriesExpenseAdapter = new CategoryRecyclerViewAdapter(categoriesExpenseNotEmpty, this.getContext(), month);
         categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
         categoriesExpenseRecyclerView.setAdapter(categoriesExpenseAdapter);
@@ -179,14 +178,15 @@ public class ExpenseFragment extends Fragment {
             }
         }));
 
+        /*
         setTotalRevenus();
         setTotalDepenses();
         setLiquidites();
         setPourcentage();
-
+*/
 
     }
-
+/*
     //total des fragment_income_name du mois
     private void setTotalRevenus(){
         totalRevenu =  databaseHandler.getSumIncomesOfMonth(month);
@@ -226,4 +226,5 @@ public class ExpenseFragment extends Fragment {
         String text = getString(R.string.pourcentage,df.format(pourcentage));
         tvPourcentage.setText(text);
     }
+    */
 }

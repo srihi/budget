@@ -60,10 +60,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-/**
- * Created by benjamin on 02/04/2017.
- */
-
 public class BackupActivity extends AppCompatActivity {
 
     @BindView(R.id.cl_activity_backup)
@@ -127,10 +123,12 @@ public class BackupActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.save_and_restore_string));
+        toolbar.setTitle(getResources().getString(R.string.title_activity_backup));
         setSupportActionBar(toolbar);
         //display back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         BudgetApplication budgetApplication = (BudgetApplication) getApplicationContext();
         realm = budgetApplication.getDBHandler().getRealmInstance();
@@ -285,7 +283,7 @@ public class BackupActivity extends AppCompatActivity {
             calendar.setTimeInMillis(budgetBackup.getModifiedDate());
             tvLastBackup.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
         }else{
-            tvLastBackup.setText("Aucune sauvegarde trouvée.");
+            tvLastBackup.setText(getString(R.string.activity_backup_last_backup_description));
         }
     }
 
@@ -507,31 +505,31 @@ public class BackupActivity extends AppCompatActivity {
     }
 
     private void showBackupSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , "Sauvegarde correctement effectuée" , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_backup_success) , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
-        snackbar.show();
-    }
-
-    private void showFolderSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , "Le dossier a correctement été enregisté." , Snackbar.LENGTH_SHORT);
-        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
-        snackbar.show();
-    }
-
-    private void showErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , "Quelque chose c'est mal passé, veuillez réessayer." , Snackbar.LENGTH_SHORT);
-        snackbar.getView().setBackgroundColor(Color.RED);
-        snackbar.show();
-    }
-
-    private void showFolderErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , "Vous devez d'abord sélectionner un dosser!" , Snackbar.LENGTH_SHORT);
-        snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }
 
     private void showBackupErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , "Il n'y a pas de sauvegarde à restaurer!" , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_backup_error) , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(Color.RED);
+        snackbar.show();
+    }
+
+    private void showFolderSuccessDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_folder_success) , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
+        snackbar.show();
+    }
+
+    private void showFolderErrorDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_folder_error) , Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(Color.RED);
+        snackbar.show();
+    }
+
+    private void showErrorDialog() {
+        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_error) , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }

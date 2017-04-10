@@ -45,12 +45,10 @@ public class IncomeFragment extends Fragment {
     private List<Category> categoriesIncomeNotEmpty;
     private List<Category> categoriesIncome;
     private CategoryRecyclerViewAdapter categoriesIncomeAdapter;
-    private RecyclerView.LayoutManager layoutManagerCategoriesIncome;
     private CategorySpinAdapter categoriesSpinAdapter;
 
     private int day;
     private Month month;
-    private String id;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -128,16 +126,17 @@ public class IncomeFragment extends Fragment {
         super.onStart();
 
         //get the month from the id givent by mainActivity
-        id = this.getArguments().getString("id");
-        month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
-
+        String id = this.getArguments().getString("id");
+        if (id != null){
+            month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
+        }
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
 
         //setup RecyclerView for categories income
         categoriesIncomeNotEmpty = databaseHandler.getCategoriesIncomeNotEmptyForMonth(month);
 
-        layoutManagerCategoriesIncome = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(this.getContext());
         categoriesIncomeAdapter = new CategoryRecyclerViewAdapter(categoriesIncomeNotEmpty, this.getContext(), month);
         categoriesIncomeRecyclerView.setLayoutManager(layoutManagerCategoriesIncome);
         categoriesIncomeRecyclerView.setAdapter(categoriesIncomeAdapter);

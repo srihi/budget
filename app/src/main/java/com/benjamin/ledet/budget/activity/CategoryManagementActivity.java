@@ -25,11 +25,6 @@ public class CategoryManagementActivity extends AppCompatActivity {
     @BindView(R.id.tabsCategories)
     TabLayout tabLayout;
 
-    private ViewPagerAdapter adapter;
-
-    private CategoryExpenseFragment categoryExpenseFragment;
-    private CategoryIncomeFragment categoryIncomeFragment;
-
     //return to the previous fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -50,10 +45,12 @@ public class CategoryManagementActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.title_category_management));
+        toolbar.setTitle(getResources().getString(R.string.title_activity_category_management));
         setSupportActionBar(toolbar);
         //display back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         //display viewPager with the tabs
         setupViewPager(viewPager);
@@ -62,11 +59,15 @@ public class CategoryManagementActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter;
+        CategoryExpenseFragment categoryExpenseFragment;
+        CategoryIncomeFragment categoryIncomeFragment;
+
         categoryExpenseFragment = new CategoryExpenseFragment();
         categoryIncomeFragment = new CategoryIncomeFragment();
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(categoryExpenseFragment, getString(R.string.category_expense));
-        adapter.addFragment(categoryIncomeFragment, getString(R.string.category_income));
+        adapter.addFragment(categoryExpenseFragment, getString(R.string.title_fragment_category_expense));
+        adapter.addFragment(categoryIncomeFragment, getString(R.string.title_fragment_category_income));
         viewPager.setAdapter(adapter);
     }
 }

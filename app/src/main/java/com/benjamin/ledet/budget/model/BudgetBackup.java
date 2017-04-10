@@ -2,10 +2,6 @@ package com.benjamin.ledet.budget.model;
 
 import com.google.android.gms.drive.DriveId;
 
-/**
- * Created by benjaminledet on 15/03/2017.
- */
-
 public class BudgetBackup {
     private DriveId driveId;
     private long modifiedDate;

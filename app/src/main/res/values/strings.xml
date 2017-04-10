@@ -9,67 +9,61 @@
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
 
-    <!-- fragments -->
-    <string name="fragment_expense_name">Dépenses</string>
-    <string name="fragment_income_name">Revenus</string>
-
     <!-- titles -->
-    <string name="title_settings">Réglages</string>
-    <string name="title_category_management">Gestion des catégories</string>
-    <string name="save_and_restore_string">Sauvegarder &amp; restaurer</string>
-    <string name="category_expense">Catégories dépenses</string>
-    <string name="category_income">Catégories revenus</string>
-    <string name="details">Détails</string>
-
-    <!-- activity_category_management -->
-    <string name="tvCategories_revenus">Catégories revenus : </string>
-    <string name="tvCategories_depenses">Catégories dépenses : </string>
-    <string name="ajouter_categorie">Ajouter une catégorie : </string>
+    <string name="title_activity_setting">Réglages</string>
+    <string name="title_activity_category_management">Gestion des catégories</string>
+    <string name="title_activity_backup">Sauvegarder &amp; restaurer</string>
+    <string name="title_activity_amount">Détails</string>
+    <string name="title_fragment_category_expense">Catégories dépenses</string>
+    <string name="title_fragment_category_income">Catégories revenus</string>
+    <string name="title_fragment_expense">Dépenses</string>
+    <string name="title_fragment_income">Revenus</string>
 
     <!-- alert_dialog -->
-    <string name="confirmer">Confirmer </string>
-    <string name="annuler">Annuler </string>
+    <string name="confirm">Confirmer </string>
+    <string name="cancel">Annuler </string>
 
     <!-- alert_dialog_add_category -->
-    <string name="tvLibelle">Libellé : </string>
-    <string name="rbDepense">Dépense </string>
-    <string name="rbRevenu">Revenu </string>
+    <string name="alert_dialog_add_category_label">Libellé : </string>
+    <string name="alert_dialog_add_category_expense">Dépense </string>
+    <string name="alert_dialog_add_category_income">Revenu </string>
 
-    <!-- alert_dialog_add_amount & income -->
-    <string name="tvCategorie">Catégorie : </string>
-    <string name="tvMontant">Montant : </string>
-    <string name="facultatif">(facultatif) </string>
-    <string name="tvJour">Jour : </string>
+    <!-- alert_dialog_add_amount -->
+    <string name="alert_dialog_add_amount_category">Catégorie : </string>
+    <string name="alert_dialog_add_amount_amount">Montant : </string>
+    <string name="alert_dialog_add_amount_optional">(facultatif) </string>
+    <string name="alert_dialog_add_amount_day">Jour : </string>
 
     <!-- alert_dialog_update_category-->
-    <string name="tvNouveauLibelle">Nouveau libellé : </string>
+    <string name="alert_dialog_update_category_new_label">Nouveau libellé : </string>
 
-    <!-- fragment_statistic-->
-    <string name="tvLiquidites">Liquidités : </string>
-    <string name="tvPourcentage">Pourcentage du revenu dépensé : </string>
-    <string name="pourcentage"> %1$s %%</string>
-    <string name="tvDepensesTotales">Dépenses totales : </string>
-    <string name="tvRevenuTotal">Revenu total : </string>
+    <!-- activity_category_management -->
+    <string name="activity_category_management_categories_income">Catégories revenus : </string>
+    <string name="activity_category_management_categories_expense">Catégories dépenses : </string>
+    <string name="activity_category_management_add_category">Ajouter une catégorie : </string>
+
+    <!-- activity_backup -->
+    <string name="activity_backup_backup_folder_label">Dossier de sauvegarde</string>
+    <string name="activity_backup_backup_folder_description">Sélectionnez le dossier de sauvegarde de votre drive.</string>
+    <string name="activity_backup_backup_now_label">Sauvegarder maintenant</string>
+    <string name="activity_backup_backup_now_description">Sauvegarde immédiatement les données.</string>
+    <string name="activity_backup_auto_backup_label">Sauvegarde automatique</string>
+    <string name="activity_backup_auto_backup_description">Vos données seront sauvegardées automatiquement tous les jours dans votre dossier.</string>
+    <string name="activity_backup_last_backup_label">Dernière sauvegarde</string>
+    <string name="activity_backup_last_backup_description">Aucune sauvegarde trouvée.</string>
+    <string name="activity_backup_restore_label">Restaurer</string>
+    <string name="activity_backup_restore_description">Restaure les données à partir de la dernière sauvegarde.</string>
+    <string name="activity_backup_last_restore_label">Dernière restauration</string>
+    <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
 
     <!-- fragment_expense-->
-    <string name="tvDepensesTotalesWithMontant">Dépenses totales : %1$s €</string>
+    <string name="fragment_expense_total">Dépenses totales : %1$s €</string>
 
     <!-- fragment_income-->
-    <string name="tvRevenuTotalWithMontant">Revenu total : %1$s €</string>
+    <string name="fragment_income_total">Revenu total : %1$s €</string>
 
-    <!-- row_category -->
-    <string name="imageCategorie">Image catégorie</string>
-
-    <!-- CategoriesAdapter -->
-    <string name="amount">%1$s €</string>
-
-    <!-- Depense & RevenuAdapter -->
-    <string name="date">le %1$d/%2$d/%3$d</string>
-
-    <string name="devise">€</string>
-
-    <!-- -->
-    <string name="error">Error</string>
+    <!-- AmountRecyclerViewAdapter -->
+    <string name="amount_recycler_view_adapter_date">le %1$d/%2$d/%3$d</string>
 
     <!-- Months -->
     <string name="january"> Janvier </string>
@@ -84,6 +78,19 @@
     <string name="october"> Octobre </string>
     <string name="november"> Novembre </string>
     <string name="december"> Décembre </string>
+    <string name="error">Error</string>
 
+    <!-- Snackbar !-->
+    <string name="snackbar_backup_success">Sauvegarde correctement effectuée.</string>
+    <string name="snackbar_backup_error">Il n\'y a pas de sauvegarde à restaurer!</string>
+    <string name="snackbar_folder_success">Le dossier a été correctement enregisté.</string>
+    <string name="snackbar_folder_error">Vous devez d\'abord sélectionner un dosser!</string>
+    <string name="snackbar_error">Quelque chose c\'est mal passé, veuillez réessayer.</string>
+
+    <!-- Global -->
+    <string name="amount">%1$s €</string>
+    <string name="currency">€</string>
+    <string name="icon_category">icone de la catégorie</string>
+    <string name="soon_available">Bientôt disponible...</string>
 
 </resources>

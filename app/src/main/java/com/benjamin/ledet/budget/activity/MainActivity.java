@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -66,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     TextView tvUserEmail;
 
-    private ViewPagerAdapter adapter;
-    private View header;
-    private Menu menu;
     private ExpenseFragment expenseFragment;
     private IncomeFragment incomeFragment;
     private Bundle bundle;
@@ -76,14 +74,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private int actualYear = calendar.get(Calendar.YEAR);
     private int actualMonth = calendar.get(Calendar.MONTH) + 1;
     private DatabaseHandler databaseHandler;
-    private BudgetApplication application;
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        application = (BudgetApplication) getApplication();
+        BudgetApplication application = (BudgetApplication) getApplication();
 
         setContentView(R.layout.activity_main);
 
@@ -111,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
 
         //display the navigationView
-        menu = navigationView.getMenu();
+        Menu menu = navigationView.getMenu();
         setupMenu(menu);
 
         //display viewPager with the tabs
@@ -143,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
             // This method will trigger on item Click of navigation menu
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 //indicates the item selected by a gray background
                 menuItem.setCheckable(true);
@@ -185,7 +181,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override
@@ -199,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
@@ -209,19 +207,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         //Storing the information of the user
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
-            String userName = acct.getDisplayName();
-            String userEmail = acct.getEmail();
-            String userId = acct.getId();
-            Uri userPhoto = acct.getPhotoUrl();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("user_id",userId);
-            editor.putString("user_name",userName);
-            editor.putString("user_email",userEmail);
-            editor.putString("user_photo",userPhoto.toString());
-            editor.apply();
-            setupHeader();
+            if (acct != null){
+                String userName = acct.getDisplayName();
+                String userEmail = acct.getEmail();
+                String userId = acct.getId();
+                Uri userPhoto = acct.getPhotoUrl();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("user_id",userId);
+                editor.putString("user_name",userName);
+                editor.putString("user_email",userEmail);
+                if (userPhoto != null) {
+                    editor.putString("user_photo",userPhoto.toString());
+                }
+                editor.apply();
+                setupHeader();
+            }
         }
-
     }
 
     private void setupMenu(Menu menu){
@@ -260,15 +261,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bundle.putString("id",String.valueOf(actualYear + "" + actualMonth));
         expenseFragment.setArguments(bundle);
         incomeFragment.setArguments(bundle);
-
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(expenseFragment, getResources().getString(R.string.fragment_expense_name));
-        adapter.addFragment(incomeFragment, getResources().getString(R.string.fragment_income_name));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(expenseFragment, getResources().getString(R.string.title_fragment_expense));
+        adapter.addFragment(incomeFragment, getResources().getString(R.string.title_fragment_income));
         viewPager.setAdapter(adapter);
     }
 
     private void setupHeader(){
-        header = navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         civProfil = ButterKnife.findById(header,R.id.header_profile_image);
         tvUserName = ButterKnife.findById(header,R.id.header_username);
         tvUserEmail = ButterKnife.findById(header,R.id.header_email);
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .requestProfile()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();

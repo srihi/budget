@@ -14,10 +14,6 @@ import com.google.android.gms.drive.Drive;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by benjaminledet on 15/03/2017.
- */
-
 public class GoogleDriveBackup implements Backup, GoogleApiClient.OnConnectionFailedListener {
     @Nullable
     private GoogleApiClient googleApiClient;
@@ -63,6 +59,8 @@ public class GoogleDriveBackup implements Backup, GoogleApiClient.OnConnectionFa
         }
     }
 
+    /*
+
     @Override
     public void stop() {
         if (googleApiClient != null) {
@@ -71,6 +69,7 @@ public class GoogleDriveBackup implements Backup, GoogleApiClient.OnConnectionFa
             throw new IllegalStateException("You should call init before start");
         }
     }
+    */
 
     @Override
     public void onConnectionFailed(@NonNull final ConnectionResult result) {

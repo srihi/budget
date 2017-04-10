@@ -18,17 +18,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by benjaminledet on 09/03/2017.
- */
-
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
     private List<Category> mCategorys;
     private final Context mContext;
     private DatabaseHandler db;
     private Month month;
-    private double sum;
 
     public CategoryRecyclerViewAdapter(List<Category> mCategorys, Context context, Month month) {
         this.mCategorys = mCategorys;
@@ -41,8 +36,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     public CategoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(rowView);
-        return viewHolder;
+        return new ViewHolder(rowView);
     }
 
     @Override
@@ -52,7 +46,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         holder.label.setText(selectedCategory.getLabel());
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        sum = db.getSumAmountsOfMonthOfCategory(month,selectedCategory);
+        double sum = db.getSumAmountsOfMonthOfCategory(month,selectedCategory);
         String textSum = mContext.getResources().getString(R.string.amount,df.format(sum));
         holder.sum.setText(textSum);
     }
@@ -62,12 +56,8 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         return mCategorys.size();
     }
 
-    public void replaceData(List<Category> customers){
-        mCategorys = customers;
-        notifyDataSetChanged();
-    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_category_icon)
         ImageView icon;
@@ -78,7 +68,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         @BindView(R.id.row_category_sum)
         TextView sum;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

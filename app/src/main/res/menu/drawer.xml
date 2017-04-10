@@ -7,21 +7,21 @@
             android:id="@+id/category_management"
             android:checked="false"
             android:icon="@drawable/ic_edit"
-            android:title="@string/title_category_management" />
+            android:title="@string/title_activity_category_management" />
 
         <item
             android:orderInCategory="2"
             android:id="@+id/backup"
             android:checked="false"
             android:icon="@drawable/ic_save"
-            android:title="@string/save_and_restore_string" />
+            android:title="@string/title_activity_backup" />
 
         <item
             android:orderInCategory="3"
             android:id="@+id/parameter"
             android:checked="false"
             android:icon="@drawable/ic_settings"
-            android:title="@string/title_settings" />
+            android:title="@string/title_activity_setting" />
 
     </group>
 </menu>

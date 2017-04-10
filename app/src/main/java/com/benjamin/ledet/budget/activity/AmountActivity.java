@@ -29,15 +29,6 @@ public class AmountActivity extends AppCompatActivity {
     @BindView(R.id.rv_amount)
     RecyclerView amountRecyclerView;
 
-    private DatabaseHandler databaseHandler;
-
-    private Month month;
-    private Category category;
-
-    private List<Amount> amounts;
-    private AmountRecyclerViewAdapter amountAdapter;
-    private RecyclerView.LayoutManager layoutManagerAmount;
-
     //return to the previous fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -58,11 +49,21 @@ public class AmountActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        DatabaseHandler databaseHandler;
+        Month month;
+        Category category;
+        List<Amount> amounts;
+        AmountRecyclerViewAdapter amountAdapter;
+        RecyclerView.LayoutManager layoutManagerAmount;
+
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.details));
+        toolbar.setTitle(getResources().getString(R.string.title_activity_amount));
         setSupportActionBar(toolbar);
+
         //display back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         databaseHandler = new DatabaseHandler(this);
 

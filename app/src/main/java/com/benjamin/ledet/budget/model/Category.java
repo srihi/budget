@@ -8,10 +8,6 @@ import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by benjaminledet on 05/03/2017.
- */
-
 public class Category extends RealmObject {
 
     @PrimaryKey

@@ -19,10 +19,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by benjaminledet on 10/03/2017.
- */
-
 public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecyclerViewAdapter.ViewHolder> {
 
     private List<Amount> mAmounts;
@@ -39,15 +35,14 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
     public AmountRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_amount, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(rowView);
-        return viewHolder;
+        return new ViewHolder(rowView);
     }
 
     @Override
     public void onBindViewHolder(AmountRecyclerViewAdapter.ViewHolder holder, int position) {
         final Amount selectedAmount = mAmounts.get(position);
         holder.label.setText(selectedAmount.getLabel());
-        String textDate = mContext.getResources().getString(R.string.date,selectedAmount.getDay(),selectedAmount.getMonth().getMonth(),selectedAmount.getMonth().getYear());
+        String textDate = mContext.getResources().getString(R.string.amount_recycler_view_adapter_date,selectedAmount.getDay(),selectedAmount.getMonth().getMonth(),selectedAmount.getMonth().getYear());
         holder.date.setText(textDate);
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -60,12 +55,9 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
         return mAmounts.size();
     }
 
-    public void replaceData(List<Amount> customers){
-        mAmounts = customers;
-        notifyDataSetChanged();
-    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_amount_amount)
         TextView amount;
@@ -82,7 +74,7 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
         @BindView(R.id.row_amount_update)
         Button update;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -130,4 +122,5 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
             });
         }
     }
+
 }

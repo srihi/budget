@@ -9,66 +9,6 @@
         android:orientation="vertical"
         android:id="@+id/ll_category_expense">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="@string/tvRevenuTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_total_revenu_1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_total_revenu_2"
-                android:layout_toEndOf="@id/tv_total_revenu_1"/>
-
-            <TextView
-                android:text="@string/tvDepensesTotales"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_total_depenses_1"
-                android:layout_toEndOf="@id/tv_total_revenu_2"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_total_depenses_2"
-                android:layout_toEndOf="@id/tv_total_depenses_1"/>
-
-            <TextView
-                android:text="@string/tvLiquidites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_liquidites_1"
-                android:layout_below="@id/tv_total_revenu_1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_liquidites_2"
-                android:layout_below="@id/tv_total_revenu_2"
-                android:layout_toEndOf="@id/tv_liquidites_1"/>
-
-            <TextView
-                android:text="@string/tvPourcentage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_pourcentage_1"
-                android:layout_below="@id/tv_total_depenses_1"
-                android:layout_toEndOf="@id/tv_liquidites_2"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_pourcentage_2"
-                android:layout_below="@id/tv_total_depenses_2"
-                android:layout_toEndOf="@id/tv_pourcentage_1"/>
-
-        </RelativeLayout>
-
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

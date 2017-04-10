@@ -24,10 +24,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by benjaminledet on 06/03/2017.
- */
-
 public class CategoryExpenseFragment extends Fragment {
 
     @BindView(R.id.fab_category_management_expense)
@@ -38,9 +34,7 @@ public class CategoryExpenseFragment extends Fragment {
 
     private DatabaseHandler databaseHandler;
 
-    private List<Category> categoriesExpense;
     private ManagementCategoryRecyclerViewAdapter categoriesExpenseAdapter;
-    private RecyclerView.LayoutManager layoutManagerCategoriesExpense;
 
     @Nullable
     @Override
@@ -51,8 +45,8 @@ public class CategoryExpenseFragment extends Fragment {
         databaseHandler = new DatabaseHandler(this.getContext());
 
         //setup RecyclerView for categories expense
-        categoriesExpense = databaseHandler.getCategoriesExpense();
-        layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
+        List<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
+        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
         categoriesExpenseAdapter = new ManagementCategoryRecyclerViewAdapter(categoriesExpense, this.getContext());
         categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
         categoriesExpenseRecyclerView.setAdapter(categoriesExpenseAdapter);
@@ -70,10 +64,10 @@ public class CategoryExpenseFragment extends Fragment {
                 final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_category,null);
                 final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_label_category);
                 builder.setView(inflator);
-                builder.setTitle(getResources().getString(R.string.ajouter_categorie));
+                builder.setTitle(getResources().getString(R.string.activity_category_management_add_category));
 
                 builder.setIcon(R.drawable.ic_add_circle);
-                builder.setPositiveButton(getResources().getString(R.string.confirmer), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //add the category in database
@@ -82,7 +76,7 @@ public class CategoryExpenseFragment extends Fragment {
                         categoriesExpenseAdapter.notifyDataSetChanged();
                     }
                 });
-                builder.setNegativeButton(getResources().getString(R.string.annuler), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

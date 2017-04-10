@@ -3,10 +3,6 @@ package com.benjamin.ledet.budget.model;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by benjaminledet on 05/03/2017.
- */
-
 public class Amount extends RealmObject {
 
     @PrimaryKey

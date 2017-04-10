@@ -22,10 +22,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by benjaminledet on 05/03/2017.
- */
-
 public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<ManagementCategoryRecyclerViewAdapter.ViewHolder> {
 
     private List<Category> mCategorys;
@@ -42,8 +38,7 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
     public ManagementCategoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category_management, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(rowView);
-        return viewHolder;
+        return new ViewHolder(rowView);
     }
 
     @Override
@@ -59,12 +54,7 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
         return mCategorys.size();
     }
 
-    public void replaceData(List<Category> customers){
-        mCategorys = customers;
-        notifyDataSetChanged();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+   class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_category_management_icon)
         ImageView icon;
@@ -79,7 +69,7 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
         Button update;
 
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -89,7 +79,7 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
                     final Category selectedCategory = mCategorys.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     final LayoutInflater layoutInflater = ((Activity)mContext).getLayoutInflater();
-                    final View inflator = layoutInflater.inflate(R.layout.alert_dialog_update_category,null);
+                    final View inflator = layoutInflater.inflate(R.layout.alert_dialog_update_category, null);
                     builder.setView(inflator);
                     builder.setTitle("Catégorie " + selectedCategory.getLabel());
                     builder.setIcon(R.drawable.ic_edit);

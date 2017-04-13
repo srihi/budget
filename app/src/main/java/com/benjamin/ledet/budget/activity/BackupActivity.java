@@ -1,8 +1,10 @@
 package com.benjamin.ledet.budget.activity;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -150,12 +152,28 @@ public class BackupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!backupFolder.equals("")){
-                    uploadToDrive(DriveId.decodeFromString(backupFolder));
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+                    builder.setTitle(getString(R.string.save_data_label));
+                    builder.setMessage(getString(R.string.save_data_description));
+                    builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            uploadToDrive(DriveId.decodeFromString(backupFolder));
+                        }
+                    });
+                    builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
                 else{
                     showFolderErrorDialog();
                 }
-
             }
         });
 
@@ -164,15 +182,31 @@ public class BackupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!backupFolder.equals("")){
-                    if (budgetBackup != null)
-                    downloadFromDrive(budgetBackup.getDriveId().asDriveFile());
+                    if (budgetBackup != null){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+                        builder.setTitle(getString(R.string.restore_data_label));
+                        builder.setMessage(getString(R.string.restore_data_description));
+                        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                downloadFromDrive(budgetBackup.getDriveId().asDriveFile());
+                            }
+                        });
+                        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
                     else{
                         showBackupErrorDialog();
                     }
                 }else{
                     showFolderErrorDialog();
                 }
-
             }
         });
 

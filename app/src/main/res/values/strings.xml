@@ -22,6 +22,10 @@
     <!-- alert_dialog -->
     <string name="confirm">Confirmer </string>
     <string name="cancel">Annuler </string>
+    <string name="save_data_label">Sauvegarder les données</string>
+    <string name="save_data_description">Ceci va écraser la précédente sauvegarde. Voulez-vous vraiment sauvegarder vos données?</string>
+    <string name="restore_data_label">Restaurer les données</string>
+    <string name="restore_data_description">Ceci va écraser vos données actuelles. Voulez-vous vraiment restaurer à partir de la dernière sauvegarde?</string>
 
     <!-- alert_dialog_add_category -->
     <string name="alert_dialog_add_category_label">Libellé : </string>

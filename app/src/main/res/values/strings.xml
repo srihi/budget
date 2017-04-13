@@ -72,12 +72,20 @@
     <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
 
     <!-- fragment_expense-->
-    <string name="fragment_expense_total">Dépenses totales : %1$s €</string>
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>
 
     <!-- fragment_income-->
-    <string name="fragment_income_total">Revenu total : %1$s €</string>
     <string name="fragment_income_add_income">Ajouter un revenu</string>
+
+    <!-- fragment_expense & income-->
+    <string name="fragment_expense_income_total_expense_label">Dépenses mensuelles totales :</string>
+    <string name="fragment_expense_income_total_income_label">Revenu mensuel total :</string>
+    <string name="fragment_expense_income_percentage_label">Pourcentage du revenu dépensé :</string>
+    <string name="fragment_expense_income_balance_label">Solde :</string>
+    <string name="fragment_expense_income_total_expense_amount">%1$s €</string>
+    <string name="fragment_expense_income_total_income_amount">%1$s €</string>
+    <string name="fragment_expense_income_percentage_amount">%1$s %</string>
+    <string name="fragment_expense_income_balance_amount">%1$s €</string>
 
     <!-- AmountRecyclerViewAdapter -->
     <string name="amount_recycler_view_adapter_date">le %1$d/%2$d/%3$d</string>
@@ -106,7 +114,7 @@
 
     <!-- Global -->
     <string name="amount">%1$s €</string>
-    <string name="currency">€</string>
+    <string name="percentage">%1$s %%</string>
     <string name="icon_category">icone de la catégorie</string>
     <string name="soon_available">Bientôt disponible...</string>
     <string name="optional">(facultatif)</string>

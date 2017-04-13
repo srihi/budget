@@ -106,6 +106,7 @@ public class IncomeFragment extends Fragment {
                         if(!categoriesIncomeNotEmpty.contains(categorySelected)){
                             categoriesIncomeNotEmpty.add(categorySelected);
                         }
+                        ((MainActivity) getActivity()).setSummary(month);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -125,13 +126,15 @@ public class IncomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //get the month from the id givent by mainActivity
+        //get the month from the id given by mainActivity
         String id = this.getArguments().getString("id");
         if (id != null){
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
         }
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
+
+        ((MainActivity)getActivity()).setSummary(month);
 
         //setup RecyclerView for categories income
         categoriesIncomeNotEmpty = databaseHandler.getCategoriesIncomeNotEmptyForMonth(month);
@@ -157,5 +160,13 @@ public class IncomeFragment extends Fragment {
 
             }
         }));
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).setSummary(month);
+    }
+
 }

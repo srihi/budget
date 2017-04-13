@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
@@ -41,17 +40,7 @@ public class ExpenseFragment extends Fragment {
     @BindView(R.id.rv_category_expense)
     RecyclerView categoriesExpenseRecyclerView;
 
-    //@BindView(R.id.tv_total_depenses_2)
-    TextView tvTotalDepenses;
 
-    //@BindView(R.id.tv_total_revenu_2)
-    TextView tvTotalRevenu;
-
-    //@BindView(R.id.tv_liquidites_2)
-    TextView tvLiquidites;
-
-    //@BindView(R.id.tv_pourcentage_2)
-    TextView tvPourcentage;
 
     private DatabaseHandler databaseHandler;
 
@@ -62,12 +51,6 @@ public class ExpenseFragment extends Fragment {
 
     private int day;
     private Month month;
-    private String id;
-
-    private double totalRevenu;
-    private double totaldepenses;
-    private double liquidites;
-    private double pourcentage;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -125,6 +108,7 @@ public class ExpenseFragment extends Fragment {
                         if(!categoriesExpenseNotEmpty.contains(categorySelected)){
                             categoriesExpenseNotEmpty.add(categorySelected);
                         }
+                        ((MainActivity)getActivity()).setSummary(month);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -145,13 +129,14 @@ public class ExpenseFragment extends Fragment {
         super.onStart();
 
         //get the month from the id given by mainActivity
-        String  id = this.getArguments().getString("id");
+        String id = this.getArguments().getString("id");
         if (id != null){
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
         }
-
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
+
+        ((MainActivity)getActivity()).setSummary(month);
 
         //setup RecyclerView for categories expense
         categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
@@ -178,53 +163,11 @@ public class ExpenseFragment extends Fragment {
             }
         }));
 
-        /*
-        setTotalRevenus();
-        setTotalDepenses();
-        setLiquidites();
-        setPourcentage();
-*/
-
-    }
-/*
-    //total des fragment_income_name du mois
-    private void setTotalRevenus(){
-        totalRevenu =  databaseHandler.getSumIncomesOfMonth(month);
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-        String text = getString(R.string.amount,df.format(totalRevenu));
-        tvTotalRevenu.setText(text);
     }
 
-    //total des dépenses du mois
-    private void setTotalDepenses(){
-        totaldepenses = databaseHandler.getSumExpensesOfMonth(month);
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-        String text = getString(R.string.amount,df.format(totaldepenses));
-        tvTotalDepenses.setText(text);
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).setSummary(month);
     }
-
-    //Liquidités du mois
-    private void setLiquidites(){
-        liquidites = totalRevenu - totaldepenses;
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-        String text = getString(R.string.amount,df.format(liquidites));
-        tvLiquidites.setText(text);
-    }
-
-    //Pourcentage du revenu dépensé
-    private void setPourcentage(){
-        if (totalRevenu == 0){
-            pourcentage = 0;
-        }else{
-            pourcentage = (totaldepenses / totalRevenu) * 100;
-        }
-        DecimalFormat df = new DecimalFormat("#");
-        df.setRoundingMode(RoundingMode.CEILING);
-        String text = getString(R.string.pourcentage,df.format(pourcentage));
-        tvPourcentage.setText(text);
-    }
-    */
 }

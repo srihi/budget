@@ -1,0 +1,69 @@
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/PrimaryColor">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_expense_income_total_expense_label"
+            android:textColor="@android:color/background_light"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/summary_total_expenses"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_expense_income_total_income_label"
+            android:textColor="@android:color/background_light"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/summary_total_income"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_expense_income_percentage_label"
+            android:textColor="@android:color/background_light"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/summary_pourcentage"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_expense_income_balance_label"
+            android:textColor="@android:color/background_light"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/summary_balance"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="10dp"/>
+
+ </LinearLayout>

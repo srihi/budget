@@ -3,6 +3,7 @@ package com.benjamin.ledet.budget.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -60,6 +63,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
+
+    @BindView(R.id.summary_total_expenses)
+    TextView tvTotalExpenses;
+
+    @BindView(R.id.summary_total_income)
+    TextView tvTotalIncome;
+
+    @BindView(R.id.summary_balance)
+    TextView tvBalance;
+
+    @BindView(R.id.summary_pourcentage)
+    TextView tvPercentage;
 
     CircleImageView civProfil;
 
@@ -186,21 +201,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
+    private void signIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .requestProfile()
+                .build();
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent,9001);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -223,6 +237,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 setupHeader();
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 9001) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
     }
 
     private void setupMenu(Menu menu){
@@ -285,20 +316,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    private void signIn() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .requestProfile()
-                .build();
-
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent,9001);
+    public void setSummary(Month month){
+        double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
+        double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
+        double balance = totalIncome - totalExpenses;
+        double percentage = 0;
+        if (totalIncome != 0){
+            percentage = (totalExpenses / totalIncome) * 100;
+        }
+        if (totalIncome == 0 && totalExpenses != 0){
+            percentage = 100;
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        tvTotalExpenses.setText(getString(R.string.amount,String.valueOf(df.format(totalExpenses))));
+        tvTotalIncome.setText(getString(R.string.amount,String.valueOf(df.format(totalIncome))));
+        tvPercentage.setText(getString(R.string.percentage,String.valueOf(df.format(percentage))));
+        tvPercentage.setTextColor(tvTotalExpenses.getTextColors());
+        if (percentage >= 100){
+            tvPercentage.setTextColor(Color.RED);
+        }
+        tvBalance.setText(getString(R.string.amount,String.valueOf(df.format(balance))));
+        tvBalance.setTextColor(tvTotalExpenses.getTextColors());
+        if (balance < 0){
+            tvBalance.setTextColor(Color.RED);
+        }
     }
-
 }

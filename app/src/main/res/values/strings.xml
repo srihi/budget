@@ -35,16 +35,27 @@
     <!-- alert_dialog_add_amount -->
     <string name="alert_dialog_add_amount_category">Catégorie : </string>
     <string name="alert_dialog_add_amount_amount">Montant : </string>
-    <string name="alert_dialog_add_amount_optional">(facultatif) </string>
     <string name="alert_dialog_add_amount_day">Jour : </string>
 
-    <!-- alert_dialog_update_category-->
-    <string name="alert_dialog_update_category_new_label">Nouveau libellé : </string>
+    <!-- alert_dialog_update_category & update_amount-->
+    <string name="alert_dialog_update_new_label">Nouveau libellé : </string>
+    <string name="alert_dialog_update_new_amount">Nouveau montant : </string>
 
     <!-- activity_category_management -->
     <string name="activity_category_management_categories_income">Catégories revenus : </string>
     <string name="activity_category_management_categories_expense">Catégories dépenses : </string>
     <string name="activity_category_management_add_category">Ajouter une catégorie : </string>
+    <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
+    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ?</string>
+    <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
+
+    <!-- activity_amount -->
+    <string name="activity_amount_delete_expense_label">Supprimer une dépense</string>
+    <string name="activity_amount_delete_income_label">Supprimer un revenu</string>
+    <string name="activity_amount_delete_expense_description">Voulez-vous vraiment supprimer la dépense \"%1$s\" ?</string>
+    <string name="activity_amount_delete_income_description">Voulez-vous vraiment supprimer le revenu \"%1$s\" ?</string>
+    <string name="activity_amount_update_expense_label">Dépense %1$s</string>
+    <string name="activity_amount_update_income_label">Revenu %1$s</string>
 
     <!-- activity_backup -->
     <string name="activity_backup_backup_folder_label">Dossier de sauvegarde</string>
@@ -62,9 +73,11 @@
 
     <!-- fragment_expense-->
     <string name="fragment_expense_total">Dépenses totales : %1$s €</string>
+    <string name="fragment_expense_add_expense">Ajouter une dépense</string>
 
     <!-- fragment_income-->
     <string name="fragment_income_total">Revenu total : %1$s €</string>
+    <string name="fragment_income_add_income">Ajouter un revenu</string>
 
     <!-- AmountRecyclerViewAdapter -->
     <string name="amount_recycler_view_adapter_date">le %1$d/%2$d/%3$d</string>
@@ -96,5 +109,6 @@
     <string name="currency">€</string>
     <string name="icon_category">icone de la catégorie</string>
     <string name="soon_available">Bientôt disponible...</string>
+    <string name="optional">(facultatif)</string>
 
 </resources>

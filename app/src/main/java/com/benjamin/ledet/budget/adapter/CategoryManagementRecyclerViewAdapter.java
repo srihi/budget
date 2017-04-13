@@ -22,27 +22,27 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<ManagementCategoryRecyclerViewAdapter.ViewHolder> {
+public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<CategoryManagementRecyclerViewAdapter.ViewHolder> {
 
     private List<Category> mCategorys;
     private final Context mContext;
     private DatabaseHandler db;
 
-    public ManagementCategoryRecyclerViewAdapter(List<Category> mCategorys, Context context) {
+    public CategoryManagementRecyclerViewAdapter(List<Category> mCategorys, Context context) {
         this.mCategorys = mCategorys;
         this.mContext = context;
         this.db = new DatabaseHandler(context);
     }
 
     @Override
-    public ManagementCategoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CategoryManagementRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category_management, parent, false);
 
         return new ViewHolder(rowView);
     }
 
     @Override
-    public void onBindViewHolder(ManagementCategoryRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryManagementRecyclerViewAdapter.ViewHolder holder, int position) {
         final Category selectedCategory = mCategorys.get(position);
         holder.label.setText(selectedCategory.getLabel());
         holder.icon.setImageDrawable(selectedCategory.getIcon());
@@ -81,17 +81,17 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
                     final LayoutInflater layoutInflater = ((Activity)mContext).getLayoutInflater();
                     final View inflator = layoutInflater.inflate(R.layout.alert_dialog_update_category, null);
                     builder.setView(inflator);
-                    builder.setTitle("Catégorie " + selectedCategory.getLabel());
+                    builder.setTitle(mContext.getString(R.string.activity_category_management_update_category_label,selectedCategory.getLabel()));
                     builder.setIcon(R.drawable.ic_edit);
-                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            EditText etUpdateCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
-                            db.updateCategory(selectedCategory,etUpdateCategorie.getText().toString());
+                            EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
+                            db.updateCategory(selectedCategory,etUpdateLabel.getText().toString());
                             notifyDataSetChanged();
                         }
                     });
-                    builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }
@@ -106,10 +106,10 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
                 public void onClick(View view) {
                     final Category selectedCategory = mCategorys.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Supprimer une catégorie");
+                    builder.setTitle(R.string.activity_category_management_delete_category_label);
                     builder.setIcon(R.drawable.ic_delete);
-                    builder.setMessage("Voulez-vous vraiment supprimer la catégorie \"" + selectedCategory.getLabel() + "\" ?");
-                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                    builder.setMessage(mContext.getString(R.string.activity_category_management_delete_category_description,selectedCategory.getLabel()));
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -117,7 +117,7 @@ public class ManagementCategoryRecyclerViewAdapter extends RecyclerView.Adapter<
                             notifyDataSetChanged();
                         }
                     });
-                    builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }

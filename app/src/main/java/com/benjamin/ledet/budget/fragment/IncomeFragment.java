@@ -83,9 +83,9 @@ public class IncomeFragment extends Fragment {
                 categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesIncome);
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
-                builder.setTitle("Ajouter un revenu");
+                builder.setTitle(R.string.fragment_income_add_income);
                 builder.setIcon(R.drawable.ic_add_circle);
-                builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -108,7 +108,7 @@ public class IncomeFragment extends Fragment {
                         }
                     }
                 });
-                builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

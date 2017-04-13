@@ -125,7 +125,7 @@ public class BackupActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.title_activity_backup));
+        toolbar.setTitle(R.string.title_activity_backup);
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){
@@ -154,16 +154,16 @@ public class BackupActivity extends AppCompatActivity {
                 if (!backupFolder.equals("")){
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                    builder.setTitle(getString(R.string.save_data_label));
-                    builder.setMessage(getString(R.string.save_data_description));
-                    builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.save_data_label);
+                    builder.setMessage(R.string.save_data_description);
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             uploadToDrive(DriveId.decodeFromString(backupFolder));
                         }
                     });
-                    builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }
@@ -184,16 +184,16 @@ public class BackupActivity extends AppCompatActivity {
                 if (!backupFolder.equals("")){
                     if (budgetBackup != null){
                         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                        builder.setTitle(getString(R.string.restore_data_label));
-                        builder.setMessage(getString(R.string.restore_data_description));
-                        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.restore_data_label);
+                        builder.setMessage(R.string.restore_data_description);
+                        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 downloadFromDrive(budgetBackup.getDriveId().asDriveFile());
                             }
                         });
-                        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
@@ -317,7 +317,7 @@ public class BackupActivity extends AppCompatActivity {
             calendar.setTimeInMillis(budgetBackup.getModifiedDate());
             tvLastBackup.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
         }else{
-            tvLastBackup.setText(getString(R.string.activity_backup_last_backup_description));
+            tvLastBackup.setText(R.string.activity_backup_last_backup_description);
         }
     }
 
@@ -539,31 +539,31 @@ public class BackupActivity extends AppCompatActivity {
     }
 
     private void showBackupSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_backup_success) , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_backup_success , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
         snackbar.show();
     }
 
     private void showBackupErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_backup_error) , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_backup_error , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }
 
     private void showFolderSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_folder_success) , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_folder_success , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
         snackbar.show();
     }
 
     private void showFolderErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_folder_error) , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_folder_error , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }
 
     private void showErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , getString(R.string.snackbar_error) , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_error , Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }

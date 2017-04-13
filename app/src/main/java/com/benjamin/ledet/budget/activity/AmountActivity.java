@@ -57,7 +57,7 @@ public class AmountActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManagerAmount;
 
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.title_activity_amount));
+        toolbar.setTitle(R.string.title_activity_amount);
         setSupportActionBar(toolbar);
 
         //display back button

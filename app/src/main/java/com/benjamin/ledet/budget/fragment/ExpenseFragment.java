@@ -102,9 +102,9 @@ public class ExpenseFragment extends Fragment {
                 categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesExpense);
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
-                builder.setTitle("Ajouter une dépense");
+                builder.setTitle(R.string.fragment_expense_add_expense);
                 builder.setIcon(R.drawable.ic_add_circle);
-                builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -127,7 +127,7 @@ public class ExpenseFragment extends Fragment {
                         }
                     }
                 });
-                builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

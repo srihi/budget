@@ -45,7 +45,7 @@ public class CategoryManagementActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(getResources().getString(R.string.title_activity_category_management));
+        toolbar.setTitle(R.string.title_activity_category_management);
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){

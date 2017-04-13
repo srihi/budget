@@ -16,7 +16,7 @@ import android.widget.EditText;
 
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
-import com.benjamin.ledet.budget.adapter.ManagementCategoryRecyclerViewAdapter;
+import com.benjamin.ledet.budget.adapter.CategoryManagementRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class CategoryIncomeFragment extends Fragment {
 
     private DatabaseHandler databaseHandler;
 
-    private ManagementCategoryRecyclerViewAdapter categoriesIncomeAdapter;
+    private CategoryManagementRecyclerViewAdapter categoriesIncomeAdapter;
 
     @Nullable
     @Override
@@ -47,7 +47,7 @@ public class CategoryIncomeFragment extends Fragment {
         //setup RecyclerView for categories income
         List<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
         RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(this.getContext());
-        categoriesIncomeAdapter = new ManagementCategoryRecyclerViewAdapter(categoriesIncome,this.getContext());
+        categoriesIncomeAdapter = new CategoryManagementRecyclerViewAdapter(categoriesIncome,this.getContext());
         categoriesIncomeRecyclerView.setLayoutManager(layoutManagerCategoriesIncome);
         categoriesIncomeRecyclerView.setAdapter(categoriesIncomeAdapter);
         //put a line between each element in the recycler view
@@ -64,9 +64,9 @@ public class CategoryIncomeFragment extends Fragment {
                 final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_category,null);
                 final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_label_category);
                 builder.setView(inflator);
-                builder.setTitle(getResources().getString(R.string.activity_category_management_add_category));
+                builder.setTitle(R.string.activity_category_management_add_category);
                 builder.setIcon(R.drawable.ic_add_circle);
-                builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //add the category in database
@@ -75,7 +75,7 @@ public class CategoryIncomeFragment extends Fragment {
                         categoriesIncomeAdapter.notifyDataSetChanged();
                     }
                 });
-                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

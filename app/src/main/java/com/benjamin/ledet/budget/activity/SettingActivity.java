@@ -33,7 +33,7 @@ public class SettingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle("Réglages");
+        toolbar.setTitle(R.string.title_activity_setting);
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){

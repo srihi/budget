@@ -262,8 +262,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         expenseFragment.setArguments(bundle);
         incomeFragment.setArguments(bundle);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(expenseFragment, getResources().getString(R.string.title_fragment_expense));
-        adapter.addFragment(incomeFragment, getResources().getString(R.string.title_fragment_income));
+        adapter.addFragment(expenseFragment, getString(R.string.title_fragment_expense));
+        adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
         viewPager.setAdapter(adapter);
     }
 

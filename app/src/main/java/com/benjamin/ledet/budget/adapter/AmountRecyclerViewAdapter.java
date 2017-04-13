@@ -1,5 +1,6 @@
 package com.benjamin.ledet.budget.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Amount;
@@ -16,6 +19,7 @@ import com.benjamin.ledet.budget.model.Amount;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,11 +46,11 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
     public void onBindViewHolder(AmountRecyclerViewAdapter.ViewHolder holder, int position) {
         final Amount selectedAmount = mAmounts.get(position);
         holder.label.setText(selectedAmount.getLabel());
-        String textDate = mContext.getResources().getString(R.string.amount_recycler_view_adapter_date,selectedAmount.getDay(),selectedAmount.getMonth().getMonth(),selectedAmount.getMonth().getYear());
+        String textDate = mContext.getString(R.string.amount_recycler_view_adapter_date,selectedAmount.getDay(),selectedAmount.getMonth().getMonth(),selectedAmount.getMonth().getYear());
         holder.date.setText(textDate);
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        String textAmount = mContext.getResources().getString(R.string.amount,df.format(selectedAmount.getAmount()));
+        String textAmount = mContext.getString(R.string.amount,df.format(selectedAmount.getAmount()));
         holder.amount.setText(textAmount);
     }
 
@@ -81,7 +85,38 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
             update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final Amount selectedAmount = mAmounts.get(getLayoutPosition());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    final LayoutInflater layoutInflater = ((Activity)mContext).getLayoutInflater();
+                    final View inflator = layoutInflater.inflate(R.layout.alert_dialog_update_amount, null);
+                    builder.setView(inflator);
+                    if (selectedAmount.getCategory().isIncome()){
+                        builder.setTitle(mContext.getString(R.string.activity_amount_update_income_label,selectedAmount.getLabel()));
+                    }else{
+                        builder.setTitle(mContext.getString(R.string.activity_amount_update_expense_label,selectedAmount.getLabel()));
+                    }
 
+                    builder.setIcon(R.drawable.ic_edit);
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            EditText etUpdateLabel= (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_amount_label);
+                            EditText etUpdateAmount= (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_amount_amount);
+                            String label = etUpdateLabel.getText().toString();
+                            if (label.length() == 0){
+                                label = selectedAmount.getLabel();
+                            }
+                            db.updateAmount(selectedAmount,label,Double.parseDouble(etUpdateAmount.getText().toString()));
+                            notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
 
@@ -91,27 +126,30 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
                     final Amount selectedAmount = mAmounts.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     if (selectedAmount.getCategory().isIncome()){
-                        builder.setTitle("Supprimer un revenu");
+                        builder.setTitle(R.string.activity_amount_delete_income_label);
                     }else{
-                        builder.setTitle("Supprimer une dépense");
+                        builder.setTitle(R.string.activity_amount_delete_expense_label);
                     }
 
                     builder.setIcon(R.drawable.ic_delete);
                     if (selectedAmount.getCategory().isIncome()){
-                        builder.setMessage("Voulez-vous vraiment supprimer le revenu \"" + selectedAmount.getLabel() + "\" ?");
+                        builder.setMessage(mContext.getString(R.string.activity_amount_delete_income_description,selectedAmount.getLabel()));
                     }else{
-                        builder.setMessage("Voulez-vous vraiment supprimer la dépense \"" + selectedAmount.getLabel() + "\" ?");
+                        builder.setMessage(mContext.getString(R.string.activity_amount_delete_expense_description,selectedAmount.getLabel()));
                     }
 
-                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             db.deleteAmount(selectedAmount);
                             notifyDataSetChanged();
+                            if(mAmounts.size() == 0){
+                                ((Activity)mContext).finish();
+                            }
                         }
                     });
-                    builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }

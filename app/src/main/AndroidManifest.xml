@@ -29,10 +29,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.BackupDriveActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
         <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity"
             android:screenOrientation="portrait">
         </activity>

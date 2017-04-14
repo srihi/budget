@@ -109,12 +109,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean("first_launch",true)){
 
-            databaseHandler.deleteAll();
-            databaseHandler.addMonths();
-            databaseHandler.addCategories();
-            databaseHandler.addIncomes();
-            databaseHandler.addExpenses();
-
             signIn();
             sharedPreferences.edit().putBoolean("first_launch",false).apply();
         } else {

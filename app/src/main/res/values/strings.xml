@@ -48,6 +48,10 @@
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
     <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ?</string>
     <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
+    <string name="activity_category_management_add_category_expense_message">La catégorie de dépense a bien été ajoutée.</string>
+    <string name="activity_category_management_add_category_income_message">La catégorie de revenu a bien été ajoutée.</string>
+    <string name="activity_category_management_update_category_message">La catégorie a bien été modifiée.</string>
+    <string name="activity_category_management_delete_category_message">La catégorie a bien été supprimée.</string>
 
     <!-- activity_amount -->
     <string name="activity_amount_delete_expense_label">Supprimer une dépense</string>
@@ -56,6 +60,10 @@
     <string name="activity_amount_delete_income_description">Voulez-vous vraiment supprimer le revenu \"%1$s\" ?</string>
     <string name="activity_amount_update_expense_label">Dépense %1$s</string>
     <string name="activity_amount_update_income_label">Revenu %1$s</string>
+    <string name="activity_amount_delete_expense_message">La dépense a bien été supprimée.</string>
+    <string name="activity_amount_delete_income_message">Le revenu a bien été supprimé.</string>
+    <string name="activity_amount_update_expense_message">La dépense a bien été modifiée.</string>
+    <string name="activity_amount_update_income_message">Le revenu a bien été modifié.</string>
 
     <!-- activity_backup -->
     <string name="activity_backup_backup_folder_label">Dossier de sauvegarde</string>
@@ -73,9 +81,11 @@
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>
+    <string name="fragment_expense_add_expense_message">La dépense a bien été ajoutée.</string>
 
     <!-- fragment_income-->
     <string name="fragment_income_add_income">Ajouter un revenu</string>
+    <string name="fragment_income_add_income_message">La dépense a bien été ajoutée.</string>
 
     <!-- fragment_expense & income-->
     <string name="fragment_expense_income_total_expense_label">Dépenses mensuelles totales :</string>

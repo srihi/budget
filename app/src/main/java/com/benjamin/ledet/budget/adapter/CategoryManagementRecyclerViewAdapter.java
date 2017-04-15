@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +91,9 @@ public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<
                             EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
                             db.updateCategory(selectedCategory,etUpdateLabel.getText().toString());
                             notifyDataSetChanged();
+                            Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
+                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                            snackbar.show();
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -103,7 +108,7 @@ public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     final Category selectedCategory = mCategorys.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle(R.string.activity_category_management_delete_category_label);
@@ -112,9 +117,11 @@ public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<
                     builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                             db.deleteCategory(selectedCategory);
                             notifyDataSetChanged();
+                            Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_delete_category_message, Snackbar.LENGTH_SHORT);
+                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                            snackbar.show();
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

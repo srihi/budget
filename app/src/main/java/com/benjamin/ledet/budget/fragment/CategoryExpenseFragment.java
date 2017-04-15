@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,7 +59,7 @@ public class CategoryExpenseFragment extends Fragment {
         //add category
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
                 //get the appropriate view
@@ -74,6 +76,9 @@ public class CategoryExpenseFragment extends Fragment {
                         Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(),etAddLibelleCategorie.getText().toString(),false);
                         databaseHandler.addCategory(categoryToAdd);
                         categoriesExpenseAdapter.notifyDataSetChanged();
+                        Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
+                        snackbar.show();
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

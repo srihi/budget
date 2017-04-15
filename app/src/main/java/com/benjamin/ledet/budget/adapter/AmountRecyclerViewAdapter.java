@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +86,7 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
 
             update.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     final Amount selectedAmount = mAmounts.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     final LayoutInflater layoutInflater = ((Activity)mContext).getLayoutInflater();
@@ -108,6 +110,15 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
                             }
                             db.updateAmount(selectedAmount,label,Double.parseDouble(etUpdateAmount.getText().toString()));
                             notifyDataSetChanged();
+                            if (selectedAmount.getCategory().isIncome()){
+                                Snackbar snackbar = Snackbar.make(view , R.string.activity_amount_update_income_message, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                                snackbar.show();
+                            }else{
+                                Snackbar snackbar = Snackbar.make(view , R.string.activity_amount_update_expense_message, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                                snackbar.show();
+                            }
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -122,7 +133,7 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     final Amount selectedAmount = mAmounts.get(getLayoutPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     if (selectedAmount.getCategory().isIncome()){
@@ -141,9 +152,18 @@ public class AmountRecyclerViewAdapter extends RecyclerView.Adapter<AmountRecycl
                     builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            Boolean isIncome = selectedAmount.getCategory().isIncome();
                             db.deleteAmount(selectedAmount);
                             notifyDataSetChanged();
+                            if (isIncome){
+                                Snackbar snackbar = Snackbar.make(view , R.string.activity_amount_delete_income_message, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                                snackbar.show();
+                            }else{
+                                Snackbar snackbar = Snackbar.make(view , R.string.activity_amount_delete_expense_message, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
+                                snackbar.show();
+                            }
                             if(mAmounts.size() == 0){
                                 ((Activity)mContext).finish();
                             }

@@ -106,8 +106,9 @@ public class ExpenseFragment extends Fragment {
                         databaseHandler.addAmount(amount);
                         categoriesExpenseAdapter.notifyDataSetChanged();
                         if(!categoriesExpenseNotEmpty.contains(categorySelected)){
-                            categoriesExpenseNotEmpty.add(categorySelected);
+                            categoriesExpenseNotEmpty.add(databaseHandler.getCategoriesExpenseNotEmptyForMonth(month).indexOf(categorySelected),categorySelected);
                         }
+
                         ((MainActivity)getActivity()).setSummary(month);
                     }
                 });

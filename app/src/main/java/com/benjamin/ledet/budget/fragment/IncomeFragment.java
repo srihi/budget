@@ -104,7 +104,8 @@ public class IncomeFragment extends Fragment {
                         databaseHandler.addAmount(amount);
                         categoriesIncomeAdapter.notifyDataSetChanged();
                         if(!categoriesIncomeNotEmpty.contains(categorySelected)){
-                            categoriesIncomeNotEmpty.add(categorySelected);
+                            categoriesIncomeNotEmpty.add(databaseHandler.getCategoriesIncomeNotEmptyForMonth(month).indexOf(categorySelected),categorySelected);
+
                         }
                         ((MainActivity) getActivity()).setSummary(month);
                     }

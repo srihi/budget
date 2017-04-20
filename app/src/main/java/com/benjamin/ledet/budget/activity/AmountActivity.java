@@ -56,20 +56,20 @@ public class AmountActivity extends AppCompatActivity {
         AmountRecyclerViewAdapter amountAdapter;
         RecyclerView.LayoutManager layoutManagerAmount;
 
+        databaseHandler = new DatabaseHandler(this);
+
+        month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
+        category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
+        amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
+
         //display toolbar
-        toolbar.setTitle(R.string.title_activity_amount);
+        toolbar.setTitle(Month.displayMonthString(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
         setSupportActionBar(toolbar);
 
         //display back button
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        databaseHandler = new DatabaseHandler(this);
-
-        month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
-        category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
-        amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         layoutManagerAmount = new LinearLayoutManager(AmountActivity.this);
         amountAdapter = new AmountRecyclerViewAdapter(amounts, AmountActivity.this);

@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,10 @@ public class CategoryExpenseFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //add the category in database
+                        if (databaseHandler.findCategoryExpenseByLabel(etAddLibelleCategorie.getText().toString()) != null){
+                            Log.e("test",databaseHandler.findCategoryExpenseByLabel(etAddLibelleCategorie.getText().toString()).getLabel());
+                        }
+
                         Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(),etAddLibelleCategorie.getText().toString(),false);
                         databaseHandler.addCategory(categoryToAdd);
                         categoriesExpenseAdapter.notifyDataSetChanged();

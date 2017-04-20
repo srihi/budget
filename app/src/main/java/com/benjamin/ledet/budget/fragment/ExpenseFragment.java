@@ -23,7 +23,7 @@ import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
 import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
 import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
-import com.benjamin.ledet.budget.adapter.RecyclerItemClickListener;
+import com.benjamin.ledet.budget.tool.RecyclerItemClickListener;
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;

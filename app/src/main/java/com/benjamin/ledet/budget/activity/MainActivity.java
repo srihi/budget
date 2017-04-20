@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
@@ -28,6 +29,7 @@ import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
 import com.benjamin.ledet.budget.model.Month;
+import com.benjamin.ledet.budget.tool.Animation;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -75,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @BindView(R.id.summary_pourcentage)
     TextView tvPercentage;
+
+    @BindView(R.id.ll_summary)
+    LinearLayout llSummary;
+
+    @BindView(R.id.ll_summary_1)
+    LinearLayout llSummary1;
+
+    @BindView(R.id.ll_summary_2)
+    LinearLayout llSummary2;
 
     CircleImageView civProfil;
 
@@ -335,5 +346,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (balance < 0){
             tvBalance.setTextColor(Color.RED);
         }
+
+        llSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(llSummary1.isShown()){
+                    Animation.slideUp(getApplicationContext(), llSummary1);
+                    llSummary1.setVisibility(View.GONE);
+                }
+                else{
+                    llSummary1.setVisibility(View.VISIBLE);
+                    Animation.slideDown(getApplicationContext(), llSummary1);
+                }
+            }
+        });
+
     }
 }

@@ -1,4 +1,4 @@
-package com.benjamin.ledet.budget.adapter;
+package com.benjamin.ledet.budget.tool;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

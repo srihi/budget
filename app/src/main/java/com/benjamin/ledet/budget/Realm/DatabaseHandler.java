@@ -106,6 +106,20 @@ public class DatabaseHandler {
         return realm.where(Category.class).equalTo("id", id).findFirst();
     }
 
+    public Category findCategoryExpenseByLabel(String label){
+        return realm.where(Category.class)
+                .like("label", "*" + label + "*")
+                .equalTo("isIncome",false)
+                .findFirst();
+    }
+
+    public Category findCategoryIncomeByLabel(String label){
+        return realm.where(Category.class)
+                .like("label", "*" + label + "*")
+                .equalTo("isIncome",true)
+                .findFirst();
+    }
+
     public void addCategory(final Category category){
         realm.executeTransaction(new Realm.Transaction() {
             @Override

@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.backup.Backup;
-import com.benjamin.ledet.budget.model.BudgetBackup;
+import com.benjamin.ledet.budget.backup.BudgetBackup;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;

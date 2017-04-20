@@ -57,6 +57,7 @@ public class AmountActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManagerAmount;
 
         databaseHandler = new DatabaseHandler(this);
+       //test
 
         month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
         category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));

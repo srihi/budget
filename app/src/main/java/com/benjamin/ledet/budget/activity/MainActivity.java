@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -126,9 +125,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             setupHeader();
         }
 
+        //check if it's a new month and add it
+        checkNewMonth();
+
         //display the navigationView
-        Menu menu = navigationView.getMenu();
-        setupMenu(menu);
+        final Menu menu = navigationView.getMenu();
+        setupNavigationViewMenu(menu);
 
         //display viewPager with the tabs
         setupViewPager(viewPager);
@@ -156,36 +158,48 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         //on item menu click
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                //indicates the item selected by a gray background
-                menuItem.setCheckable(true);
-                menuItem.setChecked(true);
-
-                //close the menu
-                drawerLayout.closeDrawers();
-
                 //open the parameter activity
                 if( menuItem.getItemId() == R.id.parameter){
+                    //close the menu
+                    drawerLayout.closeDrawers();
                     Intent intent = new Intent(MainActivity.this,SettingActivity.class);
                     startActivity(intent);
                     return true;
                 }
                 //open the management category activity
                 else if(menuItem.getItemId() == R.id.category_management){
+                    //close the menu
+                    drawerLayout.closeDrawers();
                     Intent intent = new Intent(MainActivity.this,CategoryManagementActivity.class);
                     startActivity(intent);
                     return true;
                 }
                 else if(menuItem.getItemId() == R.id.backup){
+                    //close the menu
+                    drawerLayout.closeDrawers();
                     Intent intent = new Intent(MainActivity.this,BackupActivity.class);
                     startActivity(intent);
                     return true;
                 }
-                else{
+                //select year item
+                else if(String.valueOf(menuItem.getItemId()).length() == 4){
+
+                    if(menuItem.getActionView().getId() == R.id.row_year_icon_open ){
+                        menuItem.setActionView(R.layout.row_year_close);
+
+                    }else{
+                        menuItem.setActionView(R.layout.row_year_open);
+                    }
+                    showOrCloseMonths(menu, menuItem.getItemId());
+                    return true;
+
+                }else{
+                    //indicates the item selected by a gray background
+                    menuItem.setCheckable(true);
+                    //close the menu
+                    drawerLayout.closeDrawers();
                     //open the selected month by replacing the old selected
                     bundle.clear();
                     bundle.putString("id",String.valueOf(menuItem.getItemId()));
@@ -194,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     //display fragments according to the selected month
                     expenseFragment.onStart();
                     incomeFragment.onStart();
+
                     return true;
                 }
             }
@@ -261,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
     }
 
-    private void setupMenu(Menu menu){
+    private void checkNewMonth(){
         if(databaseHandler.getMonth(actualMonth, actualYear) == null){
             Month month = new Month();
             month.setId(databaseHandler.getMonthNextKey());
@@ -269,38 +284,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             month.setYear(actualYear);
             databaseHandler.addMonth(month);
         }
-        ArrayList<Integer> years = databaseHandler.getYears();
-        int index = 1;
-        //id combining month and year which will be sent to the fragments
-        String id;
-        ArrayList<Integer> months;
-        //submenu of months of each year
-        SubMenu subMenuYear ;
-        for (Integer year: years){
-            subMenuYear = menu.addSubMenu(index,index,0,year.toString());
-            months = databaseHandler.getMonthsOfYear(year);
-            for (Integer month: months) {
-                id = year + "" + month;
-                subMenuYear.add(index,Integer.parseInt(id),0,Month.displayMonthString(month,getApplicationContext()));
-                MenuItem menuItem = menu.findItem(Integer.parseInt(id));
-                menuItem.setIcon(R.drawable.ic_today);
-            }
-            index++;
-        }
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        expenseFragment = new ExpenseFragment();
-        incomeFragment = new IncomeFragment();
-        //send month and year to fragments
-        bundle = new Bundle();
-        bundle.putString("id",String.valueOf(actualYear + "" + actualMonth));
-        expenseFragment.setArguments(bundle);
-        incomeFragment.setArguments(bundle);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(expenseFragment, getString(R.string.title_fragment_expense));
-        adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
-        viewPager.setAdapter(adapter);
     }
 
     private void setupHeader(){
@@ -319,6 +302,57 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             Picasso.with(this).load(Uri.parse(sharedPreferences.getString("user_photo",null))).into(civProfil);
         }
 
+    }
+
+    private void setupNavigationViewMenu(Menu menu){
+        ArrayList<Integer> years = databaseHandler.getYears();
+        for (Integer year: years) {
+            menu.add(0, year, 0, year.toString());
+            MenuItem menuItemYear = menu.findItem(year);
+            menuItemYear.setIcon(R.drawable.ic_today);
+            ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
+            for (Integer month: months) {
+                String id = year + "" + month;
+                menu.add(0,Integer.parseInt(id),0,Month.displayMonthString(month,getApplicationContext()));
+                MenuItem menuItemMonth = menu.findItem(Integer.parseInt(id));
+                if(year != actualYear){
+                    menuItemYear.setActionView(R.layout.row_year_open);
+                    menuItemMonth.setVisible(false);
+                }else{
+                    menuItemYear.setActionView(R.layout.row_year_close);
+                }
+            }
+        }
+        MenuItem menuItem = menu.findItem(Integer.parseInt(actualYear + "" + actualMonth));
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+    }
+
+    private void showOrCloseMonths(Menu menu,int year){
+        ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
+        for (Integer month: months) {
+            String id = year + "" + month;
+            MenuItem item = menu.findItem(Integer.parseInt(id));
+            if (item.isVisible()){
+                item.setVisible(false);
+            }else{
+                item.setVisible(true);
+            }
+        }
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        expenseFragment = new ExpenseFragment();
+        incomeFragment = new IncomeFragment();
+        //send month and year to fragments
+        bundle = new Bundle();
+        bundle.putString("id",String.valueOf(actualYear + "" + actualMonth));
+        expenseFragment.setArguments(bundle);
+        incomeFragment.setArguments(bundle);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(expenseFragment, getString(R.string.title_fragment_expense));
+        adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
+        viewPager.setAdapter(adapter);
     }
 
     public void setSummary(Month month){

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_years">
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_settings">
         <item
             android:orderInCategory="1"
             android:id="@+id/category_management"
             android:checked="false"
+            android:checkable="false"
             android:icon="@drawable/ic_edit"
             android:title="@string/title_activity_category_management" />
 
@@ -13,6 +19,7 @@
             android:orderInCategory="2"
             android:id="@+id/backup"
             android:checked="false"
+            android:checkable="false"
             android:icon="@drawable/ic_save"
             android:title="@string/title_activity_backup" />
 
@@ -20,6 +27,7 @@
             android:orderInCategory="3"
             android:id="@+id/parameter"
             android:checked="false"
+            android:checkable="false"
             android:icon="@drawable/ic_settings"
             android:title="@string/title_activity_setting" />
 

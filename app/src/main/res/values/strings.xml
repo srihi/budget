@@ -47,6 +47,7 @@
     <string name="activity_category_management_add_category">Ajouter une catégorie : </string>
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
     <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ?</string>
+    <string name="activity_category_management_duplicate_category_description">Cette catégorie semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
     <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
     <string name="activity_category_management_add_category_expense_message">La catégorie de dépense a bien été ajoutée.</string>
     <string name="activity_category_management_add_category_income_message">La catégorie de revenu a bien été ajoutée.</string>

@@ -108,14 +108,14 @@ public class DatabaseHandler {
 
     public Category findCategoryExpenseByLabel(String label){
         return realm.where(Category.class)
-                .like("label", "*" + label + "*")
+                .like("label", label)
                 .equalTo("isIncome",false)
                 .findFirst();
     }
 
     public Category findCategoryIncomeByLabel(String label){
         return realm.where(Category.class)
-                .like("label", "*" + label + "*")
+                .like("label", label)
                 .equalTo("isIncome",true)
                 .findFirst();
     }

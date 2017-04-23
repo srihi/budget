@@ -6,7 +6,7 @@ Elle sera déployée quand je jugerai qu'elle sera prête, notamment quand la se
 Elle sera développé sur IOS après.
 
 Rien ne vaut des photos pour se faire une idée :
-https://www.flickr.com/photos/148574708@N02/sets/72157682751927726
+https://www.flickr.com/photos/148574708@N02/sets/72157679795940993
 
 Fonctionnalités :
 - mois ajoutés automatiquement (mois de la première utilisation puis à chaque 1er...)

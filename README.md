@@ -17,7 +17,6 @@ Fonctionnalités :
 
 À venir :
 - statistiques (le principal atout de l'application !)
-- affichage amélioré du récapitulatif mensuel
 - possibilité d’ajouter des mois
 - contrôle des saisies
 - sauvegarde automatique

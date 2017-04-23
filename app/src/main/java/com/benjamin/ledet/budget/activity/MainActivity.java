@@ -1,5 +1,7 @@
 package com.benjamin.ledet.budget.activity;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -86,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @BindView(R.id.ll_summary_more)
     LinearLayout llSummaryMore;
+
+    private ValueAnimator animator;
 
     CircleImageView civProfil;
 
@@ -222,44 +228,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void signIn() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .requestProfile()
-                .build();
-
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent,9001);
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        //Storing the information of the user
-        if(result.isSuccess()){
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null){
-                String userName = acct.getDisplayName();
-                String userEmail = acct.getEmail();
-                String userId = acct.getId();
-                Uri userPhoto = acct.getPhotoUrl();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("user_id",userId);
-                editor.putString("user_name",userName);
-                editor.putString("user_email",userEmail);
-                if (userPhoto != null) {
-                    editor.putString("user_photo",userPhoto.toString());
-                }
-                editor.apply();
-                setupHeader();
-            }
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -275,6 +243,124 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
+    }
+
+    public void setupSummary(Month month){
+        double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
+        double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
+        double balance = totalIncome - totalExpenses;
+        double percentage = 0;
+        if (totalIncome != 0){
+            percentage = (totalExpenses / totalIncome) * 100;
+        }
+        if (totalIncome == 0 && totalExpenses != 0){
+            percentage = 100;
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        tvTotalExpenses.setText(getString(R.string.amount,String.valueOf(df.format(totalExpenses))));
+        tvTotalIncome.setText(getString(R.string.amount,String.valueOf(df.format(totalIncome))));
+        tvPercentage.setText(getString(R.string.percentage,String.valueOf(df.format(percentage))));
+        tvPercentage.setTextColor(tvTotalExpenses.getTextColors());
+        if (percentage >= 100){
+            tvPercentage.setTextColor(Color.RED);
+        }
+        tvBalance.setText(getString(R.string.amount,String.valueOf(df.format(balance))));
+        tvBalance.setTextColor(tvTotalExpenses.getTextColors());
+        if (balance < 0){
+            tvBalance.setTextColor(Color.RED);
+        }
+
+        ivArrow.setColorFilter(Color.WHITE);
+
+        //expand or collapse the entire summary
+        llSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (llSummaryMore.getVisibility()==View.GONE){
+                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_up);
+                    expand();
+                }else{
+                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
+                    collapse();
+                }
+            }
+        });
+
+        //collapse the entire summary
+        llSummaryMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
+                collapse();
+            }
+        });
+
+        //animation for the entire summary
+        llSummaryMore.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        llSummaryMore.getViewTreeObserver().removeOnPreDrawListener(this);
+                        llSummaryMore.setVisibility(View.GONE);
+                        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                        llSummaryMore.measure(widthSpec, heightSpec);
+                        animator = slideAnimator(0, llSummaryMore.getMeasuredHeight());
+                        return true;
+                    }
+                });
+    }
+
+    //expand the entire summary
+    private void expand() {
+        llSummaryMore.setVisibility(View.VISIBLE);
+        animator.start();
+    }
+
+    //collapse the entire summary
+    private void collapse() {
+        int finalHeight = llSummaryMore.getHeight();
+
+        ValueAnimator mAnimator = slideAnimator(finalHeight, 0);
+
+        mAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                llSummaryMore.setVisibility(View.GONE);
+            }
+            @Override
+            public void onAnimationStart(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+        mAnimator.start();
+    }
+
+    //animation for the entire summary
+    private ValueAnimator slideAnimator(int start, int end) {
+
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                //Update Height
+                int value = (Integer) valueAnimator.getAnimatedValue();
+
+                ViewGroup.LayoutParams layoutParams = llSummaryMore.getLayoutParams();
+                layoutParams.height = value;
+                llSummaryMore.setLayoutParams(layoutParams);
+            }
+        });
+        return animator;
     }
 
     private void checkNewMonth(){
@@ -356,46 +442,41 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         viewPager.setAdapter(adapter);
     }
 
-    public void setupSummary(Month month){
-        double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
-        double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
-        double balance = totalIncome - totalExpenses;
-        double percentage = 0;
-        if (totalIncome != 0){
-            percentage = (totalExpenses / totalIncome) * 100;
-        }
-        if (totalIncome == 0 && totalExpenses != 0){
-            percentage = 100;
-        }
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-        tvTotalExpenses.setText(getString(R.string.amount,String.valueOf(df.format(totalExpenses))));
-        tvTotalIncome.setText(getString(R.string.amount,String.valueOf(df.format(totalIncome))));
-        tvPercentage.setText(getString(R.string.percentage,String.valueOf(df.format(percentage))));
-        tvPercentage.setTextColor(tvTotalExpenses.getTextColors());
-        if (percentage >= 100){
-            tvPercentage.setTextColor(Color.RED);
-        }
-        tvBalance.setText(getString(R.string.amount,String.valueOf(df.format(balance))));
-        tvBalance.setTextColor(tvTotalExpenses.getTextColors());
-        if (balance < 0){
-            tvBalance.setTextColor(Color.RED);
-        }
+    private void signIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .requestProfile()
+                .build();
 
-        ivArrow.setColorFilter(Color.WHITE);
-        llSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(llSummaryMore.isShown()){
-                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
-                    llSummaryMore.setVisibility(View.GONE);
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent,9001);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        //Storing the information of the user
+        if(result.isSuccess()){
+            GoogleSignInAccount acct = result.getSignInAccount();
+            if (acct != null){
+                String userName = acct.getDisplayName();
+                String userEmail = acct.getEmail();
+                String userId = acct.getId();
+                Uri userPhoto = acct.getPhotoUrl();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("user_id",userId);
+                editor.putString("user_name",userName);
+                editor.putString("user_email",userEmail);
+                if (userPhoto != null) {
+                    editor.putString("user_photo",userPhoto.toString());
                 }
-                else{
-                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_up);
-                    llSummaryMore.setVisibility(View.VISIBLE);
-                }
+                editor.apply();
+                setupHeader();
             }
-        });
-
+        }
     }
 }

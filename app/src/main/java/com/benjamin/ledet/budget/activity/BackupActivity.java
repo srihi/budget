@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -153,17 +154,22 @@ public class BackupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!backupFolder.equals("")){
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                    builder.setTitle(R.string.save_data_label);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this,R.style.CustomAlertDialog);
+                    TextView title = new TextView(BackupActivity.this);
+                    title.setText(R.string.save_data_label);
+                    title.setTextColor(ContextCompat.getColor(BackupActivity.this,R.color.PrimaryColor));
+                    title.setGravity(Gravity.CENTER);
+                    title.setTextSize(22);
+                    builder.setCustomTitle(title);
                     builder.setMessage(R.string.save_data_description);
-                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             uploadToDrive(DriveId.decodeFromString(backupFolder));
                         }
                     });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }
@@ -183,17 +189,22 @@ public class BackupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!backupFolder.equals("")){
                     if (budgetBackup != null){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                        builder.setTitle(R.string.restore_data_label);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this, R.style.CustomAlertDialog);
+                        TextView title = new TextView(BackupActivity.this);
+                        title.setText(R.string.restore_data_label);
+                        title.setTextColor(ContextCompat.getColor(BackupActivity.this,R.color.PrimaryColor));
+                        title.setGravity(Gravity.CENTER);
+                        title.setTextSize(22);
+                        builder.setCustomTitle(title);
                         builder.setMessage(R.string.restore_data_description);
-                        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 downloadFromDrive(budgetBackup.getDriveId().asDriveFile());
                             }
                         });
-                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }

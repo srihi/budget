@@ -1,88 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="18sp"
+        android:text="@string/alert_dialog_add_amount_category"
+        android:layout_marginBottom="10dp"/>
+
+    <Spinner
+        android:id="@+id/alert_dialog_add_amount_categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/alert_dialog_add_amount_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:maxLength="10"
+        android:hint="@string/alert_dialog_add_amount_amount"
+        android:inputType="numberDecimal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alert_dialog_add_amount_category"
-            android:paddingTop="25dp"/>
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/alert_dialog_add_amount_categories"
-            android:spinnerMode="dialog" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:hint="@string/alert_dialog_add_amount_label"
+        android:id="@+id/alert_dialog_add_amount_label"
+        android:maxLength="25"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alert_dialog_add_amount_amount"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/alert_dialog_add_amount_amount"
-            android:paddingTop="10dp"
-            android:inputType="numberDecimal"
-            android:labelFor="@+id/alert_dialog_add_amount_amount"
-            android:ems="10"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/alert_dialog_add_amount_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alert_dialog_add_category_label"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/optional"
-            android:id="@+id/alert_dialog_add_amount_label"
-            android:paddingTop="10dp"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alert_dialog_add_amount_day"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/alert_dialog_add_amount_day"
-            android:paddingTop="10dp"
-            android:inputType="number"
-            android:ems="10"
-            android:labelFor="@+id/alert_dialog_add_amount_day"/>
-
-    </LinearLayout>
+        android:maxLength="2"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="number"
+        android:hint="@string/alert_dialog_add_amount_day" />
 
 </LinearLayout>

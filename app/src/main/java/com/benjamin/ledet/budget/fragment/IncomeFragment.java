@@ -11,11 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
@@ -23,10 +25,10 @@ import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
 import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
 import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
-import com.benjamin.ledet.budget.tool.RecyclerItemClickListener;
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;
+import com.benjamin.ledet.budget.tool.RecyclerItemClickListener;
 
 import java.util.Calendar;
 import java.util.List;
@@ -60,7 +62,7 @@ public class IncomeFragment extends Fragment {
 
         databaseHandler = new DatabaseHandler(this.getContext());
 
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         //put a line between each element in the recycler view
@@ -73,7 +75,7 @@ public class IncomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
                 final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
                 //get the appropriate view
                 final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_amount,null);
@@ -81,16 +83,18 @@ public class IncomeFragment extends Fragment {
                 final EditText etAmount = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_amount);
                 final EditText etDay = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_day);
                 final Spinner spCategories = (Spinner) inflator.findViewById(R.id.alert_dialog_add_amount_categories);
-                etDay.setText(String.valueOf(IncomeFragment.this.day));
                 categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesIncome);
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
-                builder.setTitle(R.string.fragment_income_add_income);
-                builder.setIcon(R.drawable.ic_add_circle);
+                TextView title = new TextView(getContext());
+                title.setText(R.string.fragment_income_add_income);
+                title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         Category categorySelected = (Category) spCategories.getSelectedItem();
                         String label = etLabel.getText().toString();
                         if (label.length() == 0){
@@ -101,7 +105,11 @@ public class IncomeFragment extends Fragment {
                         amount.setLabel(label);
                         amount.setCategory(categorySelected);
                         amount.setMonth(month);
-                        amount.setDay(Integer.parseInt(etDay.getText().toString()));
+                        if(etDay.getText().length() == 0){
+                            amount.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                        }else{
+                            amount.setDay(Integer.parseInt(etDay.getText().toString()));
+                        }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
                         databaseHandler.addAmount(amount);
                         categoriesIncomeAdapter.notifyDataSetChanged();
@@ -112,7 +120,7 @@ public class IncomeFragment extends Fragment {
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
 
-                        ((MainActivity) getActivity()).setSummary(month);
+                        ((MainActivity)getActivity()).setSummary(month);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

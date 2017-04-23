@@ -22,32 +22,39 @@
     <!-- alert_dialog -->
     <string name="confirm">Confirmer </string>
     <string name="cancel">Annuler </string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+
+    <!-- alert_dialog Backup & Restore-->
     <string name="save_data_label">Sauvegarder les données</string>
     <string name="save_data_description">Ceci va écraser la précédente sauvegarde. Voulez-vous vraiment sauvegarder vos données?</string>
     <string name="restore_data_label">Restaurer les données</string>
     <string name="restore_data_description">Ceci va écraser vos données actuelles. Voulez-vous vraiment restaurer à partir de la dernière sauvegarde?</string>
 
     <!-- alert_dialog_add_category -->
-    <string name="alert_dialog_add_category_label">Libellé : </string>
+    <string name="alert_dialog_add_category_label">Libellé </string>
     <string name="alert_dialog_add_category_expense">Dépense </string>
     <string name="alert_dialog_add_category_income">Revenu </string>
 
     <!-- alert_dialog_add_amount -->
-    <string name="alert_dialog_add_amount_category">Catégorie : </string>
-    <string name="alert_dialog_add_amount_amount">Montant : </string>
-    <string name="alert_dialog_add_amount_day">Jour : </string>
+    <string name="alert_dialog_add_amount_category">Sélectionnez une catégorie :</string>
+    <string name="alert_dialog_add_amount_amount">Montant</string>
+    <string name="alert_dialog_add_amount_label">Libellé (facultatif)</string>
+    <string name="alert_dialog_add_amount_day">Jour (facultatif)</string>
 
     <!-- alert_dialog_update_category & update_amount-->
-    <string name="alert_dialog_update_new_label">Nouveau libellé : </string>
-    <string name="alert_dialog_update_new_amount">Nouveau montant : </string>
+    <string name="alert_dialog_update_category_new_label">Nouveau libellé</string>
+    <string name="alert_dialog_update_amount_new_label">Nouveau libellé (facultatif)</string>
+    <string name="alert_dialog_update_new_amount">Nouveau montant</string>
 
     <!-- activity_category_management -->
     <string name="activity_category_management_categories_income">Catégories revenus : </string>
     <string name="activity_category_management_categories_expense">Catégories dépenses : </string>
-    <string name="activity_category_management_add_category">Ajouter une catégorie : </string>
+    <string name="activity_category_management_add_category">Ajouter une catégorie</string>
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
     <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ?</string>
-    <string name="activity_category_management_duplicate_category_description">Cette catégorie semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
+    <string name="activity_category_management_duplicate_category_add">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
+    <string name="activity_category_management_duplicate_category_update">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
     <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
     <string name="activity_category_management_add_category_expense_message">La catégorie de dépense a bien été ajoutée.</string>
     <string name="activity_category_management_add_category_income_message">La catégorie de revenu a bien été ajoutée.</string>
@@ -86,7 +93,7 @@
 
     <!-- fragment_income-->
     <string name="fragment_income_add_income">Ajouter un revenu</string>
-    <string name="fragment_income_add_income_message">La dépense a bien été ajoutée.</string>
+    <string name="fragment_income_add_income_message">Le revenu a bien été ajouté.</string>
 
     <!-- fragment_expense & income-->
     <string name="fragment_expense_income_total_expense_label">Dépenses mensuelles totales :</string>

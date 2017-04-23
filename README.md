@@ -19,7 +19,6 @@ Fonctionnalités :
 - statistiques (le principal atout de l'application !)
 - affichage amélioré du récapitulatif mensuel
 - possibilité d’ajouter des mois
-- possibilité de créer une nouvelle catégorie lors de l'ajout d'un revenu ou d'une dépense (actuellement il faut se rendre dans gestion des catégories)
 - contrôle des saisies
 - sauvegarde automatique
 - tutoriel de prise en main

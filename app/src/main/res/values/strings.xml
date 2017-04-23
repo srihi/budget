@@ -136,5 +136,7 @@
     <string name="icon_category">icone de la catégorie</string>
     <string name="soon_available">Bientôt disponible...</string>
     <string name="optional">(facultatif)</string>
+    <string name="arrow_drop_down">arrow drop down</string>
+    <string name="arrow_drop_up">arrow drop up</string>
 
 </resources>

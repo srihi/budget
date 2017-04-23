@@ -122,7 +122,7 @@ public class ExpenseFragment extends Fragment {
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
 
-                        ((MainActivity)getActivity()).setSummary(month);
+                        ((MainActivity)getActivity()).setupSummary(month);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -150,7 +150,7 @@ public class ExpenseFragment extends Fragment {
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
 
-        ((MainActivity)getActivity()).setSummary(month);
+        ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories expense
         categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
@@ -182,6 +182,6 @@ public class ExpenseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setSummary(month);
+        ((MainActivity)getActivity()).setupSummary(month);
     }
 }

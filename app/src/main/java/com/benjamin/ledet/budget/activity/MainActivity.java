@@ -18,7 +18,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
@@ -28,7 +30,6 @@ import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
 import com.benjamin.ledet.budget.model.Month;
-import com.benjamin.ledet.budget.tool.Animation;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -77,14 +78,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.summary_pourcentage)
     TextView tvPercentage;
 
+    @BindView(R.id.summary_arrow)
+    ImageView ivArrow;
+
     @BindView(R.id.ll_summary)
-    LinearLayout llSummary;
+    RelativeLayout llSummary;
 
-    @BindView(R.id.ll_summary_1)
-    LinearLayout llSummary1;
-
-    @BindView(R.id.ll_summary_2)
-    LinearLayout llSummary2;
+    @BindView(R.id.ll_summary_more)
+    LinearLayout llSummaryMore;
 
     CircleImageView civProfil;
 
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         viewPager.setAdapter(adapter);
     }
 
-    public void setSummary(Month month){
+    public void setupSummary(Month month){
         double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
         double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
         double balance = totalIncome - totalExpenses;
@@ -381,16 +382,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             tvBalance.setTextColor(Color.RED);
         }
 
+        ivArrow.setColorFilter(Color.WHITE);
         llSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(llSummary1.isShown()){
-                    Animation.slideUp(getApplicationContext(), llSummary1);
-                    llSummary1.setVisibility(View.GONE);
+                if(llSummaryMore.isShown()){
+                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
+                    llSummaryMore.setVisibility(View.GONE);
                 }
                 else{
-                    llSummary1.setVisibility(View.VISIBLE);
-                    Animation.slideDown(getApplicationContext(), llSummary1);
+                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_up);
+                    llSummaryMore.setVisibility(View.VISIBLE);
                 }
             }
         });

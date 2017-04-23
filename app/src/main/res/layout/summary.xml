@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/ll_summary"
+     android:background="@color/PrimaryColor"
+     android:clickable="true"
+     android:paddingStart="20dp"
+     android:paddingEnd="20dp">
+
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/fragment_expense_income_balance_label"
+         android:textColor="@android:color/background_light"
+         android:id="@+id/summary_balance_text"/>
+
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/summary_balance"
+         android:layout_below="@id/summary_balance_text" />
+
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/summary_arrow"
+         app:srcCompat="@drawable/ic_arrow_drop_down"
+         android:contentDescription="@string/arrow_drop_down"
+         android:layout_alignParentEnd="true" />
+
+ </RelativeLayout>

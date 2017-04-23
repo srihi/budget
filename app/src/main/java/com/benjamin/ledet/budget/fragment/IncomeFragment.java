@@ -120,7 +120,7 @@ public class IncomeFragment extends Fragment {
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
 
-                        ((MainActivity)getActivity()).setSummary(month);
+                        ((MainActivity)getActivity()).setupSummary(month);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -148,7 +148,7 @@ public class IncomeFragment extends Fragment {
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.displayMonthString(month.getMonth(),getContext()) + " " + month.getYear());
 
-        ((MainActivity)getActivity()).setSummary(month);
+        ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories income
         categoriesIncomeNotEmpty = databaseHandler.getCategoriesIncomeNotEmptyForMonth(month);
@@ -180,7 +180,7 @@ public class IncomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setSummary(month);
+        ((MainActivity)getActivity()).setupSummary(month);
     }
 
 }

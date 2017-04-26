@@ -18,6 +18,7 @@ Fonctionnalités :
 À venir :
 - statistiques (le principal atout de l'application !)
 - possibilité d’ajouter des mois
+- revenus et dépenses automatiques
 - contrôle des saisies
 - sauvegarde automatique
 - tutoriel de prise en main

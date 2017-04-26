@@ -95,6 +95,9 @@ public class BackupActivity extends AppCompatActivity {
     @BindView(R.id.tv_last_restore_description)
     TextView tvLastRestore;
 
+    @BindView(R.id.activity_backup_loading_panel)
+    RelativeLayout loadingPanel;
+
     private static final String TAG = "budget_drive_backup";
 
     private Backup backup;
@@ -140,6 +143,8 @@ public class BackupActivity extends AppCompatActivity {
         backup.init(this);
         backup.start();
         mGoogleApiClient = backup.getClient();
+
+        setAfterBackupFolder();
 
         rlFolder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,8 +226,6 @@ public class BackupActivity extends AppCompatActivity {
             }
         });
 
-        setAfterBackupFolder();
-
     }
 
     private void setAfterBackupFolder(){
@@ -233,6 +236,7 @@ public class BackupActivity extends AppCompatActivity {
             findBackupFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
             setTvLastRestore();
         }
+        loadingPanel.setVisibility(View.GONE);
     }
 
     private void setBackupFolderTitle(DriveId id) {

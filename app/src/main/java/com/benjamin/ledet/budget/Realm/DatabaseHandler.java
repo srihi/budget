@@ -7,6 +7,7 @@ import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -205,6 +206,14 @@ public class DatabaseHandler {
         return list;
     }
 
+    public String[] getDisplayMonths(List<Month> months){
+        String[] list = new String[months.size()];
+        for (int i = 0; i < months.size(); i++){
+            list[i] = Month.displayMonthString(months.get(i).getMonth(), mContext);
+        }
+        return  list;
+    }
+
     // Amount
 
     public int getAmountNextKey() {
@@ -245,6 +254,8 @@ public class DatabaseHandler {
         }
         return sum;
     }
+
+
 
     public double getSumExpensesOfMonth(Month month){
         double sum = 0;

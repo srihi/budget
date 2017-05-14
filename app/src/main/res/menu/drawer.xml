@@ -7,6 +7,15 @@
 
     <group android:checkableBehavior="single"
         android:id="@+id/group_settings">
+
+        <item
+            android:orderInCategory="1"
+            android:id="@+id/statistic"
+            android:checked="false"
+            android:checkable="false"
+            android:icon="@drawable/ic_trending"
+            android:title="@string/title_activity_statistic" />
+
         <item
             android:orderInCategory="1"
             android:id="@+id/category_management"

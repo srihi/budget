@@ -44,8 +44,6 @@ public class ExpenseFragment extends Fragment {
     @BindView(R.id.rv_category_expense)
     RecyclerView categoriesExpenseRecyclerView;
 
-
-
     private DatabaseHandler databaseHandler;
 
     private List<Category> categoriesExpenseNotEmpty;
@@ -53,7 +51,6 @@ public class ExpenseFragment extends Fragment {
     private CategoryRecyclerViewAdapter categoriesExpenseAdapter;
     private CategorySpinAdapter categoriesSpinAdapter;
 
-    private int day;
     private Month month;
 
     @Override
@@ -65,7 +62,6 @@ public class ExpenseFragment extends Fragment {
         databaseHandler = new DatabaseHandler(this.getContext());
 
         final Calendar calendar = Calendar.getInstance();
-        day = calendar.get(Calendar.DAY_OF_MONTH);
 
         //put a line between each element in the recycler view
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(categoriesExpenseRecyclerView.getContext(),LinearLayoutManager.VERTICAL);

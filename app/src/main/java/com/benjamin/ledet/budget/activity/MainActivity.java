@@ -190,13 +190,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     startActivity(intent);
                     return true;
                 }
+                else if(menuItem.getItemId() == R.id.statistic){
+                    //close the menu
+                    drawerLayout.closeDrawers();
+                    Intent intent = new Intent(MainActivity.this,StatisticActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
                 //select year item
-                else if(String.valueOf(menuItem.getItemId()).length() == 4){
+                else if(String.valueOf(menuItem.getItemId()).length() == 4) {
 
-                    if(menuItem.getActionView().getId() == R.id.row_year_icon_open ){
+                    if (menuItem.getActionView().getId() == R.id.row_year_icon_open) {
                         menuItem.setActionView(R.layout.row_year_close);
 
-                    }else{
+                    } else {
                         menuItem.setActionView(R.layout.row_year_open);
                     }
                     showOrCloseMonths(menu, menuItem.getItemId());

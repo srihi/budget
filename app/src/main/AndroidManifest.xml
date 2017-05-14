@@ -37,6 +37,10 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name="com.benjamin.ledet.budget.activity.StatisticActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 </manifest>

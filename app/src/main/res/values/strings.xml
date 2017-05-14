@@ -14,6 +14,7 @@
     <string name="title_activity_category_management">Gestion des catégories</string>
     <string name="title_activity_backup">Sauvegarder &amp; restaurer</string>
     <string name="title_activity_amount">Détails</string>
+    <string name="title_activity_statistic">Statistiques</string>
     <string name="title_fragment_category_expense">Catégories dépenses</string>
     <string name="title_fragment_category_income">Catégories revenus</string>
     <string name="title_fragment_expense">Dépenses</string>
@@ -86,6 +87,12 @@
     <string name="activity_backup_restore_description">Restaure les données à partir de la dernière sauvegarde.</string>
     <string name="activity_backup_last_restore_label">Dernière restauration</string>
     <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
+
+    <!-- activity_statistic -->
+    <string name="activity_statistic_select_category_expense">Sélectionnez une catégorie de dépense :</string>
+    <string name="activity_statistic_select_category_income">Sélectionnez une catégorie de revenu :</string>
+    <string name="activity_statistic_expenses">Dépenses</string>
+    <string name="activity_statistic_incomes">Revenus</string>
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>

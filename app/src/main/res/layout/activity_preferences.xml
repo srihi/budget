@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.benjamin.ledet.budget.activity.SettingActivity">
+    tools:context="com.benjamin.ledet.budget.activity.PreferencesActivity">
 
     <LinearLayout
         android:layout_height="match_parent"
@@ -23,6 +23,12 @@
                 android:layout_height="wrap_content"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:background="@color/PrimaryColor" />
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/preferencesFrame"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="?attr/actionBarSize"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

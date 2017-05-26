@@ -30,7 +30,7 @@ public class CustomLineChartRecyclerViewAdapter extends RecyclerView.Adapter<Cus
 
     public CustomLineChartRecyclerViewAdapter(List<CustomLineChart> mCustomLineCharts, Context context) {
         this.mCustomLineCharts = mCustomLineCharts;
-        mContext = context;
+        this.mContext = context;
     }
 
     @Override

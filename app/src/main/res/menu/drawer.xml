@@ -38,7 +38,7 @@
             android:checked="false"
             android:checkable="false"
             android:icon="@drawable/ic_settings"
-            android:title="@string/title_activity_setting" />
+            android:title="@string/title_activity_preferences" />
 
     </group>
 </menu>

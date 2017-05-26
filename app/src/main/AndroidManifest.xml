@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.SettingActivity">
+        <activity android:name="com.benjamin.ledet.budget.activity.PreferencesActivity">
         </activity>
 
         <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity">

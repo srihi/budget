@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:dialogTitle="@string/activity_preferences_chart_type"
+        android:key="pref_chart_type"
+        android:defaultValue="@string/activity_preferences_line_chart"
+        android:title="@string/activity_preferences_chart_type" />
+
+    <!--
+    <EditTextPreference
+        android:dialogTitle="test"
+        android:inputType="number"
+        android:key="pref_range_max"
+        android:title="test" />
+    <SwitchPreference
+        android:id="@+id/preferences_freestyle_libre"
+        android:summary="test"
+        android:defaultValue="false"
+        android:key="pref_freestyle_libre"
+        />
+
+        !-->
+    <Preference
+        android:key="about_settings"
+        android:title="@string/activity_preferences_about_budget" />
+
+</PreferenceScreen>

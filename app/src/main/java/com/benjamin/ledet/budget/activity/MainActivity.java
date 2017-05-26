@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         //asks the user to connect to the first launch
         sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean("first_launch",true)){
-
+            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
             signIn();
             sharedPreferences.edit().putBoolean("first_launch",false).apply();
         } else {
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 if( menuItem.getItemId() == R.id.parameter){
                     //close the menu
                     drawerLayout.closeDrawers();
-                    Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+                    Intent intent = new Intent(MainActivity.this,PreferencesActivity.class);
                     startActivity(intent);
                     return true;
                 }

@@ -10,7 +10,7 @@
     <string name="openDrawer">Navigation View Closed</string>
 
     <!-- titles -->
-    <string name="title_activity_setting">Réglages</string>
+    <string name="title_activity_preferences">Réglages</string>
     <string name="title_activity_category_management">Gestion des catégories</string>
     <string name="title_activity_backup">Sauvegarder &amp; restaurer</string>
     <string name="title_activity_amount">Détails</string>
@@ -98,9 +98,11 @@
     <string name="activity_statistic_incomes">Revenus</string>
     <string name="activity_statistic_balance">Soldes</string>
 
-    <!-- activity_setting -->
-    <string name="activity_setting_about_budget">À propos de Budget</string>
-    <string name="activity_setting_chart_type">Type de graphique</string>
+    <!-- activity_preferences -->
+    <string name="activity_preferences_about_budget">À propos de Budget</string>
+    <string name="activity_preferences_chart_type">Type de graphique</string>
+    <string name="activity_preferences_bar_chart">Histogramme</string>
+    <string name="activity_preferences_line_chart">Linéaire</string>
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>

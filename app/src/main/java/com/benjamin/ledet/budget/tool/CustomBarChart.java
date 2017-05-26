@@ -18,6 +18,16 @@ import java.util.List;
 public class CustomBarChart extends BarChart {
 
     private String title;
+    private List<BarEntry> entries1;
+    private String nameEntries1;
+    private int colorEntries1;
+    private List<BarEntry> entries2;
+    private String nameEntries2;
+    private int colorEntries2;
+    private boolean multipleEntries;
+    private String[] xValues;
+    private float groupSpace;
+    private float barSpace;
 
     public CustomBarChart(Context context) {
         super(context);
@@ -58,6 +68,7 @@ public class CustomBarChart extends BarChart {
     }
 
     public void setxValues(final String[] xValues) {
+        this.xValues = xValues;
         IAxisValueFormatter formatter = new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -68,6 +79,11 @@ public class CustomBarChart extends BarChart {
     }
 
     public void setEntries(List<BarEntry> entries, String name, int color, float barWidth){
+        this.entries1 = entries;
+        this.nameEntries1 = name;
+        this.colorEntries1 = color;
+        this.multipleEntries = false;
+
         BarDataSet set = new BarDataSet(entries, name);
         set.setColor(color);
         BarData data = new BarData(set);
@@ -78,6 +94,16 @@ public class CustomBarChart extends BarChart {
     }
 
     public void setMultipleEntries(List<BarEntry> entries1, String name1, int color1, List<BarEntry> entries2, String name2, int color2, float barWidth, float groupSpace, float barSpace){
+        this.entries1 = entries1;
+        this.nameEntries1 = name1;
+        this.colorEntries1 = color1;
+        this.entries2 = entries2;
+        this.nameEntries2 = name2;
+        this.colorEntries2 = color2;
+        this.multipleEntries = true;
+        this.groupSpace = groupSpace;
+        this.barSpace = barSpace;
+
         BarDataSet set1 = new BarDataSet(entries1, name1);
         set1.setColor(color1);
         BarDataSet set2 = new BarDataSet(entries2, name2);
@@ -96,6 +122,46 @@ public class CustomBarChart extends BarChart {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<BarEntry> getEntries1(){
+        return this.entries1;
+    }
+
+    public List<BarEntry> getEntries2(){
+        return this.entries2;
+    }
+
+    public String getNameEntries1(){
+        return this.nameEntries1;
+    }
+
+    public String getNameEntries2(){
+        return this.nameEntries2;
+    }
+
+    public int getColorEntries1(){
+        return this.colorEntries1;
+    }
+
+    public int getColorEntries2(){
+        return this.colorEntries2;
+    }
+
+    public boolean asMultipleEntries(){
+        return this.multipleEntries;
+    }
+
+    public String[] getxValues(){
+        return this.xValues;
+    }
+
+    public float getGroupSpace() {
+        return groupSpace;
+    }
+
+    public float getBarSpace() {
+        return barSpace;
     }
 
     private void setDesign(){

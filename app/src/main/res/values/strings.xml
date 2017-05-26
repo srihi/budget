@@ -23,6 +23,7 @@
     <!-- alert_dialog -->
     <string name="confirm">Confirmer </string>
     <string name="cancel">Annuler </string>
+    <string name="close">Fermer</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
 
@@ -89,10 +90,17 @@
     <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
 
     <!-- activity_statistic -->
+    <string name="activity_statistic_expenses_incomes">Dépenses et revenus :</string>
+    <string name="activity_statistic_textview_balance">Soldes :</string>
     <string name="activity_statistic_select_category_expense">Sélectionnez une catégorie de dépense :</string>
     <string name="activity_statistic_select_category_income">Sélectionnez une catégorie de revenu :</string>
     <string name="activity_statistic_expenses">Dépenses</string>
     <string name="activity_statistic_incomes">Revenus</string>
+    <string name="activity_statistic_balance">Soldes</string>
+
+    <!-- activity_setting -->
+    <string name="activity_setting_about_budget">À propos de Budget</string>
+    <string name="activity_setting_chart_type">Type de graphique</string>
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>

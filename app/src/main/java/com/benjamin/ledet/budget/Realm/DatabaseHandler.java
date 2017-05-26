@@ -281,6 +281,10 @@ public class DatabaseHandler {
         return sum;
     }
 
+    public double getBalanceOfMonth(Month month){
+        return getSumIncomesOfMonth(month) - getSumExpensesOfMonth(month);
+    }
+
     public void addAmount(final Amount amount){
         realm.executeTransaction(new Realm.Transaction() {
             @Override

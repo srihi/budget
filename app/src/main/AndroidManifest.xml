@@ -13,32 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.benjamin.ledet.budget.activity.MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.SettingActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.SettingActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.StatisticActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.benjamin.ledet.budget.activity.StatisticActivity">
         </activity>
 
     </application>

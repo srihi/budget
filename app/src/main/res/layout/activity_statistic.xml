@@ -25,66 +25,31 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/ll_statistic"
-            android:paddingTop="?attr/actionBarSize"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/ll_statistic"
+                android:paddingTop="?attr/actionBarSize"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:textSize="16sp"
-                    android:text="@string/activity_statistic_select_category_expense"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
-
-                <Spinner
-                    android:id="@+id/activity_statistic_categories_expense"
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_main_charts"/>
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/line_chart_category_expense"
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_charts_expenses"/>
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart_category_expense"
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:textSize="16sp"
-                    android:text="@string/activity_statistic_select_category_income"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
-
-                <Spinner
-                    android:id="@+id/activity_statistic_categories_income"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/line_chart_category_income"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
-
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart_category_income"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_charts_incomes"/>
 
             </LinearLayout>
 

@@ -1,32 +1,25 @@
 package com.benjamin.ledet.budget.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
 
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
-import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
+import com.benjamin.ledet.budget.adapter.CustomLineChartRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;
-import com.benjamin.ledet.budget.tool.ChartValueFormatter;
-import com.benjamin.ledet.budget.tool.CustonChartMarkerView;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
+import com.benjamin.ledet.budget.tool.CustomBarChart;
+import com.benjamin.ledet.budget.tool.CustomLineChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,31 +27,30 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class StatisticActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.activity_statistic_categories_expense)
-    Spinner spCategoriesExpense;
+    @BindView(R.id.rv_charts_expenses)
+    RecyclerView chartsExpensesRecyclerView;
 
-    @BindView(R.id.activity_statistic_categories_income)
-    Spinner spCategoriesIncome;
+    @BindView(R.id.rv_charts_incomes)
+    RecyclerView chartsIncomesRecyclerView;
 
-    @BindView(R.id.bar_chart_category_expense)
-    BarChart barChartCategoryExpense;
+    @BindView(R.id.rv_main_charts)
+    RecyclerView mainChartsRecyclerView;
 
-    @BindView(R.id.line_chart_category_expense)
-    LineChart lineChartCategoryExpense;
-
-    @BindView(R.id.bar_chart_category_income)
-    BarChart barChartCategoryIncome;
-
-    @BindView(R.id.line_chart_category_income)
-    LineChart lineChartCategoryIncome;
-
+    private SharedPreferences sharedPreferences;
     private DatabaseHandler databaseHandler;
+
+    private ArrayList<CustomBarChart> customBarMainChartsArrayList = new ArrayList<>();
+    private ArrayList<CustomBarChart> customBarChartsExpensesArrayList = new ArrayList<>();
+    private ArrayList<CustomBarChart> customBarChartsIncomesArrayList = new ArrayList<>();
+
+    private ArrayList<CustomLineChart> customLineMainChartsArrayList = new ArrayList<>();
+    private ArrayList<CustomLineChart> customLineChartsExpensesArrayList = new ArrayList<>();
+    private ArrayList<CustomLineChart> customLineChartsIncomesArrayList = new ArrayList<>();
 
     private List<Month> months;
     private String[] monthsDisplay;
@@ -90,143 +82,168 @@ public class StatisticActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         databaseHandler = new DatabaseHandler(StatisticActivity.this);
 
-        List<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
-        List<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
         months = databaseHandler.getMonths();
         monthsDisplay = databaseHandler.getDisplayMonths(months);
 
+        addChartBalance();
+        addChartExpenseIncome();
+        addChartsCategoriesExpense();
+        addChartsCategoriesIncome();
 
-        //spinner for categories expense, update the chart on category selected
-        CategorySpinAdapter categoriesExpenseSpinAdapter = new CategorySpinAdapter(StatisticActivity.this, categoriesExpense);
-        spCategoriesExpense.setAdapter(categoriesExpenseSpinAdapter);
-        spCategoriesExpense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Category category = (Category) spCategoriesExpense.getSelectedItem();
-                barChartCategory(category, barChartCategoryExpense, getString(R.string.activity_statistic_expenses));
+        //main charts
+        LinearLayoutManager layoutManagerMainCharts = new LinearLayoutManager(StatisticActivity.this);
+        mainChartsRecyclerView.setLayoutManager(layoutManagerMainCharts);
 
-                lineChartCategory(category,lineChartCategoryExpense, getString(R.string.activity_statistic_expenses));
-            }
+        //CustomBarChartRecyclerViewAdapter customBarMainChartsAdapter = new CustomBarChartRecyclerViewAdapter(customBarMainChartsArrayList);
+        //mainChartsRecyclerView.setAdapter(customBarMainChartsAdapter);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        CustomLineChartRecyclerViewAdapter customLineMainChartsAdapter = new CustomLineChartRecyclerViewAdapter(customLineMainChartsArrayList, StatisticActivity.this);
+        mainChartsRecyclerView.setAdapter(customLineMainChartsAdapter);
 
-            }
-        });
 
-        //spinner for categories income, update the chart on category selected
-        CategorySpinAdapter categoriesIncomeSpinAdapter = new CategorySpinAdapter(StatisticActivity.this, categoriesIncome);
-        spCategoriesIncome.setAdapter(categoriesIncomeSpinAdapter);
-        spCategoriesIncome.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Category category = (Category) spCategoriesIncome.getSelectedItem();
-                barChartCategory(category, barChartCategoryIncome, getString(R.string.activity_statistic_incomes));
+        //charts expenses
+        LinearLayoutManager layoutManagerChartsExpenses = new LinearLayoutManager(StatisticActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        chartsExpensesRecyclerView.setLayoutManager(layoutManagerChartsExpenses);
 
-                lineChartCategory(category,lineChartCategoryIncome, getString(R.string.activity_statistic_incomes));
-            }
+        //CustomBarChartRecyclerViewAdapter customBarChartsExpensesAdapter = new CustomBarChartRecyclerViewAdapter(customBarChartsExpensesArrayList);
+        //chartsExpensesRecyclerView.setAdapter(customBarChartsExpensesAdapter);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        CustomLineChartRecyclerViewAdapter customLineChartsExpensesAdapter = new CustomLineChartRecyclerViewAdapter(customLineChartsExpensesArrayList, StatisticActivity.this);
+        chartsExpensesRecyclerView.setAdapter(customLineChartsExpensesAdapter);
 
-            }
-        });
+        //charts incomes
+        LinearLayoutManager layoutManagerChartsIncomes = new LinearLayoutManager(StatisticActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        chartsIncomesRecyclerView.setLayoutManager(layoutManagerChartsIncomes);
+
+        //CustomBarChartRecyclerViewAdapter customBarChartsIncomesAdapter = new CustomBarChartRecyclerViewAdapter(customBarChartsIncomesArrayList);
+        //chartsIncomesRecyclerView.setAdapter(customBarChartsIncomesAdapter);
+
+        CustomLineChartRecyclerViewAdapter customLineChartsIncomesAdapter = new CustomLineChartRecyclerViewAdapter(customLineChartsIncomesArrayList, StatisticActivity.this);
+        chartsIncomesRecyclerView.setAdapter(customLineChartsIncomesAdapter);
 
     }
 
-    private void lineChartCategory(Category category, LineChart chart, String name){
-
-        List<Entry> entries = new ArrayList<>();
+    private void addChartBalance(){
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<Entry> lineEntries = new ArrayList<>();
 
         for (int i = 0; i < months.size(); i++){
-            entries.add(new BarEntry((float)i, (float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+            barEntries.add(new BarEntry((float)i,(float)databaseHandler.getBalanceOfMonth(months.get(i))));
+            lineEntries.add(new Entry((float)i,(float)databaseHandler.getBalanceOfMonth(months.get(i))));
         }
 
-        LineDataSet set = new LineDataSet(entries, name);
-        LineData data = new LineData(set);
-        //data.setValueTextSize(12);
+        CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance));
+        customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_balance), ContextCompat.getColor(StatisticActivity.this,R.color.PrimaryColor), 0.7f);
+        customBarChart.setSpaceTop(50f);
+        customBarChart.setSpacebottom(30f);
+        customBarChart.setxValues(monthsDisplay);
 
-        data.setValueFormatter(new ChartValueFormatter(StatisticActivity.this));
+        CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance));
+        customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_balance), ContextCompat.getColor(StatisticActivity.this,R.color.PrimaryColor));
+        customLineChart.setSpaceTop(50f);
+        customLineChart.setSpacebottom(30f);
+        customLineChart.setxValues(monthsDisplay);
 
-        IAxisValueFormatter formatterMonths = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return monthsDisplay[ (int) value];
-            }
-        };
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatterMonths);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setSpaceTop(70f);
-
-        chart.setData(data);
-
-        //display a bubble with the amount when there is a click on a value
-        CustonChartMarkerView custom_marker_view = new CustonChartMarkerView(this, R.layout.custom_chart_marker_view);
-        custom_marker_view.setChartView(chart);
-        chart.setMarker(custom_marker_view);
-
-        chart.getDescription().setEnabled(false);
-        chart.getAxisRight().setEnabled(false);
-        chart.setDoubleTapToZoomEnabled(false);
-        chart.setScaleEnabled(false);
-        chart.setVisibleXRangeMaximum(5f);
-        chart.moveViewToX(months.size() +1);
-
+        customBarMainChartsArrayList.add(customBarChart);
+        customLineMainChartsArrayList.add(customLineChart);
     }
 
-    private void barChartCategory(Category category, BarChart chart, String name){
+    private void addChartExpenseIncome(){
+        float barWidth = 0.45f;
+        float groupSpace = 0.06f;
+        float barSpace = 0.02f;
 
-        List<BarEntry> entries = new ArrayList<>();
+        //expenses
+        List<BarEntry> barEntriesExpense = new ArrayList<>();
+        List<Entry> lineEntriesExpense = new ArrayList<>();
 
         for (int i = 0; i < months.size(); i++){
-            entries.add(new BarEntry((float)i, (float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+            barEntriesExpense.add(new BarEntry((float)i, (float)databaseHandler.getSumExpensesOfMonth(months.get(i))));
+            lineEntriesExpense.add(new Entry((float)i, (float)databaseHandler.getSumExpensesOfMonth(months.get(i))));
         }
 
-        BarDataSet set = new BarDataSet(entries, name);
-        BarData data = new BarData(set);
-       // data.setValueTextSize(12);
-        data.setValueFormatter(new ChartValueFormatter(StatisticActivity.this));
+        //incomes
+        List<BarEntry> barEntriesIncome = new ArrayList<>();
+        List<Entry> lineEntriesIncome = new ArrayList<>();
 
-        IAxisValueFormatter formatterMonths = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return monthsDisplay[ (int) value];
-            }
-        };
+        for (int i = 0; i < months.size(); i++){
+            barEntriesIncome.add(new BarEntry((float)i, (float)databaseHandler.getSumIncomesOfMonth(months.get(i))));
+            lineEntriesIncome.add(new Entry((float)i, (float)databaseHandler.getSumIncomesOfMonth(months.get(i))));
+        }
 
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatterMonths);
+        CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes));
+        customBarChart.setMultipleEntries(barEntriesIncome, getString(R.string.activity_statistic_incomes), ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), barEntriesExpense, getString(R.string.activity_statistic_expenses), Color.RED, barWidth, groupSpace, barSpace);
+        customBarChart.setSpaceTop(50f);
+        customBarChart.setSpacebottom(30f);
+        customBarChart.setxValues(monthsDisplay);
 
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setSpaceTop(70f);
+        CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes));
+        customLineChart.setMultipleEntries(lineEntriesIncome, getString(R.string.activity_statistic_incomes), ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), lineEntriesExpense, getString(R.string.activity_statistic_expenses), Color.RED);
+        customLineChart.setSpaceTop(50f);
+        customLineChart.setSpacebottom(30f);
+        customLineChart.setxValues(monthsDisplay);
 
-        chart.setData(data);
-
-        //display a bubble with the amount when there is a click on a value
-        CustonChartMarkerView custom_marker_view = new CustonChartMarkerView(this, R.layout.custom_chart_marker_view);
-        custom_marker_view.setChartView(chart);
-        chart.setMarker(custom_marker_view);
-
-        chart.getDescription().setEnabled(false);
-        chart.getAxisRight().setEnabled(false);
-        chart.setDoubleTapToZoomEnabled(false);
-        chart.setScaleEnabled(false);
-        chart.setVisibleXRangeMaximum(5f);
-        chart.moveViewToX(months.size());
+        customBarMainChartsArrayList.add(customBarChart);
+        customLineMainChartsArrayList.add(customLineChart);
     }
 
+    private void addChartsCategoriesExpense(){
+        for (Category category : databaseHandler.getCategoriesExpense()){
+
+            List<BarEntry> barEntries = new ArrayList<>();
+            List<Entry> lineEntries = new ArrayList<>();
+
+            for (int i = 0; i < months.size(); i++){
+                barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+                lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+            }
+
+            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel());
+            customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_expenses), Color.RED, 0.7f);
+            customBarChart.setSpaceTop(50f);
+            customBarChart.setSpacebottom(30f);
+            customBarChart.setxValues(monthsDisplay);
+
+            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel());
+            customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_expenses), Color.RED);
+            customLineChart.setSpaceTop(50f);
+            customLineChart.setSpacebottom(30f);
+            customLineChart.setxValues(monthsDisplay);
+
+            customBarChartsExpensesArrayList.add(customBarChart);
+            customLineChartsExpensesArrayList.add(customLineChart);
+        }
+    }
+
+    private void addChartsCategoriesIncome(){
+        for (Category category : databaseHandler.getCategoriesIncome()){
+
+            List<BarEntry> barEntries = new ArrayList<>();
+            List<Entry> lineEntries = new ArrayList<>();
+
+            for (int i = 0; i < months.size(); i++){
+                barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+                lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
+            }
+
+            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel());
+            customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_incomes),ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), 0.7f);
+            customBarChart.setSpaceTop(50f);
+            customBarChart.setSpacebottom(30f);
+            customBarChart.setxValues(monthsDisplay);
+
+            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel());
+            customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_incomes),ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor));
+            customLineChart.setSpaceTop(50f);
+            customLineChart.setSpacebottom(30f);
+            customLineChart.setxValues(monthsDisplay);
+
+            customBarChartsIncomesArrayList.add(customBarChart);
+            customLineChartsIncomesArrayList.add(customLineChart);
+        }
+    }
 
 }

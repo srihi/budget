@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-        android:dialogTitle="@string/activity_preferences_chart_type"
-        android:key="pref_chart_type"
-        android:defaultValue="@string/activity_preferences_line_chart"
-        android:title="@string/activity_preferences_chart_type" />
 
-    <!--
-    <EditTextPreference
-        android:dialogTitle="test"
-        android:inputType="number"
-        android:key="pref_range_max"
-        android:title="test" />
-    <SwitchPreference
-        android:id="@+id/preferences_freestyle_libre"
-        android:summary="test"
-        android:defaultValue="false"
-        android:key="pref_freestyle_libre"
-        />
+    <PreferenceCategory
+        android:title="@string/title_activity_statistic">
 
-        !-->
-    <Preference
-        android:key="about_settings"
-        android:title="@string/activity_preferences_about_budget" />
+        <ListPreference
+            android:defaultValue="@string/activity_preferences_line_chart"
+            android:dialogTitle="@string/activity_preferences_chart_type"
+            android:key="pref_chart_type"
+            android:title="@string/activity_preferences_chart_type" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/month">
+
+        <EditTextPreference
+            android:dialogTitle="@string/activity_preferences_add_month"
+            android:inputType="date"
+            android:key="pref_add_month"
+            android:hint="@string/activity_preferences_example_month"
+            android:title="@string/activity_preferences_add_month" />
+
+        <ListPreference
+            android:dialogTitle="@string/activity_preferences_delete_month"
+            android:key="pref_delete_month"
+            android:title="@string/activity_preferences_delete_month" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/about">
+
+        <Preference
+            android:key="about_settings"
+            android:title="@string/activity_preferences_about_budget" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

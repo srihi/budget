@@ -7,9 +7,17 @@ import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by benjaminledet on 05/03/2017.
- */
+import static com.benjamin.ledet.budget.R.string.april;
+import static com.benjamin.ledet.budget.R.string.august;
+import static com.benjamin.ledet.budget.R.string.february;
+import static com.benjamin.ledet.budget.R.string.january;
+import static com.benjamin.ledet.budget.R.string.july;
+import static com.benjamin.ledet.budget.R.string.june;
+import static com.benjamin.ledet.budget.R.string.march;
+import static com.benjamin.ledet.budget.R.string.may;
+import static com.benjamin.ledet.budget.R.string.november;
+import static com.benjamin.ledet.budget.R.string.october;
+import static com.benjamin.ledet.budget.R.string.september;
 
 public class Month extends RealmObject {
 
@@ -55,11 +63,11 @@ public class Month extends RealmObject {
         this.amounts = amounts;
     }
 
-    public static String displayMonthString(int month, Context context){
+    public static String intMonthToStringMonth(int month, Context context){
         String monthString = "";
         switch (month){
             case 1:
-                monthString = context.getString(R.string.january);
+                monthString = context.getString(january);
                 break;
             case 2:
                 monthString = context.getString(R.string.february);
@@ -99,6 +107,36 @@ public class Month extends RealmObject {
                 break;
         }
         return  monthString;
+    }
+
+    public static int stringMonthToIntMonth(String month, Context context){
+        int monthInt;
+        if(month.equals(context.getString(january))){
+            monthInt = 1;
+        }else if(month.equals(context.getString(february))) {
+            monthInt = 2;
+        }else if(month.equals(context.getString(march))) {
+            monthInt = 3;
+        }else if(month.equals(context.getString(april))) {
+            monthInt = 4;
+        }else if(month.equals(context.getString(may))) {
+            monthInt = 5;
+        }else if(month.equals(context.getString(june))) {
+            monthInt = 6;
+        }else if(month.equals(context.getString(july))) {
+            monthInt = 7;
+        }else if(month.equals(context.getString(august))) {
+            monthInt = 8;
+        }else if(month.equals(context.getString(september))) {
+            monthInt = 9;
+        }else if(month.equals(context.getString(october))) {
+            monthInt = 10;
+        }else if(month.equals(context.getString(november))) {
+            monthInt = 11;
+        }else {
+            monthInt = 12;
+        }
+        return monthInt;
     }
 
     @Override

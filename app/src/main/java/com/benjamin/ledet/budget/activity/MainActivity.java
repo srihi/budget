@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
             for (Integer month: months) {
                 String id = year + "" + month;
-                menu.add(0,Integer.parseInt(id),0,Month.displayMonthString(month,getApplicationContext()));
+                menu.add(0,Integer.parseInt(id),0,Month.intMonthToStringMonth(month,getApplicationContext()));
                 MenuItem menuItemMonth = menu.findItem(Integer.parseInt(id));
                 if(year != actualYear){
                     menuItemYear.setActionView(R.layout.row_year_open);

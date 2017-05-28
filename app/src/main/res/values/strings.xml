@@ -26,6 +26,8 @@
     <string name="close">Fermer</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="ok">Ok</string>
+
 
     <!-- alert_dialog Backup & Restore-->
     <string name="save_data_label">Sauvegarder les données</string>
@@ -54,7 +56,7 @@
     <string name="activity_category_management_categories_expense">Catégories dépenses : </string>
     <string name="activity_category_management_add_category">Ajouter une catégorie</string>
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
-    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ?</string>
+    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
     <string name="activity_category_management_duplicate_category_add">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
     <string name="activity_category_management_duplicate_category_update">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
     <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
@@ -99,10 +101,19 @@
     <string name="activity_statistic_balance">Soldes</string>
 
     <!-- activity_preferences -->
-    <string name="activity_preferences_about_budget">À propos de Budget</string>
     <string name="activity_preferences_chart_type">Type de graphique</string>
     <string name="activity_preferences_bar_chart">Histogramme</string>
     <string name="activity_preferences_line_chart">Linéaire</string>
+    <string name="activity_preferences_add_month">Ajouter un ancien mois</string>
+    <string name="activity_preferences_example_month">Exemple : 01/2017</string>
+    <string name="activity_preferences_add_month_error">Le format est incorrect. Écrivez sous la forme : xx/xxxx</string>
+    <string name="activity_preferences_add_month_already_exist">Ce mois existe déjà.</string>
+    <string name="activity_preferences_add_month_not_yet">Vous ne pouvez pas ajouter en avance un futur mois.</string>
+    <string name="activity_preferences_add_month_success">Le mois a bien été ajouté.</string>
+    <string name="activity_preferences_delete_month">Supprimer un mois</string>
+    <string name="activity_preferences_delete_month_message">Voulez vous vraiment supprimer le mois %1$s ? Celà supprimera toutes les données de ce mois. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
+    <string name="activity_preferences_delete_month_success">Le mois a bien été supprimé.</string>
+    <string name="activity_preferences_about_budget">À propos de Budget</string>
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>
@@ -126,6 +137,7 @@
     <string name="amount_recycler_view_adapter_date">le %1$d/%2$d/%3$d</string>
 
     <!-- Months -->
+    <string name="month">Mois</string>
     <string name="january"> Janvier </string>
     <string name="february"> Février </string>
     <string name="march"> Mars </string>
@@ -138,7 +150,7 @@
     <string name="october"> Octobre </string>
     <string name="november"> Novembre </string>
     <string name="december"> Décembre </string>
-    <string name="error">Error</string>
+    <string name="error">Erreur</string>
 
     <!-- Snackbar !-->
     <string name="snackbar_backup_success">Sauvegarde correctement effectuée.</string>
@@ -148,6 +160,7 @@
     <string name="snackbar_error">Quelque chose c\'est mal passé, veuillez réessayer.</string>
 
     <!-- Global -->
+    <string name="about">À propos</string>
     <string name="amount">%1$s €</string>
     <string name="percentage">%1$s %%</string>
     <string name="icon_category">icone de la catégorie</string>

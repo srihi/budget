@@ -63,7 +63,7 @@ public class AmountActivity extends AppCompatActivity {
         amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         //display toolbar
-        toolbar.setTitle(Month.displayMonthString(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
+        toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
         setSupportActionBar(toolbar);
 
         //display back button

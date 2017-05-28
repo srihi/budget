@@ -183,6 +183,15 @@ public class DatabaseHandler {
         });
     }
 
+    public void deleteMonth(final Month month){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Month.class).equalTo("id",month.getId()).findFirst().deleteFromRealm();
+            }
+        });
+    }
+
     public ArrayList<Integer> getYears(){
         ArrayList<Integer> list = new ArrayList<>();
         RealmResults<Month> months = realm.where(Month.class)
@@ -209,7 +218,7 @@ public class DatabaseHandler {
     public String[] getDisplayMonths(List<Month> months){
         String[] list = new String[months.size()];
         for (int i = 0; i < months.size(); i++){
-            list[i] = Month.displayMonthString(months.get(i).getMonth(), mContext);
+            list[i] = Month.intMonthToStringMonth(months.get(i).getMonth(), mContext);
         }
         return  list;
     }

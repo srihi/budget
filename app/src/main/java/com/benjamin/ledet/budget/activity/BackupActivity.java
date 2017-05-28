@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.backup.Backup;
 import com.benjamin.ledet.budget.backup.BudgetBackup;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
@@ -58,6 +60,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,11 +104,13 @@ public class BackupActivity extends AppCompatActivity {
     private static final String TAG = "budget_drive_backup";
 
     private Backup backup;
-    private BudgetBackup budgetBackup;
+    private BudgetBackup budgetBackup = null;
     private GoogleApiClient mGoogleApiClient;
     private IntentSender intentPicker;
     private Realm realm;
-    private String backupFolder;
+    private String backupFolderId;
+    private String backupFolderTitle;
+
     private SharedPreferences sharedPreferences;
 
     //return to the previous activity
@@ -117,6 +122,93 @@ public class BackupActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class LoadBackupInformationsFromDrive extends AsyncTask<Void, Integer, Boolean> {
+
+        private Context context;
+
+        public LoadBackupInformationsFromDrive(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            backupFolderId = sharedPreferences.getString("backup_folder", "");
+            if (!backupFolderId.equals("")) {
+                findFolderTitle();
+                if(findBackupFromDrive(DriveId.decodeFromString(backupFolderId).asDriveFolder())){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void findFolderTitle(){
+                DriveId.decodeFromString(backupFolderId).asDriveFolder().getMetadata((mGoogleApiClient)).setResultCallback(
+                        new ResultCallback<DriveResource.MetadataResult>() {
+                            @Override
+                            public void onResult(@NonNull DriveResource.MetadataResult result) {
+                                if (!result.getStatus().isSuccess()) {
+                                    showErrorDialog();
+                                    return;
+                                }
+                                Metadata metadata = result.getMetadata();
+                                backupFolderTitle = metadata.getTitle();
+                            }
+                        }
+                );
+            }
+
+        private boolean findBackupFromDrive(DriveFolder folder){
+            Query query = new Query.Builder()
+                    .addFilter(Filters.eq(SearchableField.TITLE, "budget.realm"))
+                    .addFilter(Filters.eq(SearchableField.TRASHED, false))
+                    .build();
+
+            PendingResult<DriveApi.MetadataBufferResult> pendingResult = folder.queryChildren(mGoogleApiClient,query);
+            DriveApi.MetadataBufferResult result = pendingResult.await();
+            MetadataBuffer buffer = result.getMetadataBuffer();
+            if (buffer.getCount() != 0){
+                Metadata metadata = buffer.get(0);
+                DriveId driveId = metadata.getDriveId();
+                Date modifiedDate = metadata.getModifiedDate();
+                long backupSize = metadata.getFileSize();
+                budgetBackup = new BudgetBackup(driveId, modifiedDate.getTime(), backupSize);
+            }
+
+            return budgetBackup != null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            loadingPanel.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            //folder name
+            if(backupFolderTitle != null){
+                tvFolder.setText(backupFolderTitle);
+                ivFolder.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.PrimaryColor));
+            }
+
+            if(aBoolean){
+                //last backup
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(budgetBackup.getModifiedDate());
+                tvLastBackup.setText(getString(R.string.activity_backup_date,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+
+                //last restoration
+                long date = sharedPreferences.getLong("last_restore", 0);
+                if (date != 0){
+                    calendar.setTimeInMillis(date);
+                    tvLastRestore.setText(getString(R.string.activity_backup_date,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                }
+            }
+            loadingPanel.setVisibility(View.GONE);
         }
     }
 
@@ -144,7 +236,16 @@ public class BackupActivity extends AppCompatActivity {
         backup.start();
         mGoogleApiClient = backup.getClient();
 
-        setAfterBackupFolder();
+        if(getIntent().getExtras() != null){
+            if(getIntent().getExtras().getString("reload","").equals("folder")){
+                showFolderSuccessDialog();
+            }
+            if(getIntent().getExtras().getString("reload","").equals("backup")){
+                showBackupSuccessDialog();
+            }
+        }
+
+        new LoadBackupInformationsFromDrive(this).execute();
 
         rlFolder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +258,7 @@ public class BackupActivity extends AppCompatActivity {
         rlBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!backupFolder.equals("")){
+                if (!backupFolderId.equals("")){
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this,R.style.CustomAlertDialog);
                     TextView title = new TextView(BackupActivity.this);
@@ -171,7 +272,7 @@ public class BackupActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                            uploadToDrive(DriveId.decodeFromString(backupFolder));
+                            uploadToDrive(DriveId.decodeFromString(backupFolderId));
                         }
                     });
                     builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -192,7 +293,7 @@ public class BackupActivity extends AppCompatActivity {
         rlRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!backupFolder.equals("")){
+                if (!backupFolderId.equals("")){
                     if (budgetBackup != null){
                         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this, R.style.CustomAlertDialog);
                         TextView title = new TextView(BackupActivity.this);
@@ -228,33 +329,6 @@ public class BackupActivity extends AppCompatActivity {
 
     }
 
-    private void setAfterBackupFolder(){
-        backupFolder = sharedPreferences.getString("backup_folder", "");
-        if (!backupFolder.equals("")){
-            setBackupFolderTitle(DriveId.decodeFromString(backupFolder));
-            ivFolder.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.PrimaryColor));
-            findBackupFromDrive(DriveId.decodeFromString(backupFolder).asDriveFolder());
-            setTvLastRestore();
-        }
-        loadingPanel.setVisibility(View.GONE);
-    }
-
-    private void setBackupFolderTitle(DriveId id) {
-        id.asDriveFolder().getMetadata((mGoogleApiClient)).setResultCallback(
-                new ResultCallback<DriveResource.MetadataResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveResource.MetadataResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            showErrorDialog();
-                            return;
-                        }
-                        Metadata metadata = result.getMetadata();
-                        tvFolder.setText(metadata.getTitle());
-                    }
-                }
-        );
-    }
-
     private void openFolderPicker() {
         try {
             intentPicker = null;
@@ -278,37 +352,6 @@ public class BackupActivity extends AppCompatActivity {
                 .build(mGoogleApiClient);
     }
 
-    private void findBackupFromDrive(DriveFolder folder){
-        Query query = new Query.Builder()
-                .addFilter(Filters.eq(SearchableField.TITLE, "budget.realm"))
-                .addFilter(Filters.eq(SearchableField.TRASHED, false))
-                .build();
-
-        folder.queryChildren(mGoogleApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        MetadataBuffer buffer = result.getMetadataBuffer();
-                        BudgetBackup budgetBackup = null;
-                        if (buffer.getCount() != 0){
-                            Metadata metadata = buffer.get(0);
-                            DriveId driveId = metadata.getDriveId();
-                            Date modifiedDate = metadata.getModifiedDate();
-                            long backupSize = metadata.getFileSize();
-                            budgetBackup = new BudgetBackup(driveId, modifiedDate.getTime(), backupSize);
-                        }
-                        setBackupFile(budgetBackup);
-                        setTvLastBackup();
-
-                    }
-                });
-    }
-
-    private void setBackupFile(BudgetBackup budgetBackup){
-        this.budgetBackup = budgetBackup;
-    }
-
     private void deleteBackupFromDrive(DriveFolder folder){
         Query query = new Query.Builder()
                 .addFilter(Filters.eq(SearchableField.TITLE, "budget.realm"))
@@ -326,24 +369,6 @@ public class BackupActivity extends AppCompatActivity {
                 });
     }
 
-    private void setTvLastBackup(){
-        if (budgetBackup != null){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(budgetBackup.getModifiedDate());
-            tvLastBackup.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
-        }else{
-            tvLastBackup.setText(R.string.activity_backup_last_backup_description);
-        }
-    }
-
-    private void setTvLastRestore(){
-        long date = sharedPreferences.getLong("last_restore",0);
-        if (date != 0){
-            Calendar calendar =  Calendar.getInstance();
-            calendar.setTimeInMillis(date);
-            tvLastRestore.setText("Le " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " à " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
-        }
-    }
 
     public void downloadFromDrive(DriveFile file) {
         file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
@@ -387,8 +412,6 @@ public class BackupActivity extends AppCompatActivity {
                         }
 
                         saveLastRestore(System.currentTimeMillis());
-                        setTvLastRestore();
-
 
                         // Reboot app
                         Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
@@ -397,7 +420,6 @@ public class BackupActivity extends AppCompatActivity {
                         AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                         System.exit(0);
-
 
                     }
                 });
@@ -477,9 +499,10 @@ public class BackupActivity extends AppCompatActivity {
                                                         finish();
                                                         return;
                                                     }
-                                                    setTvLastBackup();
-                                                    findBackupFromDrive(folder);
-                                                    showBackupSuccessDialog();
+                                                    Intent intent = new Intent(BackupActivity.this,BackupActivity.class);
+                                                    intent.putExtra("reload","backup");
+                                                    finish();
+                                                    startActivity(intent);
 
                                                 }
                                             });
@@ -534,8 +557,10 @@ public class BackupActivity extends AppCompatActivity {
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
                     saveBackupFolder(mFolderDriveId.encodeToString());
-                    showFolderSuccessDialog();
-                    setAfterBackupFolder();
+                    Intent intent = new Intent(BackupActivity.this,BackupActivity.class);
+                    intent.putExtra("reload","folder");
+                    finish();
+                    startActivity(intent);
                 }
                 break;
         }

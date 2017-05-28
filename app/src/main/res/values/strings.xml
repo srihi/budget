@@ -90,6 +90,7 @@
     <string name="activity_backup_restore_description">Restaure les données à partir de la dernière sauvegarde.</string>
     <string name="activity_backup_last_restore_label">Dernière restauration</string>
     <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
+    <string name="activity_backup_date">Le %1$d %2$s %3$d à %4$d:%5$d</string>
 
     <!-- activity_statistic -->
     <string name="activity_statistic_expenses_incomes">Dépenses et revenus :</string>
@@ -154,6 +155,7 @@
 
     <!-- Snackbar !-->
     <string name="snackbar_backup_success">Sauvegarde correctement effectuée.</string>
+    <string name="snackbar_restore_success">Vos données ont bien été restaurées.</string>
     <string name="snackbar_backup_error">Il n\'y a pas de sauvegarde à restaurer!</string>
     <string name="snackbar_folder_success">Le dossier a été correctement enregisté.</string>
     <string name="snackbar_folder_error">Vous devez d\'abord sélectionner un dosser!</string>

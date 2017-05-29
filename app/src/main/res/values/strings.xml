@@ -82,8 +82,6 @@
     <string name="activity_backup_backup_folder_description">Sélectionnez le dossier de sauvegarde de votre drive.</string>
     <string name="activity_backup_backup_now_label">Sauvegarder maintenant</string>
     <string name="activity_backup_backup_now_description">Sauvegarde immédiatement les données.</string>
-    <string name="activity_backup_auto_backup_label">Sauvegarde automatique</string>
-    <string name="activity_backup_auto_backup_description">Vos données seront sauvegardées automatiquement tous les jours dans votre dossier.</string>
     <string name="activity_backup_last_backup_label">Dernière sauvegarde</string>
     <string name="activity_backup_last_backup_description">Aucune sauvegarde trouvée.</string>
     <string name="activity_backup_restore_label">Restaurer</string>

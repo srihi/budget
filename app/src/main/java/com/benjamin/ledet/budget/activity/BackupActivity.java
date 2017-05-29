@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
@@ -88,9 +87,6 @@ public class BackupActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_backup_folder_description)
     TextView tvFolder;
-
-    @BindView(R.id.switch_backup)
-    Switch aSwitch;
 
     @BindView(R.id.tv_last_backup_description)
     TextView tvLastBackup;

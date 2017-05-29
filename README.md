@@ -19,5 +19,4 @@ Fonctionnalités :
 
 À venir :
 - ajouter des revenus et dépenses automatiques
-- sauvegarde automatique
 - tutoriel de prise en main

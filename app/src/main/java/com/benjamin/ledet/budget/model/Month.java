@@ -1,8 +1,9 @@
 package com.benjamin.ledet.budget.model;
 
 import android.content.Context;
+
 import com.benjamin.ledet.budget.R;
-import io.realm.RealmList;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -29,8 +30,6 @@ public class Month extends RealmObject {
     @Index
     private int year;
 
-    private RealmList<Amount> amounts;
-
     public long getId() {
         return id;
     }
@@ -53,14 +52,6 @@ public class Month extends RealmObject {
 
     public void setYear(int year) {
         this.year = year;
-    }
-
-    public RealmList<Amount> getAmounts() {
-        return amounts;
-    }
-
-    public void setAmounts(RealmList<Amount> amounts) {
-        this.amounts = amounts;
     }
 
     public static String intMonthToStringMonth(int month, Context context){

@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
+import com.benjamin.ledet.budget.model.Migration;
 import com.benjamin.ledet.budget.model.Month;
+import com.benjamin.ledet.budget.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,6 @@ public class DatabaseHandler {
 
     public DatabaseHandler(Context context) {
         this.mContext = context;
-
         this.realm = getNewRealmInstance();
     }
 
@@ -29,8 +30,8 @@ public class DatabaseHandler {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()
-                    .schemaVersion(2)
-                    .deleteRealmIfMigrationNeeded()
+                    .schemaVersion(4)
+                    .migration(new Migration())
                     .build();
         }
         return Realm.getInstance(mRealmConfig); // Automatically run migration if needed
@@ -166,32 +167,6 @@ public class DatabaseHandler {
         return realm.where(Month.class).findAll();
     }
 
-    public Month getMonth(int month, int year) {
-
-        return realm.where(Month.class)
-                .equalTo("month", month)
-                .equalTo("year", year)
-                .findFirst();
-    }
-
-    public void addMonth(final Month month){
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.insertOrUpdate(month);
-            }
-        });
-    }
-
-    public void deleteMonth(final Month month){
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(Month.class).equalTo("id",month.getId()).findFirst().deleteFromRealm();
-            }
-        });
-    }
-
     public ArrayList<Integer> getYears(){
         ArrayList<Integer> list = new ArrayList<>();
         RealmResults<Month> months = realm.where(Month.class)
@@ -221,6 +196,32 @@ public class DatabaseHandler {
             list[i] = Month.intMonthToStringMonth(months.get(i).getMonth(), mContext);
         }
         return  list;
+    }
+
+    public Month getMonth(int month, int year) {
+
+        return realm.where(Month.class)
+                .equalTo("month", month)
+                .equalTo("year", year)
+                .findFirst();
+    }
+
+    public void addMonth(final Month month){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(month);
+            }
+        });
+    }
+
+    public void deleteMonth(final Month month){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Month.class).equalTo("id",month.getId()).findFirst().deleteFromRealm();
+            }
+        });
     }
 
     // Amount
@@ -319,6 +320,46 @@ public class DatabaseHandler {
             @Override
             public void execute(Realm realm) {
                 realm.where(Amount.class).equalTo("id",amount.getId()).findFirst().deleteFromRealm();
+            }
+        });
+    }
+
+    // User
+
+    public int getUserNextKey() {
+        try {
+            return realm.where(User.class)
+                    .max("id").intValue() + 1;
+        }
+        catch (NullPointerException e) {
+            return 1;
+        }
+    }
+
+    public RealmResults<User> getUsers() {
+
+        return realm.where(User.class)
+                .findAll();
+    }
+
+    public User getUser() {
+
+        return realm.where(User.class)
+                .findFirst();
+    }
+
+    public User getUser(String email) {
+
+        return realm.where(User.class)
+                .equalTo("email", email)
+                .findFirst();
+    }
+
+    public void addUser(final User user){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(user);
             }
         });
     }

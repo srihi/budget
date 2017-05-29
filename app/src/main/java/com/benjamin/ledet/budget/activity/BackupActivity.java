@@ -28,8 +28,14 @@ import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.backup.Backup;
+import com.benjamin.ledet.budget.Realm.DatabaseHandler;
 import com.benjamin.ledet.budget.backup.BudgetBackup;
+import com.benjamin.ledet.budget.model.User;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -65,7 +71,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class BackupActivity extends AppCompatActivity {
+public class BackupActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.cl_activity_backup)
     CoordinatorLayout clPrincipal;
@@ -99,9 +105,9 @@ public class BackupActivity extends AppCompatActivity {
 
     private static final String TAG = "budget_drive_backup";
 
-    private Backup backup;
+    private DatabaseHandler databaseHandler;
     private BudgetBackup budgetBackup = null;
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient googleApiClient;
     private IntentSender intentPicker;
     private Realm realm;
     private String backupFolderId;
@@ -125,7 +131,7 @@ public class BackupActivity extends AppCompatActivity {
 
         private Context context;
 
-        public LoadBackupInformationsFromDrive(Context context) {
+        private LoadBackupInformationsFromDrive(Context context) {
             this.context = context;
         }
 
@@ -143,7 +149,7 @@ public class BackupActivity extends AppCompatActivity {
         }
 
         private void findFolderTitle(){
-                DriveId.decodeFromString(backupFolderId).asDriveFolder().getMetadata((mGoogleApiClient)).setResultCallback(
+                DriveId.decodeFromString(backupFolderId).asDriveFolder().getMetadata((googleApiClient)).setResultCallback(
                         new ResultCallback<DriveResource.MetadataResult>() {
                             @Override
                             public void onResult(@NonNull DriveResource.MetadataResult result) {
@@ -164,7 +170,7 @@ public class BackupActivity extends AppCompatActivity {
                     .addFilter(Filters.eq(SearchableField.TRASHED, false))
                     .build();
 
-            PendingResult<DriveApi.MetadataBufferResult> pendingResult = folder.queryChildren(mGoogleApiClient,query);
+            PendingResult<DriveApi.MetadataBufferResult> pendingResult = folder.queryChildren(googleApiClient,query);
             DriveApi.MetadataBufferResult result = pendingResult.await();
             MetadataBuffer buffer = result.getMetadataBuffer();
             if (buffer.getCount() != 0){
@@ -225,13 +231,14 @@ public class BackupActivity extends AppCompatActivity {
         }
 
         BudgetApplication budgetApplication = (BudgetApplication) getApplicationContext();
-        realm = budgetApplication.getDBHandler().getRealmInstance();
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        backup = budgetApplication.getBackup();
-        backup.init(this);
-        backup.start();
-        mGoogleApiClient = backup.getClient();
 
+        sharedPreferences = budgetApplication.getPreferences();
+
+        databaseHandler = new DatabaseHandler(this);
+
+        realm = budgetApplication.getDBHandler().getRealmInstance();
+
+        //if the folder as changed or there is a backup, show a message
         if(getIntent().getExtras() != null){
             if(getIntent().getExtras().getString("reload","").equals("folder")){
                 showFolderSuccessDialog();
@@ -240,6 +247,18 @@ public class BackupActivity extends AppCompatActivity {
                 showBackupSuccessDialog();
             }
         }
+
+        //the user must be connected with Google
+        if(databaseHandler.getUsers().size() == 0){
+            signIn();
+        }
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                .addOnConnectionFailedListener(this)
+                .build();
+        googleApiClient.connect();
 
         new LoadBackupInformationsFromDrive(this).execute();
 
@@ -328,7 +347,7 @@ public class BackupActivity extends AppCompatActivity {
     private void openFolderPicker() {
         try {
             intentPicker = null;
-            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            if (googleApiClient != null && googleApiClient.isConnected()) {
                 if (intentPicker == null)
                     intentPicker = buildIntent();
                 //Start the picker to choose a folder
@@ -345,7 +364,7 @@ public class BackupActivity extends AppCompatActivity {
         return Drive.DriveApi
                 .newOpenFileActivityBuilder()
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE})
-                .build(mGoogleApiClient);
+                .build(googleApiClient);
     }
 
     private void deleteBackupFromDrive(DriveFolder folder){
@@ -354,20 +373,20 @@ public class BackupActivity extends AppCompatActivity {
                 .addFilter(Filters.eq(SearchableField.TRASHED, false))
                 .build();
 
-        folder.queryChildren(mGoogleApiClient, query)
+        folder.queryChildren(googleApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
 
                     @Override
                     public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         MetadataBuffer buffer = result.getMetadataBuffer();
-                        buffer.get(0).getDriveId().asDriveFile().delete(mGoogleApiClient);
+                        buffer.get(0).getDriveId().asDriveFile().delete(googleApiClient);
                     }
                 });
     }
 
 
     public void downloadFromDrive(DriveFile file) {
-        file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+        file.open(googleApiClient, DriveFile.MODE_READ_ONLY, null)
                 .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                     @Override
                     public void onResult(@NonNull DriveApi.DriveContentsResult result) {
@@ -405,9 +424,8 @@ public class BackupActivity extends AppCompatActivity {
                             e.printStackTrace();
                         } finally {
                             safeCloseClosable(input);
+                            saveLastRestore(System.currentTimeMillis());
                         }
-
-                        saveLastRestore(System.currentTimeMillis());
 
                         // Reboot app
                         Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
@@ -434,7 +452,7 @@ public class BackupActivity extends AppCompatActivity {
         if (mFolderDriveId != null) {
             //Create the file on GDrive
             final DriveFolder folder = mFolderDriveId.asDriveFolder();
-            Drive.DriveApi.newDriveContents(mGoogleApiClient)
+            Drive.DriveApi.newDriveContents(googleApiClient)
                     .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                         @Override
                         public void onResult(@NonNull DriveApi.DriveContentsResult result) {
@@ -485,7 +503,7 @@ public class BackupActivity extends AppCompatActivity {
                                             .build();
 
                                     // create a file in selected folder
-                                    folder.createFile(mGoogleApiClient, changeSet, driveContents)
+                                    folder.createFile(googleApiClient, changeSet, driveContents)
                                             .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
                                                 @Override
                                                 public void onResult(@NonNull DriveFolder.DriveFileResult result) {
@@ -512,12 +530,7 @@ public class BackupActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    backup.start();
-                }
-                break;
-            // REQUEST_CODE_PICKER
+            // backup
             case 2:
                 intentPicker = null;
 
@@ -530,7 +543,7 @@ public class BackupActivity extends AppCompatActivity {
                 }
                 break;
 
-            // REQUEST_CODE_SELECT
+            // restoration
             case 3:
                 if (resultCode == RESULT_OK) {
                     // get the selected item's ID
@@ -545,7 +558,8 @@ public class BackupActivity extends AppCompatActivity {
                 }
                 finish();
                 break;
-            // REQUEST_CODE_PICKER_FOLDER
+
+            // backup folder
             case 4:
                 if (resultCode == RESULT_OK) {
                     //Get the folder drive id
@@ -559,6 +573,12 @@ public class BackupActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 break;
+
+            // connection
+            case 9001:
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+
         }
     }
 
@@ -607,5 +627,47 @@ public class BackupActivity extends AppCompatActivity {
     private void reportToFirebase(Exception e, String message) {
         FirebaseCrash.log(message);
         FirebaseCrash.report(e);
+    }
+
+    private void signIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .build();
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent,9001);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        //Storing the information of the user
+        if(result.isSuccess()){
+            GoogleSignInAccount acct = result.getSignInAccount();
+            if (acct != null){
+
+                User user = new User();
+                user.setId(databaseHandler.getUserNextKey());
+                user.setEmail(acct.getEmail());
+                user.setGivenName(acct.getGivenName());
+                user.setFamilyName(acct.getFamilyName());
+                if(acct.getPhotoUrl() != null){
+                    user.setPhotoUrl(acct.getPhotoUrl().toString());
+                }
+                databaseHandler.addUser(user);
+
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.e(TAG, "onConnectionFailed:" + connectionResult);
     }
 }

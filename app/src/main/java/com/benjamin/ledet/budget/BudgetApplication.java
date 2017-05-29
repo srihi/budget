@@ -1,15 +1,11 @@
 package com.benjamin.ledet.budget;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.benjamin.ledet.budget.Realm.DatabaseHandler;
-import com.benjamin.ledet.budget.backup.Backup;
-import com.benjamin.ledet.budget.backup.GoogleDriveBackup;
-
-/**
- * Created by benjaminledet on 05/03/2017.
- */
 
 public class BudgetApplication extends Application {
 
@@ -19,11 +15,6 @@ public class BudgetApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-    }
-
-    @NonNull
-    public Backup getBackup() {
-        return new GoogleDriveBackup();
     }
 
     @NonNull
@@ -37,6 +28,10 @@ public class BudgetApplication extends Application {
             sInstance = new BudgetApplication();
         }
         return sInstance;
+    }
+
+    public SharedPreferences getPreferences(){
+        return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
 }

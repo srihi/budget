@@ -2,7 +2,6 @@ package com.benjamin.ledet.budget.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -35,6 +34,7 @@ import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
 import com.benjamin.ledet.budget.model.Month;
+import com.benjamin.ledet.budget.model.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -53,8 +53,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-    private SharedPreferences sharedPreferences;
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
@@ -94,12 +92,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private ValueAnimator animator;
 
-    CircleImageView civProfil;
-
-    TextView tvUserName;
-
-    TextView tvUserEmail;
-
     private ExpenseFragment expenseFragment;
     private IncomeFragment incomeFragment;
     private Bundle bundle;
@@ -112,25 +104,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BudgetApplication application = (BudgetApplication) getApplication();
+        BudgetApplication budgetApplication = (BudgetApplication) getApplication();
 
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
 
-        databaseHandler = application.getDBHandler();
+        databaseHandler = budgetApplication.getDBHandler();
 
         // display the toolbar
         setSupportActionBar(toolbar);
 
-        //asks the user to connect to the first launch
-        sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        //the user must be connected with Google
+        if(databaseHandler.getUsers().size() == 0){
+            signIn();
+        } else{
+            setupUserHeader();
+        }
+
+        //set default preferences at the first launch
+        SharedPreferences sharedPreferences = budgetApplication.getPreferences();
         if(sharedPreferences.getBoolean("first_launch",true)){
             PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-            signIn();
             sharedPreferences.edit().putBoolean("first_launch",false).apply();
-        } else {
-            setupHeader();
         }
 
         //check if it's a new month and add it
@@ -236,23 +232,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d("MainActivity", "onConnectionFailed:" + connectionResult);
-    }
-
     public void setupSummary(Month month){
         double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
         double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
@@ -323,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     //expand the entire summary
     private void expand() {
         llSummaryMore.setVisibility(View.VISIBLE);
-        animator.start();
+         animator.start();
     }
 
     //collapse the entire summary
@@ -381,22 +360,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void setupHeader(){
+    public void setupUserHeader(){
         View header = navigationView.getHeaderView(0);
-        civProfil = ButterKnife.findById(header,R.id.header_profile_image);
-        tvUserName = ButterKnife.findById(header,R.id.header_username);
-        tvUserEmail = ButterKnife.findById(header,R.id.header_email);
-        //get the information of the user
-        if (sharedPreferences.getString("user_name",null) != null){
-            tvUserName.setText(sharedPreferences.getString("user_name",null));
-        }
-        if (sharedPreferences.getString("user_email",null) != null){
-            tvUserEmail.setText(sharedPreferences.getString("user_email",null));
-        }
-        if (sharedPreferences.getString("user_photo",null) != null){
-            Picasso.with(this).load(Uri.parse(sharedPreferences.getString("user_photo",null))).into(civProfil);
-        }
+        CircleImageView civProfil = ButterKnife.findById(header,R.id.header_profile_image);
+        TextView displayName = ButterKnife.findById(header,R.id.header_username);
+        TextView email = ButterKnife.findById(header,R.id.header_email);
 
+        User user = databaseHandler.getUser();
+        displayName.setText(user.getDisplayName());
+        email.setText(user.getEmail());
+        Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(civProfil);
     }
 
     private void setupNavigationViewMenu(Menu menu){
@@ -454,7 +427,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestId()
-                .requestProfile()
                 .build();
 
         GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -471,20 +443,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
             if (acct != null){
-                String userName = acct.getDisplayName();
-                String userEmail = acct.getEmail();
-                String userId = acct.getId();
-                Uri userPhoto = acct.getPhotoUrl();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("user_id",userId);
-                editor.putString("user_name",userName);
-                editor.putString("user_email",userEmail);
-                if (userPhoto != null) {
-                    editor.putString("user_photo",userPhoto.toString());
+
+                User user = new User();
+                user.setId(databaseHandler.getUserNextKey());
+                user.setEmail(acct.getEmail());
+                user.setGivenName(acct.getGivenName());
+                user.setFamilyName(acct.getFamilyName());
+                if(acct.getPhotoUrl() != null){
+                    user.setPhotoUrl(acct.getPhotoUrl().toString());
                 }
-                editor.apply();
-                setupHeader();
+                databaseHandler.addUser(user);
+
+                setupUserHeader();
             }
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 9001) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.e("MainActivity", "onConnectionFailed:" + connectionResult);
+    }
+
 }

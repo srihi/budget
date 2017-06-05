@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.AmountRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
@@ -44,35 +44,26 @@ public class AmountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_amount);
-
         ButterKnife.bind(this);
 
-        DatabaseHandler databaseHandler;
-        Month month;
-        Category category;
-        List<Amount> amounts;
-        AmountRecyclerViewAdapter amountAdapter;
-        RecyclerView.LayoutManager layoutManagerAmount;
-
-        databaseHandler = new DatabaseHandler(this);
-
-        month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
-        category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
-        amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
+        //get the list of amounts of the selected category
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
+        Month month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
+        Category category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
+        List<Amount> amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         //display toolbar
         toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
         setSupportActionBar(toolbar);
-
         //display back button
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        layoutManagerAmount = new LinearLayoutManager(AmountActivity.this);
-        amountAdapter = new AmountRecyclerViewAdapter(amounts, AmountActivity.this);
+        //setup recylerView
+        RecyclerView.LayoutManager layoutManagerAmount = new LinearLayoutManager(AmountActivity.this);
+        AmountRecyclerViewAdapter amountAdapter = new AmountRecyclerViewAdapter(amounts, AmountActivity.this);
         amountRecyclerView.setLayoutManager(layoutManagerAmount);
         amountRecyclerView.setAdapter(amountAdapter);
         //put a line between each element in the recycler view

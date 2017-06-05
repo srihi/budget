@@ -20,6 +20,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.benjamin.ledet.budget.activity.SignInActivity">
+        </activity>
+
         <activity android:name="com.benjamin.ledet.budget.activity.PreferencesActivity">
         </activity>
 

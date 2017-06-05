@@ -91,6 +91,7 @@
     <string name="activity_backup_date">Le %1$d %2$s %3$d à %4$d:%5$d</string>
 
     <!-- activity_statistic -->
+    <string name="activity_statistic_no_data_available">Pas de données disponibles.</string>
     <string name="activity_statistic_expenses_incomes">Dépenses et revenus :</string>
     <string name="activity_statistic_textview_balance">Soldes :</string>
     <string name="activity_statistic_select_category_expense">Sélectionnez une catégorie de dépense :</string>
@@ -160,6 +161,7 @@
     <string name="snackbar_error">Quelque chose c\'est mal passé, veuillez réessayer.</string>
 
     <!-- Global -->
+    <string name="budget">Budget</string>
     <string name="about">À propos</string>
     <string name="amount">%1$s €</string>
     <string name="percentage">%1$s %%</string>

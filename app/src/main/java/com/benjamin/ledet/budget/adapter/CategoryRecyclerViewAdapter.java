@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.Month;
 
@@ -20,13 +20,13 @@ import butterknife.ButterKnife;
 
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
-    private List<Category> mCategorys;
+    private List<Category> mCategories;
     private final Context mContext;
     private DatabaseHandler db;
     private Month month;
 
-    public CategoryRecyclerViewAdapter(List<Category> mCategorys, Context context, Month month) {
-        this.mCategorys = mCategorys;
+    public CategoryRecyclerViewAdapter(List<Category> mCategories, Context context, Month month) {
+        this.mCategories = mCategories;
         this.mContext = context;
         this.month = month;
         this.db = new DatabaseHandler(context);
@@ -41,7 +41,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @Override
     public void onBindViewHolder(CategoryRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Category selectedCategory = mCategorys.get(position);
+        final Category selectedCategory = mCategories.get(position);
         holder.icon.setImageDrawable(selectedCategory.getIcon());
         holder.label.setText(selectedCategory.getLabel());
         DecimalFormat df = new DecimalFormat("#.##");
@@ -53,7 +53,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @Override
     public int getItemCount() {
-        return mCategorys.size();
+        return mCategories.size();
     }
 
 

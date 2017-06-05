@@ -1,12 +1,6 @@
-package com.benjamin.ledet.budget.Realm;
+package com.benjamin.ledet.budget.model;
 
 import android.content.Context;
-
-import com.benjamin.ledet.budget.model.Amount;
-import com.benjamin.ledet.budget.model.Category;
-import com.benjamin.ledet.budget.model.Migration;
-import com.benjamin.ledet.budget.model.Month;
-import com.benjamin.ledet.budget.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

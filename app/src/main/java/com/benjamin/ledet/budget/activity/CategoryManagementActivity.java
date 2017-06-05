@@ -41,7 +41,6 @@ public class CategoryManagementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_management);
-
         ButterKnife.bind(this);
 
         //display toolbar
@@ -52,12 +51,12 @@ public class CategoryManagementActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //display viewPager with the tabs
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
     }
 
+    //display viewPager with the tabs
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter;
         CategoryExpenseFragment categoryExpenseFragment;

@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.CategoryManagementRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 

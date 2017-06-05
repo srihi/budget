@@ -10,9 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.CustomBarChartRecyclerViewAdapter;
 import com.benjamin.ledet.budget.adapter.CustomLineChartRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
@@ -32,6 +34,9 @@ public class StatisticActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.tv_no_data_available)
+    TextView noDataAvailable;
 
     @BindView(R.id.rv_charts_expenses)
     RecyclerView chartsExpensesRecyclerView;
@@ -74,7 +79,6 @@ public class StatisticActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
-
         ButterKnife.bind(this);
 
         //display toolbar
@@ -148,6 +152,8 @@ public class StatisticActivity extends AppCompatActivity {
                 chartsIncomesRecyclerView.setAdapter(customLineChartsIncomesAdapter);
             }
 
+        }else{
+            noDataAvailable.setVisibility(View.VISIBLE);
         }
 
     }

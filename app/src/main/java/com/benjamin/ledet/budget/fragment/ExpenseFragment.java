@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
 import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
@@ -56,7 +56,6 @@ public class ExpenseFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_expense,container,false);
-
         ButterKnife.bind(this,v);
 
         databaseHandler = new DatabaseHandler(this.getContext());
@@ -75,7 +74,6 @@ public class ExpenseFragment extends Fragment {
             public void onClick(final View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
                 final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
-                //get the appropriate view
                 final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_amount,null);
                 final EditText etLabel = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_label);
                 final EditText etAmount = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_amount);

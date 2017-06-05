@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -16,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,18 +27,12 @@ import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.Realm.DatabaseHandler;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.model.User;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.math.RoundingMode;
@@ -52,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity{
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar toolbar;
@@ -103,40 +95,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        BudgetApplication budgetApplication = (BudgetApplication) getApplication();
-
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
 
+        BudgetApplication budgetApplication = (BudgetApplication) getApplication();
+        SharedPreferences sharedPreferences = budgetApplication.getPreferences();
         databaseHandler = budgetApplication.getDBHandler();
 
         // display the toolbar
         setSupportActionBar(toolbar);
 
-        //the user must be connected with Google
-        if(databaseHandler.getUsers().size() == 0){
-            signIn();
-        } else{
+        //launch the signIn activity at the first launch
+        if(sharedPreferences.getBoolean("first_launch",true)){
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        }
+
+        if(databaseHandler.getUser() != null){
             setupUserHeader();
         }
 
-        //set default preferences at the first launch
-        SharedPreferences sharedPreferences = budgetApplication.getPreferences();
-        if(sharedPreferences.getBoolean("first_launch",true)){
-            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-            sharedPreferences.edit().putBoolean("first_launch",false).apply();
-        }
-
-        //check if it's a new month and add it
         checkNewMonth();
 
-        //display the navigationView
         final Menu menu = navigationView.getMenu();
         setupNavigationViewMenu(menu);
 
-        //display viewPager with the tabs
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -180,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     startActivity(intent);
                     return true;
                 }
+                //open the backup activity
                 else if(menuItem.getItemId() == R.id.backup){
                     //close the menu
                     drawerLayout.closeDrawers();
@@ -187,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     startActivity(intent);
                     return true;
                 }
+                //open the statistic activity
                 else if(menuItem.getItemId() == R.id.statistic){
                     //close the menu
                     drawerLayout.closeDrawers();
@@ -194,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     startActivity(intent);
                     return true;
                 }
-                //select year item
+                //on the click of a year
                 else if(String.valueOf(menuItem.getItemId()).length() == 4) {
 
                     if (menuItem.getActionView().getId() == R.id.row_year_icon_open) {
@@ -205,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                     showOrCloseMonths(menu, menuItem.getItemId());
                     return true;
-
+                //update the fragments with the selected month
                 }else{
                     //indicates the item selected by a gray background
                     menuItem.setCheckable(true);
@@ -219,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     //display fragments according to the selected month
                     expenseFragment.onStart();
                     incomeFragment.onStart();
-
                     return true;
                 }
             }
@@ -232,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    //displays information for the selected month
     public void setupSummary(Month month){
         double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
         double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
@@ -350,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return animator;
     }
 
+    //check if it's a new month and add it
     private void checkNewMonth(){
         if(databaseHandler.getMonth(actualMonth, actualYear) == null){
             Month month = new Month();
@@ -360,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    //displays information of the user
     public void setupUserHeader(){
         View header = navigationView.getHeaderView(0);
         CircleImageView civProfil = ButterKnife.findById(header,R.id.header_profile_image);
@@ -372,6 +359,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(civProfil);
     }
 
+    //manages the user's click to view or closing the months of a year
+    private void showOrCloseMonths(Menu menu,int year){
+        ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
+        for (Integer month: months) {
+            String id = year + "" + month;
+            MenuItem item = menu.findItem(Integer.parseInt(id));
+            if (item.isVisible()){
+                item.setVisible(false);
+            }else{
+                item.setVisible(true);
+            }
+        }
+    }
+
+    //display the navigationView
     private void setupNavigationViewMenu(Menu menu){
         ArrayList<Integer> years = databaseHandler.getYears();
         for (Integer year: years) {
@@ -396,19 +398,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         menuItem.setChecked(true);
     }
 
-    private void showOrCloseMonths(Menu menu,int year){
-        ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
-        for (Integer month: months) {
-            String id = year + "" + month;
-            MenuItem item = menu.findItem(Integer.parseInt(id));
-            if (item.isVisible()){
-                item.setVisible(false);
-            }else{
-                item.setVisible(true);
-            }
-        }
-    }
-
+    //display viewPager with the tabs
     private void setupViewPager(ViewPager viewPager) {
         expenseFragment = new ExpenseFragment();
         incomeFragment = new IncomeFragment();
@@ -421,59 +411,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         adapter.addFragment(expenseFragment, getString(R.string.title_fragment_expense));
         adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
         viewPager.setAdapter(adapter);
-    }
-
-    private void signIn() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .build();
-
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent,9001);
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        //Storing the information of the user
-        if(result.isSuccess()){
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null){
-
-                User user = new User();
-                user.setId(databaseHandler.getUserNextKey());
-                user.setEmail(acct.getEmail());
-                user.setGivenName(acct.getGivenName());
-                user.setFamilyName(acct.getFamilyName());
-                if(acct.getPhotoUrl() != null){
-                    user.setPhotoUrl(acct.getPhotoUrl().toString());
-                }
-                databaseHandler.addUser(user);
-
-                setupUserHeader();
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.e("MainActivity", "onConnectionFailed:" + connectionResult);
     }
 
 }

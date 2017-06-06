@@ -30,6 +30,7 @@ import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.model.BudgetBackup;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -65,7 +66,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class BackupActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class BackupActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.cl_activity_backup)
     CoordinatorLayout clPrincipal;
@@ -98,6 +99,7 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     RelativeLayout loadingPanel;
 
     private static final String TAG = "budget_drive_backup";
+    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 0;
 
     private BudgetBackup budgetBackup = null;
     private GoogleApiClient googleApiClient;
@@ -169,7 +171,6 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
             PendingResult<DriveApi.MetadataBufferResult> pendingResult = folder.queryChildren(googleApiClient,query);
             DriveApi.MetadataBufferResult result = pendingResult.await();
             MetadataBuffer buffer = result.getMetadataBuffer();
-            Log.e("test",buffer.getCount() + "");
             if (buffer.getCount() != 0){
                 Metadata metadata = buffer.get(0);
                 DriveId driveId = metadata.getDriveId();
@@ -243,9 +244,19 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_FILE)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        // Do nothing
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
                 .addOnConnectionFailedListener(this)
                 .build();
-        googleApiClient.connect();
 
         new LoadBackupInformationsFromDrive(this).execute();
 
@@ -519,9 +530,20 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
             // backup
+            case RESOLVE_CONNECTION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    googleApiClient.connect();
+                }
+                break;
             case 2:
                 intentPicker = null;
 
@@ -615,9 +637,16 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.e(TAG, "onConnectionFailed:" + connectionResult);
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
+            } catch (IntentSender.SendIntentException e) {
+                // Unable to resolve, message user appropriately
+            }
+        } else {
+            GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+            apiAvailability.getErrorDialog(BackupActivity.this,connectionResult.getErrorCode(), 0).show();
+        }
     }
 }

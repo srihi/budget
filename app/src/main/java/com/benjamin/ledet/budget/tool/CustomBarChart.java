@@ -6,12 +6,11 @@ import android.util.AttributeSet;
 
 import com.benjamin.ledet.budget.R;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class CustomBarChart extends BarChart {
     private String[] xValues;
     private float groupSpace;
     private float barSpace;
+    private boolean enlarge;
 
     public CustomBarChart(Context context) {
         super(context);
@@ -41,9 +41,10 @@ public class CustomBarChart extends BarChart {
         super(context, attrs, defStyle);
     }
 
-    public CustomBarChart(Context context, String title) {
+    public CustomBarChart(Context context, String title, boolean enlarge) {
         super(context);
         this.title = title;
+        this.enlarge = enlarge;
 
         this.setLayoutParams(new AppBarLayout.LayoutParams(LayoutParams.MATCH_PARENT, 600));
 
@@ -56,7 +57,6 @@ public class CustomBarChart extends BarChart {
         CustonChartMarkerView custom_marker_view = new CustonChartMarkerView(context, R.layout.custom_chart_marker_view);
         custom_marker_view.setChartView(this);
         this.setMarker(custom_marker_view);
-
     }
 
     public void setSpaceTop(float spaceTop) {
@@ -69,12 +69,7 @@ public class CustomBarChart extends BarChart {
 
     public void setxValues(final String[] xValues) {
         this.xValues = xValues;
-        IAxisValueFormatter formatter = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return xValues[ (int) value];
-            }
-        };
+        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(xValues);
         this.getXAxis().setValueFormatter(formatter);
     }
 
@@ -90,7 +85,7 @@ public class CustomBarChart extends BarChart {
         data.setValueFormatter(new ChartValueFormatter(this.getContext()));
         data.setBarWidth(barWidth);
         this.setData(data);
-        setDesign();
+        this.setDesign();
     }
 
     public void setMultipleEntries(List<BarEntry> entries1, String name1, int color1, List<BarEntry> entries2, String name2, int color2, float barWidth, float groupSpace, float barSpace){
@@ -113,7 +108,7 @@ public class CustomBarChart extends BarChart {
         data.setBarWidth(barWidth);
         this.setData(data);
         this.groupBars(this.getXAxis().getAxisMinimum(), groupSpace, barSpace);
-        setDesign();
+        this.setDesign();
     }
 
     public String getTitle() {
@@ -164,12 +159,26 @@ public class CustomBarChart extends BarChart {
         return barSpace;
     }
 
+    public void setEnlarge(boolean enlarge){
+        this.enlarge = enlarge;
+    }
+
+    public boolean isEnlarge(){
+        return this.enlarge;
+    }
+
     private void setDesign(){
+        if(enlarge){
+            this.setScaleEnabled(true);
+        }else{
+
+            this.setScaleEnabled(false);
+            this.setVisibleXRangeMaximum(5f);
+        }
         this.getDescription().setEnabled(false);
         this.getAxisRight().setEnabled(false);
         this.setDoubleTapToZoomEnabled(false);
-        this.setScaleEnabled(false);
-        this.setVisibleXRangeMaximum(5f);
         this.moveViewToX(this.getXChartMax());
     }
+
 }

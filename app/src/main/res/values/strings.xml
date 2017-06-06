@@ -92,6 +92,7 @@
 
     <!-- activity_statistic -->
     <string name="activity_statistic_no_data_available">Pas de données disponibles.</string>
+    <string name="activity_statistic_enlarge">Agrandir</string>
     <string name="activity_statistic_expenses_incomes">Dépenses et revenus :</string>
     <string name="activity_statistic_textview_balance">Soldes :</string>
     <string name="activity_statistic_select_category_expense">Sélectionnez une catégorie de dépense :</string>

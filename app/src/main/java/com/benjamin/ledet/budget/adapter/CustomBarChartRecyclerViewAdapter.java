@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -55,7 +54,7 @@ public class CustomBarChartRecyclerViewAdapter extends RecyclerView.Adapter<Cust
             @Override
             public void onClick(View v) {
 
-                CustomBarChart customBarChart = new CustomBarChart(mContext,holder.title.getText().toString());
+                CustomBarChart customBarChart = new CustomBarChart(mContext,holder.title.getText().toString(),true);
                 if (selectedCustomBarChart.asMultipleEntries()){
                     customBarChart.setMultipleEntries(selectedCustomBarChart.getEntries1(), selectedCustomBarChart.getNameEntries1(), selectedCustomBarChart.getColorEntries1(),selectedCustomBarChart.getEntries2(), selectedCustomBarChart.getNameEntries2(), selectedCustomBarChart.getColorEntries2(),selectedCustomBarChart.getData().getBarWidth(),selectedCustomBarChart.getGroupSpace(),selectedCustomBarChart.getBarSpace());
                 }else{
@@ -90,7 +89,6 @@ public class CustomBarChartRecyclerViewAdapter extends RecyclerView.Adapter<Cust
                 dialog.show();
             }
         });
-
     }
 
     @Override
@@ -108,7 +106,7 @@ public class CustomBarChartRecyclerViewAdapter extends RecyclerView.Adapter<Cust
         TextView title;
 
         @BindView(R.id.row_chart_extend)
-        Button extend;
+        TextView extend;
 
         private ViewHolder(View itemView) {
             super(itemView);

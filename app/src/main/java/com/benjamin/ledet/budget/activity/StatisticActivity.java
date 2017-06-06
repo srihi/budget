@@ -165,7 +165,7 @@ public class StatisticActivity extends AppCompatActivity {
             for (int i = 0; i < months.size(); i++){
                 barEntries.add(new BarEntry((float)i,(float)databaseHandler.getBalanceOfMonth(months.get(i))));
             }
-            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance));
+            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance),false);
             customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_balance), ContextCompat.getColor(StatisticActivity.this,R.color.PrimaryColor), 0.7f);
             customBarChart.setSpaceTop(50f);
             customBarChart.setSpacebottom(30f);
@@ -178,7 +178,7 @@ public class StatisticActivity extends AppCompatActivity {
             for (int i = 0; i < months.size(); i++){
                 lineEntries.add(new Entry((float)i,(float)databaseHandler.getBalanceOfMonth(months.get(i))));
             }
-            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance));
+            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_textview_balance),false);
             customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_balance), ContextCompat.getColor(StatisticActivity.this,R.color.PrimaryColor));
             customLineChart.setSpaceTop(50f);
             customLineChart.setSpacebottom(30f);
@@ -208,7 +208,7 @@ public class StatisticActivity extends AppCompatActivity {
                 barEntriesIncome.add(new BarEntry((float)i, (float)databaseHandler.getSumIncomesOfMonth(months.get(i))));
             }
 
-            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes));
+            CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes),false);
             customBarChart.setMultipleEntries(barEntriesIncome, getString(R.string.activity_statistic_incomes), ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), barEntriesExpense, getString(R.string.activity_statistic_expenses), Color.RED, barWidth, groupSpace, barSpace);
             customBarChart.setSpaceTop(50f);
             customBarChart.setSpacebottom(30f);
@@ -232,7 +232,7 @@ public class StatisticActivity extends AppCompatActivity {
                 lineEntriesIncome.add(new Entry((float)i, (float)databaseHandler.getSumIncomesOfMonth(months.get(i))));
             }
 
-            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes));
+            CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, getString(R.string.activity_statistic_expenses_incomes),false);
             customLineChart.setMultipleEntries(lineEntriesIncome, getString(R.string.activity_statistic_incomes), ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), lineEntriesExpense, getString(R.string.activity_statistic_expenses), Color.RED);
             customLineChart.setSpaceTop(50f);
             customLineChart.setSpacebottom(30f);
@@ -254,7 +254,7 @@ public class StatisticActivity extends AppCompatActivity {
                     barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
                 }
 
-                CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel());
+                CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel(),false);
                 customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_expenses), Color.RED, 0.7f);
                 customBarChart.setSpaceTop(50f);
                 customBarChart.setSpacebottom(30f);
@@ -273,7 +273,7 @@ public class StatisticActivity extends AppCompatActivity {
                     lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
                 }
 
-                CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel());
+                CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel(),false);
                 customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_expenses), Color.RED);
                 customLineChart.setSpaceTop(50f);
                 customLineChart.setSpacebottom(30f);
@@ -295,7 +295,7 @@ public class StatisticActivity extends AppCompatActivity {
                     barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
                 }
 
-                CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel());
+                CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel(),false);
                 customBarChart.setEntries(barEntries, getString(R.string.activity_statistic_incomes),ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor), 0.7f);
                 customBarChart.setSpaceTop(50f);
                 customBarChart.setSpacebottom(30f);
@@ -314,7 +314,7 @@ public class StatisticActivity extends AppCompatActivity {
                     lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountsOfMonthOfCategory(months.get(i),category)));
                 }
 
-                CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel());
+                CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel(),false);
                 customLineChart.setEntries(lineEntries, getString(R.string.activity_statistic_incomes),ContextCompat.getColor(StatisticActivity.this, R.color.PrimaryColor));
                 customLineChart.setSpaceTop(50f);
                 customLineChart.setSpacebottom(30f);

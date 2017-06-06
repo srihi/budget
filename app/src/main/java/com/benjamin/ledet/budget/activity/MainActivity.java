@@ -356,7 +356,9 @@ public class MainActivity extends AppCompatActivity{
         User user = databaseHandler.getUser();
         displayName.setText(user.getDisplayName());
         email.setText(user.getEmail());
-        Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(civProfil);
+        if(user.getPhotoUrl() != null){
+            Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(civProfil);
+        }
     }
 
     //manages the user's click to view or closing the months of a year
@@ -412,5 +414,7 @@ public class MainActivity extends AppCompatActivity{
         adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
         viewPager.setAdapter(adapter);
     }
+
+
 
 }

@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -55,7 +54,7 @@ public class CustomLineChartRecyclerViewAdapter extends RecyclerView.Adapter<Cus
             @Override
             public void onClick(View v) {
 
-                CustomLineChart customLineChart = new CustomLineChart(mContext,holder.title.getText().toString());
+                CustomLineChart customLineChart = new CustomLineChart(mContext,holder.title.getText().toString(),true);
                 if (selectedCustomLineChart.asMultipleEntries()){
                     customLineChart.setMultipleEntries(selectedCustomLineChart.getEntries1(), selectedCustomLineChart.getNameEntries1(), selectedCustomLineChart.getColorEntries1(),selectedCustomLineChart.getEntries2(), selectedCustomLineChart.getNameEntries2(), selectedCustomLineChart.getColorEntries2());
                 }else{
@@ -107,7 +106,7 @@ public class CustomLineChartRecyclerViewAdapter extends RecyclerView.Adapter<Cus
         TextView title;
 
         @BindView(R.id.row_chart_extend)
-        Button extend;
+        TextView extend;
 
         private ViewHolder(View itemView) {
             super(itemView);

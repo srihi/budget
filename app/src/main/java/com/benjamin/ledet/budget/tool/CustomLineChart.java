@@ -6,16 +6,16 @@ import android.util.AttributeSet;
 
 import com.benjamin.ledet.budget.R;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.List;
 
 public class CustomLineChart extends LineChart{
+
     private String title;
     private List<Entry> entries1;
     private String nameEntries1;
@@ -25,6 +25,7 @@ public class CustomLineChart extends LineChart{
     private int colorEntries2;
     private boolean multipleEntries;
     private String[] xValues;
+    private boolean enlarge;
 
     public CustomLineChart(Context context) {
         super(context);
@@ -38,9 +39,10 @@ public class CustomLineChart extends LineChart{
         super(context, attrs, defStyle);
     }
 
-    public CustomLineChart(Context context, String title) {
+    public CustomLineChart(Context context, String title, boolean enlarge) {
         super(context);
         this.title = title;
+        this.enlarge = enlarge;
 
         this.setLayoutParams(new AppBarLayout.LayoutParams(LayoutParams.MATCH_PARENT, 600));
 
@@ -66,12 +68,7 @@ public class CustomLineChart extends LineChart{
 
     public void setxValues(final String[] xValues) {
         this.xValues = xValues;
-        IAxisValueFormatter formatter = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return xValues[ (int) value];
-            }
-        };
+        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(xValues);
         this.getXAxis().setValueFormatter(formatter);
     }
 
@@ -148,12 +145,25 @@ public class CustomLineChart extends LineChart{
         return this.xValues;
     }
 
+    public void setEnlarge(boolean enlarge){
+        this.enlarge = enlarge;
+    }
+
+    public boolean isEnlarge(){
+        return this.enlarge;
+    }
+
     private void setDesign(){
+        if(enlarge){
+            this.setScaleEnabled(true);
+        }else{
+
+            this.setScaleEnabled(false);
+            this.setVisibleXRangeMaximum(5f);
+        }
         this.getDescription().setEnabled(false);
         this.getAxisRight().setEnabled(false);
         this.setDoubleTapToZoomEnabled(false);
-        this.setScaleEnabled(false);
-        this.setVisibleXRangeMaximum(5f);
         this.moveViewToX(this.getXChartMax());
     }
 }

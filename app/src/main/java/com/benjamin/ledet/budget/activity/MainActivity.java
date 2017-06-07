@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -27,10 +28,11 @@ import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
+import com.benjamin.ledet.budget.model.Category;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.model.User;
 import com.squareup.picasso.Picasso;
@@ -105,13 +107,20 @@ public class MainActivity extends AppCompatActivity{
         // display the toolbar
         setSupportActionBar(toolbar);
 
-        //launch the signIn activity at the first launch
         if(sharedPreferences.getBoolean("first_launch",true)){
-            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-            startActivity(intent);
+            //set default preferences at the first launch of the application
+            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+            addCategories();
+            sharedPreferences.edit().putBoolean("first_launch",false).apply();
         }
 
-        if(databaseHandler.getUser() != null){
+        //launch the signIn activity if there is no user connected
+        if(databaseHandler.getUser() == null) {
+            finish(); // the signInActivity can be the taskRoot, useful in onBackPressMethod()
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        }else{
             setupUserHeader();
         }
 
@@ -415,6 +424,12 @@ public class MainActivity extends AppCompatActivity{
         viewPager.setAdapter(adapter);
     }
 
-
+    //add some categories
+    private void addCategories(){
+        databaseHandler.addCategory(new Category(1,getString(R.string.category_various_purchases),false));
+        databaseHandler.addCategory(new Category(2,getString(R.string.category_shopping),false));
+        databaseHandler.addCategory(new Category(3,getString(R.string.category_apl),true));
+        databaseHandler.addCategory(new Category(4,getString(R.string.category_salary),true));
+    }
 
 }

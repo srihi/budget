@@ -30,6 +30,24 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/activity_preferences_account">
+
+        <Preference
+            android:key="pref_my_account"
+            android:title="@string/activity_preferences_my_account"
+            android:selectable="false"/>
+
+        <Preference
+            android:key="pref_update_account"
+            android:title="@string/activity_preferences_change_account">
+
+            <intent android:action="change_account" />
+
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/about">
 
         <Preference

@@ -36,6 +36,8 @@ public class PreferencesActivity extends AppCompatActivity {
     public static final String KEY_PREF_CHART_TYPE = "pref_chart_type";
     public static final String KEY_PREF_ADD_MONTH = "pref_add_month";
     public static final String KEY_PREF_DELETE_MONTH = "pref_delete_month";
+    public static final String KEY_PREF_MY_ACCOUNT = "pref_my_account";
+    public static final String KEY_PREF_CHANGE_ACCOUNT = "pref_change_account";
 
     //return to the previous fragment
     @Override
@@ -68,15 +70,16 @@ public class PreferencesActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment  {
+    public static class MyPreferenceFragment extends PreferenceFragment {
 
+        private DatabaseHandler databaseHandler;
         private SharedPreferences sharedPreferences;
 
         private ListPreference chartTypePref;
         private EditTextPreference addMonthPref;
         private ListPreference deleteMonthPref;
-
-        private DatabaseHandler databaseHandler;
+        private Preference myAccount;
+        private Preference changeAccount;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -89,11 +92,17 @@ public class PreferencesActivity extends AppCompatActivity {
             chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
             addMonthPref = (EditTextPreference) findPreference(KEY_PREF_ADD_MONTH);
             deleteMonthPref = (ListPreference) findPreference(KEY_PREF_DELETE_MONTH);
+            myAccount = findPreference(KEY_PREF_MY_ACCOUNT);
+            changeAccount = findPreference(KEY_PREF_CHANGE_ACCOUNT);
+
 
             databaseHandler = new DatabaseHandler(getActivity());
 
             setChartTypePref();
             setDeleteMonthPref();
+
+            myAccount.setSummary(databaseHandler.getUser().getEmail());
+
 
             chartTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

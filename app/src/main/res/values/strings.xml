@@ -28,7 +28,6 @@
     <string name="no">Non</string>
     <string name="ok">Ok</string>
 
-
     <!-- alert_dialog Backup & Restore-->
     <string name="save_data_label">Sauvegarder les données</string>
     <string name="save_data_description">Ceci va écraser la précédente sauvegarde. Voulez-vous vraiment sauvegarder vos données?</string>
@@ -101,6 +100,11 @@
     <string name="activity_statistic_incomes">Revenus</string>
     <string name="activity_statistic_balance">Soldes</string>
 
+    <!-- activity_sign_in -->
+    <string name="activity_sign_in_change_account_title">Changer de compte</string>
+    <string name="activity_sign_in_change_account_message">Voulez-vous vraiment changer de compte? Vos données ne seront pas perdues.</string>
+    <string name="activity_sign_in_on_back_pressed">Vous devez choisir un compte!</string>
+
     <!-- activity_preferences -->
     <string name="activity_preferences_chart_type">Type de graphique</string>
     <string name="activity_preferences_bar_chart">Histogramme</string>
@@ -114,7 +118,13 @@
     <string name="activity_preferences_delete_month">Supprimer un mois</string>
     <string name="activity_preferences_delete_month_message">Voulez vous vraiment supprimer le mois %1$s ? Celà supprimera toutes les données de ce mois. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
     <string name="activity_preferences_delete_month_success">Le mois a bien été supprimé.</string>
+    <string name="activity_preferences_account">Compte</string>
+    <string name="activity_preferences_my_account">Mon compte Google</string>
+    <string name="activity_preferences_change_account">Changer de compte</string>
     <string name="activity_preferences_about_budget">À propos de Budget</string>
+    <string name="activity_preferences_about_feedback">Envoyez vos commentaires</string>
+    <string name="activity_preferences_about_rate">Noter Budget</string>
+    <string name="activity_preferences_about_version">Version</string>
 
     <!-- fragment_expense-->
     <string name="fragment_expense_add_expense">Ajouter une dépense</string>
@@ -161,8 +171,15 @@
     <string name="snackbar_folder_error">Vous devez d\'abord sélectionner un dosser!</string>
     <string name="snackbar_error">Quelque chose c\'est mal passé, veuillez réessayer.</string>
 
+    <!-- Categories -->
+    <string name="category_shopping">Courses</string>
+    <string name="category_various_purchases">Achats divers</string>
+    <string name="category_salary">Salaire</string>
+    <string name="category_apl">Apl</string>
+
     <!-- Global -->
     <string name="budget">Budget</string>
+    <string name="version">1.0</string>
     <string name="about">À propos</string>
     <string name="amount">%1$s €</string>
     <string name="percentage">%1$s %%</string>

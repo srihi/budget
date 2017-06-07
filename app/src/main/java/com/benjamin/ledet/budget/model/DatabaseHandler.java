@@ -320,16 +320,6 @@ public class DatabaseHandler {
 
     // User
 
-    public int getUserNextKey() {
-        try {
-            return realm.where(User.class)
-                    .max("id").intValue() + 1;
-        }
-        catch (NullPointerException e) {
-            return 1;
-        }
-    }
-
     public RealmResults<User> getUsers() {
 
         return realm.where(User.class)
@@ -342,13 +332,6 @@ public class DatabaseHandler {
                 .findFirst();
     }
 
-    public User getUser(String email) {
-
-        return realm.where(User.class)
-                .equalTo("email", email)
-                .findFirst();
-    }
-
     public void addUser(final User user){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -357,5 +340,16 @@ public class DatabaseHandler {
             }
         });
     }
+
+    public void deleteUser(final User user){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(User.class).equalTo("id",user.getId()).findFirst().deleteFromRealm();
+            }
+        });
+    }
+
+
 
 }

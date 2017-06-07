@@ -49,6 +49,7 @@ dependencies {
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.github.PhilJay:MPAndroidChart-Realm:v2.0.2@aar'
+    compile 'io.realm:android-adapters:2.0.0'
 
     // Butterknife
     compile 'com.jakewharton:butterknife:8.5.1'

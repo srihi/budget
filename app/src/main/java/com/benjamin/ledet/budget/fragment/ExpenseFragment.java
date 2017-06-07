@@ -107,6 +107,7 @@ public class ExpenseFragment extends Fragment {
                             amount.setDay(Integer.parseInt(etDay.getText().toString()));
                         }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
+                        amount.setAutomatic(false);
                         databaseHandler.addAmount(amount);
                         categoriesExpenseAdapter.notifyDataSetChanged();
                         if(!categoriesExpenseNotEmpty.contains(categorySelected)){

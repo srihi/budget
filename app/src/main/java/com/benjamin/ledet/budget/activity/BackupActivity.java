@@ -602,31 +602,31 @@ public class BackupActivity extends AppCompatActivity implements  GoogleApiClien
     }
 
     private void showBackupSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_backup_success , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.activity_backup_backup_success, Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
         snackbar.show();
     }
 
     private void showBackupErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_backup_error , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.activity_backup_backup_error, Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }
 
     private void showFolderSuccessDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_folder_success , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.activity_backup_folder_success, Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.PrimaryColor));
         snackbar.show();
     }
 
     private void showFolderErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_folder_error , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.activity_backup_folder_error, Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }
 
     private void showErrorDialog() {
-        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.snackbar_error , Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(clPrincipal , R.string.activity_backup_global_error, Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(Color.RED);
         snackbar.show();
     }

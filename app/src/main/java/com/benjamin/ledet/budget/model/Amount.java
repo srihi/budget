@@ -18,6 +18,8 @@ public class Amount extends RealmObject {
 
     private double amount;
 
+    private Boolean isAutomatic;
+
     public long getId() {
         return id;
     }
@@ -66,6 +68,14 @@ public class Amount extends RealmObject {
         this.amount = amount;
     }
 
+    public Boolean isAutomatic() {
+        return isAutomatic;
+    }
+
+    public void setAutomatic(Boolean automatic) {
+        isAutomatic = automatic;
+    }
+
     @Override
     public String toString() {
         return  "id : " + id + " - " +
@@ -73,7 +83,8 @@ public class Amount extends RealmObject {
                 "day : " + day + " - " +
                 "month : " + month.toString() + " - " +
                 "label : " + label + " - " +
-                "amount : " + amount;
+                "amount : " + amount +
+                "isAutomatic : " + isAutomatic;
 
     }
 }

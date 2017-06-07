@@ -73,6 +73,8 @@ public class PreferencesActivity extends AppCompatActivity {
         private DatabaseHandler databaseHandler;
         private SharedPreferences sharedPreferences;
 
+        private Preference automaticExpenses;
+        private Preference automaticIncomes;
         private ListPreference chartTypePref;
         private EditTextPreference addMonthPref;
         private ListPreference deleteMonthPref;
@@ -89,12 +91,15 @@ public class PreferencesActivity extends AppCompatActivity {
             databaseHandler = new DatabaseHandler(getActivity());
 
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            automaticExpenses = findPreference("pref_automatic_expenses");
+            automaticIncomes = findPreference("pref_automatic_incomes");
             chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
             addMonthPref = (EditTextPreference) findPreference("pref_add_month");
             deleteMonthPref = (ListPreference) findPreference("pref_delete_month");
             myAccount = findPreference("pref_my_account");
             feedbackPref = findPreference("pref_feedback");
             ratePref = findPreference("pref_rate");
+
 
             //chart type pref
             setChartTypePref();

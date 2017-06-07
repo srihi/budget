@@ -30,6 +30,13 @@
         <activity android:name="com.benjamin.ledet.budget.activity.PreferencesActivity">
         </activity>
 
+        <activity android:name="com.benjamin.ledet.budget.activity.AutomaticAmountsActivity">
+            <intent-filter>
+                <action android:name="automatic_amounts" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity">
         </activity>
 

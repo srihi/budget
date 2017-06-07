@@ -107,6 +107,7 @@ public class IncomeFragment extends Fragment {
                             amount.setDay(Integer.parseInt(etDay.getText().toString()));
                         }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
+                        amount.setAutomatic(false);
                         databaseHandler.addAmount(amount);
                         categoriesIncomeAdapter.notifyDataSetChanged();
                         if(!categoriesIncomeNotEmpty.contains(categorySelected)){

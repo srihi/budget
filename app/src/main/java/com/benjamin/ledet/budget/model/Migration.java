@@ -1,8 +1,10 @@
 package com.benjamin.ledet.budget.model;
 
 import io.realm.DynamicRealm;
+import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
 import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
 public class Migration implements RealmMigration {
@@ -56,6 +58,20 @@ public class Migration implements RealmMigration {
         if (oldVersion == 3){
             schema.get("Category").removeField("amounts");
             schema.get("Month").removeField("amounts");
+
+            oldVersion++;
+        }
+
+
+        if (oldVersion == 4) {
+            schema.get("Amount")
+                    .addField("isAutomatic", Boolean.class)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            obj.setBoolean("isAutomatic",false);
+                    }});
+            oldVersion++;
         }
 
     }

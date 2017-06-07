@@ -2,6 +2,29 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:title="@string/activity_preferences_expenses_and_incomes">
+
+        <Preference
+            android:key="pref_automatic_expenses"
+            android:title="@string/activity_preferences_automatic_expenses">
+
+            <intent android:action="automatic_amounts">
+                <extra android:name="amount" android:value="expenses" />
+            </intent>
+        </Preference>
+
+        <Preference
+            android:key="pref_automatic_incomes"
+            android:title="@string/activity_preferences_automatic_incomes">
+
+            <intent android:action="automatic_amounts">
+                <extra android:name="amount" android:value="incomes" />
+            </intent>
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/title_activity_statistic">
 
         <ListPreference

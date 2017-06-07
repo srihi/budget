@@ -24,7 +24,7 @@ public class DatabaseHandler {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()
-                    .schemaVersion(4)
+                    .schemaVersion(5)
                     .migration(new Migration())
                     .build();
         }
@@ -236,6 +236,22 @@ public class DatabaseHandler {
                 .findAll();
     }
 
+    public RealmResults<Amount> getAutomaticsIncomes() {
+
+        return realm.where(Amount.class)
+                .equalTo("isAutomatic",true)
+                .equalTo("category.isIncome",true)
+                .findAll();
+    }
+
+    public RealmResults<Amount> getAutomaticsExpenses() {
+
+        return realm.where(Amount.class)
+                .equalTo("isAutomatic",true)
+                .equalTo("category.isIncome",false)
+                .findAll();
+    }
+
     public Amount getAmount(long id) {
 
         return realm.where(Amount.class)
@@ -258,8 +274,6 @@ public class DatabaseHandler {
         }
         return sum;
     }
-
-
 
     public double getSumExpensesOfMonth(Month month){
         double sum = 0;
@@ -320,12 +334,6 @@ public class DatabaseHandler {
 
     // User
 
-    public RealmResults<User> getUsers() {
-
-        return realm.where(User.class)
-                .findAll();
-    }
-
     public User getUser() {
 
         return realm.where(User.class)
@@ -349,7 +357,5 @@ public class DatabaseHandler {
             }
         });
     }
-
-
 
 }

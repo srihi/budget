@@ -51,8 +51,16 @@
         android:title="@string/about">
 
         <Preference
-            android:key="about_settings"
-            android:title="@string/activity_preferences_about_budget" />
+            android:key="pref_feedback"
+            android:title="@string/activity_preferences_about_feedback" />
+        <Preference
+            android:key="pref_rate"
+            android:title="@string/activity_preferences_about_rate" />
+        <Preference
+            android:key="pref_version"
+            android:summary="@string/version"
+            android:title="@string/activity_preferences_about_version"
+            android:selectable="false"/>
 
     </PreferenceCategory>
 

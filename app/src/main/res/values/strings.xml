@@ -123,6 +123,7 @@
     <string name="activity_preferences_change_account">Changer de compte</string>
     <string name="activity_preferences_about_budget">À propos de Budget</string>
     <string name="activity_preferences_about_feedback">Envoyez vos commentaires</string>
+    <string name="activity_preferences_no_email_app">Il n\'y a pas d\'application de mail installée. Envoyez s\'il vous plait un mail à ledet.benjamin23@gmail.com</string>
     <string name="activity_preferences_about_rate">Noter Budget</string>
     <string name="activity_preferences_about_version">Version</string>
 

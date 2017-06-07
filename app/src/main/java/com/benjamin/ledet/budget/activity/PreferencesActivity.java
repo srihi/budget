@@ -2,8 +2,10 @@ package com.benjamin.ledet.budget.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -34,10 +36,6 @@ public class PreferencesActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     public static final String KEY_PREF_CHART_TYPE = "pref_chart_type";
-    public static final String KEY_PREF_ADD_MONTH = "pref_add_month";
-    public static final String KEY_PREF_DELETE_MONTH = "pref_delete_month";
-    public static final String KEY_PREF_MY_ACCOUNT = "pref_my_account";
-    public static final String KEY_PREF_CHANGE_ACCOUNT = "pref_change_account";
 
     //return to the previous fragment
     @Override
@@ -79,7 +77,8 @@ public class PreferencesActivity extends AppCompatActivity {
         private EditTextPreference addMonthPref;
         private ListPreference deleteMonthPref;
         private Preference myAccount;
-        private Preference changeAccount;
+        private Preference feedbackPref;
+        private Preference ratePref;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -87,23 +86,18 @@ public class PreferencesActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-
-            chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
-            addMonthPref = (EditTextPreference) findPreference(KEY_PREF_ADD_MONTH);
-            deleteMonthPref = (ListPreference) findPreference(KEY_PREF_DELETE_MONTH);
-            myAccount = findPreference(KEY_PREF_MY_ACCOUNT);
-            changeAccount = findPreference(KEY_PREF_CHANGE_ACCOUNT);
-
-
             databaseHandler = new DatabaseHandler(getActivity());
 
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
+            addMonthPref = (EditTextPreference) findPreference("pref_add_month");
+            deleteMonthPref = (ListPreference) findPreference("pref_delete_month");
+            myAccount = findPreference("pref_my_account");
+            feedbackPref = findPreference("pref_feedback");
+            ratePref = findPreference("pref_rate");
+
+            //chart type pref
             setChartTypePref();
-            setDeleteMonthPref();
-
-            myAccount.setSummary(databaseHandler.getUser().getEmail());
-
-
             chartTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -113,6 +107,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             });
 
+            //add month pref
             addMonthPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -173,6 +168,8 @@ public class PreferencesActivity extends AppCompatActivity {
 
             });
 
+            //delete month pref
+            setDeleteMonthPref();
             deleteMonthPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, final Object newValue) {
@@ -205,6 +202,40 @@ public class PreferencesActivity extends AppCompatActivity {
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
+
+                    return false;
+                }
+            });
+
+            //account pref
+            myAccount.setSummary(databaseHandler.getUser().getEmail());
+
+
+            //feedback pref
+            feedbackPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // Open email intent
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:ledet.benjamin23@gmail.com"));
+                    boolean activityExists = emailIntent.resolveActivityInfo(getActivity().getPackageManager(), 0) != null;
+                    if (activityExists) {
+                        startActivity(emailIntent);
+                    } else {
+                        Snackbar snackbar = Snackbar.make(getView() , R.string.activity_preferences_no_email_app , Snackbar.LENGTH_LONG);
+                        snackbar.getView().setBackgroundColor(Color.RED);
+                        snackbar.show();
+                    }
+
+                    return false;
+                }
+            });
+
+            //rate pref
+            ratePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.glucosio.android"));
+                    startActivity(intent);
 
                     return false;
                 }

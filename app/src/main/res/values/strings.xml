@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Global -->
     <string name="app_name">Budget</string>
     <string name="version">1.0</string>
@@ -36,7 +35,7 @@
     <string name="close">Fermer</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 
     <!-- alert_dialog Backup & Restore-->
     <string name="save_data_label">Sauvegarder les données</string>
@@ -181,13 +180,10 @@
     <string name="november"> Novembre </string>
     <string name="december"> Décembre </string>
 
-
     <!-- Categories -->
     <string name="category_shopping">Courses</string>
     <string name="category_various_purchases">Achats divers</string>
     <string name="category_salary">Salaire</string>
     <string name="category_apl">Apl</string>
-
-
 
 </resources>

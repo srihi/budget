@@ -24,7 +24,7 @@ public class DatabaseHandler {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()
-                    .schemaVersion(5)
+                    .schemaVersion(6)
                     .migration(new Migration())
                     .build();
         }
@@ -70,14 +70,12 @@ public class DatabaseHandler {
                 .findAllSorted("label");
     }
 
-    public ArrayList<Category> getCategoriesIncomeNotEmptyForMonth(Month month) {
-        ArrayList<Category> list = new ArrayList<>();
-        for (Category category: getCategoriesIncome()) {
-            if (getAmountsOfMonthOfCategory(month,category).size() != 0){
-                list.add(category);
-            }
-        }
-        return list;
+    public RealmResults<Category> getCategoriesIncomeNotEmptyForMonth(Month month) {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",true)
+                .equalTo("amounts.month.id",month.getId())
+                .findAllSorted("label");
     }
 
     public RealmResults<Category> getCategoriesExpense() {
@@ -87,14 +85,12 @@ public class DatabaseHandler {
                 .findAllSorted("label");
     }
 
-    public ArrayList<Category> getCategoriesExpenseNotEmptyForMonth(Month month) {
-        ArrayList<Category> list = new ArrayList<>();
-        for (Category category: getCategoriesExpense()) {
-            if (getAmountsOfMonthOfCategory(month,category).size() != 0){
-                list.add(category);
-            }
-        }
-        return list;
+    public RealmResults<Category> getCategoriesExpenseNotEmptyForMonth(Month month) {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",false)
+                .equalTo("amounts.month.id",month.getId())
+                .findAllSorted("label");
     }
 
     public Category getCategory(long id) {
@@ -308,6 +304,7 @@ public class DatabaseHandler {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(amount);
+                amount.getCategory().getAmounts().add(amount);
             }
         });
     }

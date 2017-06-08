@@ -19,14 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.CategoryManagementRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
-
-import java.util.List;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 public class CategoryIncomeFragment extends Fragment {
 
@@ -38,34 +37,29 @@ public class CategoryIncomeFragment extends Fragment {
 
     private DatabaseHandler databaseHandler;
 
-    private CategoryManagementRecyclerViewAdapter categoriesIncomeAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_category_income,container,false);
-        ButterKnife.bind(this,v);
+        ButterKnife.bind(this, v);
 
-        databaseHandler = new DatabaseHandler(this.getContext());
+        databaseHandler = new DatabaseHandler(getContext());
+        OrderedRealmCollection<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
 
         //setup RecyclerView for categories income
-        List<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
-        RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(this.getContext());
-        categoriesIncomeAdapter = new CategoryManagementRecyclerViewAdapter(categoriesIncome,this.getContext());
+        RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(getContext());
+        CategoryManagementRecyclerViewAdapter categoriesIncomeAdapter = new CategoryManagementRecyclerViewAdapter(categoriesIncome,getContext());
         categoriesIncomeRecyclerView.setLayoutManager(layoutManagerCategoriesIncome);
         categoriesIncomeRecyclerView.setAdapter(categoriesIncomeAdapter);
-        //put a line between each element in the recycler view
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(categoriesIncomeRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        categoriesIncomeRecyclerView.addItemDecoration(dividerItemDecoration);
+        categoriesIncomeRecyclerView.setHasFixedSize(true);
+        categoriesIncomeRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add category
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
-                final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
-                //get the appropriate view
-                final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_category,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
+                final View inflator = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_add_category, null);
                 final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_label_category);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
@@ -92,7 +86,6 @@ public class CategoryIncomeFragment extends Fragment {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
                                     databaseHandler.addCategory(categoryToAdd);
-                                    categoriesIncomeAdapter.notifyDataSetChanged();
                                     Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
                                     snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                                     snackbar.show();
@@ -108,7 +101,6 @@ public class CategoryIncomeFragment extends Fragment {
                         } else {
                             Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
                             databaseHandler.addCategory(categoryToAdd);
-                            categoriesIncomeAdapter.notifyDataSetChanged();
                             Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                             snackbar.show();

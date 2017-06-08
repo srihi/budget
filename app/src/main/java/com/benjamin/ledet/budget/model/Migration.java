@@ -7,7 +7,7 @@ import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
-public class Migration implements RealmMigration {
+class Migration implements RealmMigration {
 
     @Override
     public void migrate(final DynamicRealm realm, long oldVersion, long newVersion) {
@@ -71,6 +71,19 @@ public class Migration implements RealmMigration {
                         public void apply(DynamicRealmObject obj) {
                             obj.setBoolean("isAutomatic",false);
                     }});
+            oldVersion++;
+        }
+
+        if (oldVersion == 5){
+            schema.get("Category")
+                    .addRealmListField("amounts",schema.get("Amount"))
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            for (DynamicRealmObject amount : realm.where("Amount").equalTo("category.id",obj.getInt("id")).findAll())
+                            obj.getList("amounts").add(amount);
+                        }
+                    });
             oldVersion++;
         }
 

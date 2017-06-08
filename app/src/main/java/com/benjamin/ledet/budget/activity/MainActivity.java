@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity{
     LinearLayout llSummaryMore;
 
     private ValueAnimator animator;
-
     private ExpenseFragment expenseFragment;
     private IncomeFragment incomeFragment;
     private Bundle bundle;
@@ -156,8 +155,8 @@ public class MainActivity extends AppCompatActivity{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                //open the parameter activity
-                if( menuItem.getItemId() == R.id.parameter){
+                //open the preference activity
+                if( menuItem.getItemId() == R.id.preference){
                     //close the menu
                     drawerLayout.closeDrawers();
                     Intent intent = new Intent(MainActivity.this,PreferencesActivity.class);
@@ -358,7 +357,7 @@ public class MainActivity extends AppCompatActivity{
     //displays information of the user
     public void setupUserHeader(){
         View header = navigationView.getHeaderView(0);
-        CircleImageView civProfil = ButterKnife.findById(header,R.id.header_profile_image);
+        CircleImageView profileImage = ButterKnife.findById(header,R.id.header_profile_image);
         TextView displayName = ButterKnife.findById(header,R.id.header_username);
         TextView email = ButterKnife.findById(header,R.id.header_email);
 
@@ -366,7 +365,7 @@ public class MainActivity extends AppCompatActivity{
         displayName.setText(user.getDisplayName());
         email.setText(user.getEmail());
         if(user.getPhotoUrl() != null){
-            Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(civProfil);
+            Picasso.with(this).load(Uri.parse(user.getPhotoUrl())).into(profileImage);
         }
     }
 

@@ -140,7 +140,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
-                            public void onResult(Status status) {
+                            public void onResult(@Nullable Status status) {
                                 // ...
                             }
                         });
@@ -170,7 +170,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@Nullable Status status) {
                         // ...
                     }
                 });

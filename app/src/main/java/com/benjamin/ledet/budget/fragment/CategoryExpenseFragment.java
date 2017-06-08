@@ -19,14 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.CategoryManagementRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
-
-import java.util.List;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 public class CategoryExpenseFragment extends Fragment {
 
@@ -38,34 +37,29 @@ public class CategoryExpenseFragment extends Fragment {
 
     private DatabaseHandler databaseHandler;
 
-    private CategoryManagementRecyclerViewAdapter categoriesExpenseAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_category_expense, container, false);
         ButterKnife.bind(this, v);
 
-        databaseHandler = new DatabaseHandler(this.getContext());
+        databaseHandler = new DatabaseHandler(getContext());
+        OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
 
         //setup RecyclerView for categories expense
-        List<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
-        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
-        categoriesExpenseAdapter = new CategoryManagementRecyclerViewAdapter(categoriesExpense, this.getContext());
+        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(getContext());
+        CategoryManagementRecyclerViewAdapter categoriesExpenseAdapter = new CategoryManagementRecyclerViewAdapter(categoriesExpense, getContext());
         categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
         categoriesExpenseRecyclerView.setAdapter(categoriesExpenseAdapter);
-        //put a line between each element in the recycler view
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(categoriesExpenseRecyclerView.getContext(), LinearLayoutManager.VERTICAL);
-        categoriesExpenseRecyclerView.addItemDecoration(dividerItemDecoration);
+        categoriesExpenseRecyclerView.setHasFixedSize(true);
+        categoriesExpenseRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add category
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
-                final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
-                //get the appropriate view
-                final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_category, null);
+                final View inflator = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_add_category, null);
                 final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_label_category);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
@@ -87,18 +81,18 @@ public class CategoryExpenseFragment extends Fragment {
                             title.setTextSize(22);
                             builder.setCustomTitle(title);
                             builder.setMessage(R.string.activity_category_management_duplicate_category_add);
-                            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), false);
                                     databaseHandler.addCategory(categoryToAdd);
-                                    categoriesExpenseAdapter.notifyDataSetChanged();
+                                    //categoriesExpenseAdapter.notifyDataSetChanged();
                                     Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
                                     snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                                     snackbar.show();
                                 }
                             });
-                            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -108,7 +102,7 @@ public class CategoryExpenseFragment extends Fragment {
                         } else {
                             Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), false);
                             databaseHandler.addCategory(categoryToAdd);
-                            categoriesExpenseAdapter.notifyDataSetChanged();
+                            //categoriesExpenseAdapter.notifyDataSetChanged();
                             Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                             snackbar.show();

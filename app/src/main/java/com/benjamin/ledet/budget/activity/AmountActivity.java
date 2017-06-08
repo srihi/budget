@@ -10,16 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.AmountRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 public class AmountActivity extends AppCompatActivity {
 
@@ -51,7 +50,7 @@ public class AmountActivity extends AppCompatActivity {
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         Month month = databaseHandler.getMonth(getIntent().getExtras().getInt("month"),getIntent().getExtras().getInt("year"));
         Category category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
-        List<Amount> amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
+        OrderedRealmCollection<Amount> amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         //display toolbar
         toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
@@ -66,9 +65,8 @@ public class AmountActivity extends AppCompatActivity {
         AmountRecyclerViewAdapter amountAdapter = new AmountRecyclerViewAdapter(amounts, AmountActivity.this);
         amountRecyclerView.setLayoutManager(layoutManagerAmount);
         amountRecyclerView.setAdapter(amountAdapter);
-        //put a line between each element in the recycler view
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(amountRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        amountRecyclerView.addItemDecoration(dividerItemDecoration);
+        amountRecyclerView.setHasFixedSize(true);
+        amountRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
     }
 }

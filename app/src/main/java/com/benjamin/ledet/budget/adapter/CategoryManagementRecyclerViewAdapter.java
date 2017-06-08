@@ -1,6 +1,5 @@
 package com.benjamin.ledet.budget.adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,47 +17,149 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Category;
-
-import java.util.List;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 
-public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<CategoryManagementRecyclerViewAdapter.ViewHolder> {
+public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdapter<Category, CategoryManagementRecyclerViewAdapter.MyViewHolder> {
 
-    private List<Category> mCategorys;
-    private final Context mContext;
-    private DatabaseHandler db;
+    private Context context;
+    private DatabaseHandler databaseHandler;
 
-    public CategoryManagementRecyclerViewAdapter(List<Category> mCategorys, Context context) {
-        this.mCategorys = mCategorys;
-        this.mContext = context;
-        this.db = new DatabaseHandler(context);
+    public CategoryManagementRecyclerViewAdapter(OrderedRealmCollection<Category> data, Context context) {
+        super(data, true);
+        setHasStableIds(true);
+        this.context = context;
+        this.databaseHandler = new DatabaseHandler(context);
     }
 
     @Override
-    public CategoryManagementRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category_management, parent, false);
-
-        return new ViewHolder(rowView);
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row_category_management, parent, false);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(CategoryManagementRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Category selectedCategory = mCategorys.get(position);
-        holder.label.setText(selectedCategory.getLabel());
-        holder.icon.setImageDrawable(selectedCategory.getIcon());
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        final Category obj = getItem(position);
+        holder.data = obj;
+        //noinspection ConstantConditions
+        holder.label.setText(obj.getLabel());
+        holder.icon.setImageDrawable(obj.getIcon());
+
+        holder.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
+                final View inflator = LayoutInflater.from(context).inflate(R.layout.alert_dialog_update_category, null);
+                builder.setView(inflator);
+                TextView title = new TextView(context);
+                title.setText(context.getString(R.string.activity_category_management_update_category_label,obj.getLabel()));
+                title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
+                        Category category;
+                        if (obj.isIncome()){
+                            category = databaseHandler.findCategoryIncomeByLabel(etUpdateLabel.getText().toString());
+                        }else{
+                            category = databaseHandler.findCategoryExpenseByLabel(etUpdateLabel.getText().toString());
+                        }
+                        //duplicate category
+                        if (category != null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
+                            TextView title = new TextView(context);
+                            title.setText(context.getString(R.string.activity_category_management_update_category_label,obj.getLabel()));
+                            title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
+                            title.setGravity(Gravity.CENTER);
+                            title.setTextSize(22);
+                            builder.setCustomTitle(title);
+                            builder.setMessage(R.string.activity_category_management_duplicate_category_update);
+                            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
+                                   // notifyDataSetChanged();
+                                    Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
+                                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                                    snackbar.show();
+                                }
+                            });
+                            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        } else {
+                            databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
+                           // notifyDataSetChanged();
+                            Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
+                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                            snackbar.show();
+                        }
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
+                TextView title = new TextView(context);
+                title.setText(R.string.activity_category_management_delete_category_label);
+                title.setTextColor(Color.RED);
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
+                builder.setMessage(context.getString(R.string.activity_category_management_delete_category_description,obj.getLabel()));
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        databaseHandler.deleteCategory(obj);
+                        //notifyDataSetChanged();
+                        Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_delete_category_message, Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                        snackbar.show();
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
     }
 
     @Override
-    public int getItemCount() {
-        return mCategorys.size();
+    public long getItemId(int index) {
+        //noinspection ConstantConditions
+        return getItem(index).getId();
     }
 
-   class ViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_category_management_icon)
         ImageView icon;
@@ -72,111 +173,11 @@ public class CategoryManagementRecyclerViewAdapter extends RecyclerView.Adapter<
         @BindView(R.id.row_category_management_update)
         Button update;
 
+        public Category data;
 
-        private ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            update.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    final Category selectedCategory = mCategorys.get(getLayoutPosition());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.CustomAlertDialog);
-                    final LayoutInflater layoutInflater = ((Activity)mContext).getLayoutInflater();
-                    final View inflator = layoutInflater.inflate(R.layout.alert_dialog_update_category, null);
-                    builder.setView(inflator);
-                    TextView title = new TextView(mContext);
-                    title.setText(mContext.getString(R.string.activity_category_management_update_category_label,selectedCategory.getLabel()));
-                    title.setTextColor(ContextCompat.getColor(mContext,R.color.PrimaryColor));
-                    title.setGravity(Gravity.CENTER);
-                    title.setTextSize(22);
-                    builder.setCustomTitle(title);
-                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
-                            Category category;
-                            if (selectedCategory.isIncome()){
-                                category = db.findCategoryIncomeByLabel(etUpdateLabel.getText().toString());
-                            }else{
-                                category = db.findCategoryExpenseByLabel(etUpdateLabel.getText().toString());
-                            }
-                            if (category != null) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.CustomAlertDialog);
-                                TextView title = new TextView(mContext);
-                                title.setText(mContext.getString(R.string.activity_category_management_update_category_label,selectedCategory.getLabel()));
-                                title.setTextColor(ContextCompat.getColor(mContext,R.color.PrimaryColor));
-                                title.setGravity(Gravity.CENTER);
-                                title.setTextSize(22);
-                                builder.setCustomTitle(title);
-                                builder.setMessage(R.string.activity_category_management_duplicate_category_update);
-                                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        db.updateCategory(selectedCategory,etUpdateLabel.getText().toString());
-                                        notifyDataSetChanged();
-                                        Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
-                                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
-                                        snackbar.show();
-                                    }
-                                });
-                                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                    }
-                                });
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            } else {
-                                db.updateCategory(selectedCategory,etUpdateLabel.getText().toString());
-                                notifyDataSetChanged();
-                                Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
-                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
-                                snackbar.show();
-                            }
-                        }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
-
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    final Category selectedCategory = mCategorys.get(getLayoutPosition());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.CustomAlertDialog);
-                    TextView title = new TextView(mContext);
-                    title.setText(R.string.activity_category_management_delete_category_label);
-                    title.setTextColor(Color.RED);
-                    title.setGravity(Gravity.CENTER);
-                    title.setTextSize(22);
-                    builder.setCustomTitle(title);
-                    builder.setMessage(mContext.getString(R.string.activity_category_management_delete_category_description,selectedCategory.getLabel()));
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            db.deleteCategory(selectedCategory);
-                            notifyDataSetChanged();
-                            Snackbar snackbar = Snackbar.make(view , R.string.activity_category_management_delete_category_message, Snackbar.LENGTH_SHORT);
-                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(mContext, R.color.PrimaryColor));
-                            snackbar.show();
-                        }
-                    });
-                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
+        MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 }

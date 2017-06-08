@@ -73,8 +73,6 @@ public class PreferencesActivity extends AppCompatActivity {
         private DatabaseHandler databaseHandler;
         private SharedPreferences sharedPreferences;
 
-        private Preference automaticExpenses;
-        private Preference automaticIncomes;
         private ListPreference chartTypePref;
         private EditTextPreference addMonthPref;
         private ListPreference deleteMonthPref;
@@ -91,8 +89,6 @@ public class PreferencesActivity extends AppCompatActivity {
             databaseHandler = new DatabaseHandler(getActivity());
 
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            automaticExpenses = findPreference("pref_automatic_expenses");
-            automaticIncomes = findPreference("pref_automatic_incomes");
             chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
             addMonthPref = (EditTextPreference) findPreference("pref_add_month");
             deleteMonthPref = (ListPreference) findPreference("pref_delete_month");
@@ -157,6 +153,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
                             databaseHandler.addMonth(month);
                             setDeleteMonthPref();
+                            //noinspection ConstantConditions
                             Snackbar snackbar = Snackbar.make(getView(), R.string.activity_preferences_add_month_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.PrimaryColor));
                             snackbar.show();
@@ -194,7 +191,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             Month month = databaseHandler.getMonth(Month.stringMonthToIntMonth(newValue.toString().substring(0,position),getActivity()),Integer.parseInt(newValue.toString().substring(position + 1)));
                             databaseHandler.deleteMonth(month);
                             setDeleteMonthPref();
-
+                            //noinspection ConstantConditions
                             Snackbar snackbar = Snackbar.make(getView() , R.string.activity_preferences_delete_month_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.PrimaryColor));
                             snackbar.show();
@@ -226,6 +223,7 @@ public class PreferencesActivity extends AppCompatActivity {
                     if (activityExists) {
                         startActivity(emailIntent);
                     } else {
+                        //noinspection ConstantConditions
                         Snackbar snackbar = Snackbar.make(getView() , R.string.activity_preferences_no_email_app , Snackbar.LENGTH_LONG);
                         snackbar.getView().setBackgroundColor(Color.RED);
                         snackbar.show();

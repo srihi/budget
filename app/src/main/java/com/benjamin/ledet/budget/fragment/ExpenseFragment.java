@@ -20,21 +20,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
 import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
 import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
 import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.tool.RecyclerItemClickListener;
 
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 public class ExpenseFragment extends Fragment {
 
@@ -45,41 +45,35 @@ public class ExpenseFragment extends Fragment {
     RecyclerView categoriesExpenseRecyclerView;
 
     private DatabaseHandler databaseHandler;
-
-    private List<Category> categoriesExpenseNotEmpty;
-    private List<Category> categoriesExpense;
-    private CategoryRecyclerViewAdapter categoriesExpenseAdapter;
-    private CategorySpinAdapter categoriesSpinAdapter;
-
     private Month month;
+    private OrderedRealmCollection<Category> categoriesExpenseNotEmpty;
+    private OrderedRealmCollection<Category> categoriesExpense;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_expense,container,false);
         ButterKnife.bind(this,v);
 
-        databaseHandler = new DatabaseHandler(this.getContext());
-
-        final Calendar calendar = Calendar.getInstance();
-
-        //put a line between each element in the recycler view
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(categoriesExpenseRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        categoriesExpenseRecyclerView.addItemDecoration(dividerItemDecoration);
-
+        databaseHandler = new DatabaseHandler(getContext());
         categoriesExpense = databaseHandler.getCategoriesExpense();
+
+        //setup RecyclerView for categories expense
+        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(getContext());
+        categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
+        categoriesExpenseRecyclerView.setHasFixedSize(true);
+        categoriesExpenseRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add expense
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
-                final LayoutInflater layoutInflater = (getActivity().getLayoutInflater());
-                final View inflator = layoutInflater.inflate(R.layout.alert_dialog_add_amount,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+                final View inflator = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_add_amount, null);
                 final EditText etLabel = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_label);
                 final EditText etAmount = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_amount);
                 final EditText etDay = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_day);
                 final Spinner spCategories = (Spinner) inflator.findViewById(R.id.alert_dialog_add_amount_categories);
-                categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesExpense);
+                CategorySpinAdapter categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesExpense);
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
@@ -102,17 +96,14 @@ public class ExpenseFragment extends Fragment {
                         amount.setCategory(categorySelected);
                         amount.setMonth(month);
                         if(etDay.getText().length() == 0){
-                            amount.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                            amount.setDay(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                         }else{
                             amount.setDay(Integer.parseInt(etDay.getText().toString()));
                         }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
                         amount.setAutomatic(false);
                         databaseHandler.addAmount(amount);
-                        categoriesExpenseAdapter.notifyDataSetChanged();
-                        if(!categoriesExpenseNotEmpty.contains(categorySelected)){
-                            categoriesExpenseNotEmpty.add(databaseHandler.getCategoriesExpenseNotEmptyForMonth(month).indexOf(categorySelected),categorySelected);
-                        }
+
                         Snackbar snackbar = Snackbar.make(view , R.string.fragment_expense_add_expense_message, Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
@@ -138,9 +129,10 @@ public class ExpenseFragment extends Fragment {
         super.onStart();
 
         //get the month from the id given by mainActivity
-        String id = this.getArguments().getString("id");
+        String id = getArguments().getString("id");
         if (id != null){
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
+            categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
         }
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.intMonthToStringMonth(month.getMonth(),getContext()) + " " + month.getYear());
@@ -148,11 +140,7 @@ public class ExpenseFragment extends Fragment {
         ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories expense
-        categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
-
-        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(this.getContext());
-        categoriesExpenseAdapter = new CategoryRecyclerViewAdapter(categoriesExpenseNotEmpty, this.getContext(), month);
-        categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
+        CategoryRecyclerViewAdapter categoriesExpenseAdapter = new CategoryRecyclerViewAdapter(categoriesExpenseNotEmpty, month, getContext());
         categoriesExpenseRecyclerView.setAdapter(categoriesExpenseAdapter);
 
         categoriesExpenseRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), categoriesExpenseRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {

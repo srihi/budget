@@ -1,35 +1,14 @@
 package com.benjamin.ledet.budget.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.adapter.AmountRecyclerViewAdapter;
-import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
-import com.benjamin.ledet.budget.model.Amount;
-import com.benjamin.ledet.budget.model.Category;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
-import com.benjamin.ledet.budget.model.Month;
-
-import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +43,8 @@ public class AutomaticAmountsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_automatic_amounts);
         ButterKnife.bind(this);
+
+        /*
 
         final DatabaseHandler databaseHandler = new DatabaseHandler(this);
         final List<Category> categories;
@@ -157,5 +138,7 @@ public class AutomaticAmountsActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        */
     }
 }

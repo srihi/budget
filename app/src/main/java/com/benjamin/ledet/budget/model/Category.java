@@ -3,6 +3,7 @@ package com.benjamin.ledet.budget.model;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -15,6 +16,8 @@ public class Category extends RealmObject {
     private String label;
 
     private boolean isIncome;
+
+    private RealmList<Amount> amounts;
 
     @Ignore
     private TextDrawable icon;
@@ -50,6 +53,14 @@ public class Category extends RealmObject {
 
     public void setIncome(boolean income) {
         isIncome = income;
+    }
+
+    public RealmList<Amount> getAmounts() {
+        return amounts;
+    }
+
+    public void setAmounts(RealmList<Amount> amounts) {
+        this.amounts = amounts;
     }
 
     public TextDrawable getIcon() {

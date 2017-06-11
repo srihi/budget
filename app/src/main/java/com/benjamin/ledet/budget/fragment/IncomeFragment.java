@@ -38,15 +38,15 @@ import io.realm.OrderedRealmCollection;
 
 public class IncomeFragment extends Fragment {
 
-    @BindView(R.id.fab_category_income)
+    @BindView(R.id.fragment_income_fab)
     FloatingActionButton floatingActionButton;
 
-    @BindView(R.id.rv_category_income)
-    RecyclerView categoriesIncomeRecyclerView;
+    @BindView(R.id.fragment_income_rv)
+    RecyclerView recyclerView;
 
     private DatabaseHandler databaseHandler;
     private Month month;
-    private OrderedRealmCollection<Category> categoriesIncomeNotEmpty;
+    private OrderedRealmCollection<Category> categoriesIncomeWithIncomes;
     private OrderedRealmCollection<Category> categoriesIncome;
 
     @Override
@@ -58,10 +58,10 @@ public class IncomeFragment extends Fragment {
         categoriesIncome = databaseHandler.getCategoriesIncome();
 
         //setup RecyclerView for categories income
-        RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(getContext());
-        categoriesIncomeRecyclerView.setLayoutManager(layoutManagerCategoriesIncome);
-        categoriesIncomeRecyclerView.setHasFixedSize(true);
-        categoriesIncomeRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add income
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class IncomeFragment extends Fragment {
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
-                title.setText(R.string.fragment_income_add_income);
+                title.setText(R.string.fragment_income_add_income_label);
                 title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
@@ -101,10 +101,9 @@ public class IncomeFragment extends Fragment {
                             amount.setDay(Integer.parseInt(etDay.getText().toString()));
                         }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
-                        amount.setAutomatic(false);
                         databaseHandler.addAmount(amount);
 
-                        Snackbar snackbar = Snackbar.make(view , R.string.fragment_income_add_income_message, Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar = Snackbar.make(view , R.string.fragment_income_add_income_success, Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
 
@@ -132,7 +131,7 @@ public class IncomeFragment extends Fragment {
         String id = getArguments().getString("id");
         if (id != null){
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
-            categoriesIncomeNotEmpty = databaseHandler.getCategoriesIncomeNotEmptyForMonth(month);
+            categoriesIncomeWithIncomes = databaseHandler.getCategoriesIncomeWithIncomesOfMonth(month);
         }
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.intMonthToStringMonth(month.getMonth(),getContext()) + " " + month.getYear());
@@ -140,13 +139,13 @@ public class IncomeFragment extends Fragment {
         ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories income
-        CategoryRecyclerViewAdapter categoriesIncomeAdapter = new CategoryRecyclerViewAdapter(categoriesIncomeNotEmpty, month, getContext());
-        categoriesIncomeRecyclerView.setAdapter(categoriesIncomeAdapter);
+        CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter(categoriesIncomeWithIncomes, month, getContext());
+        recyclerView.setAdapter(adapter);
 
-        categoriesIncomeRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), categoriesIncomeRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Category category = categoriesIncomeNotEmpty.get(position);
+                Category category = categoriesIncomeWithIncomes.get(position);
                 Intent intent = new Intent(getContext(),AmountActivity.class);
                 intent.putExtra("month", month.getMonth());
                 intent.putExtra("year", month.getYear());

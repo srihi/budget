@@ -1,6 +1,5 @@
 package com.benjamin.ledet.budget.adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.Amount;
+import com.benjamin.ledet.budget.model.AutomaticAmount;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 
 import java.math.RoundingMode;
@@ -28,12 +27,12 @@ import butterknife.ButterKnife;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
-public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, AmountRecyclerViewAdapter.MyViewHolder> {
+public class AutomaticAmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<AutomaticAmount, AutomaticAmountRecyclerViewAdapter.MyViewHolder> {
 
     private Context context;
     private DatabaseHandler databaseHandler;
 
-    public AmountRecyclerViewAdapter(OrderedRealmCollection<Amount> data, Context context) {
+    public AutomaticAmountRecyclerViewAdapter(OrderedRealmCollection<AutomaticAmount> data, Context context) {
         super(data, true);
         setHasStableIds(true);
         this.context = context;
@@ -49,15 +48,24 @@ public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final Amount obj = getItem(position);
+        final AutomaticAmount obj = getItem(position);
         //noinspection ConstantConditions
-        holder.label.setText(obj.getLabel());
-        holder.date.setText(context.getString(R.string.full_date, obj.getDay(), obj.getMonth().getMonth(), obj.getMonth().getYear()));
+        if(obj.getLabel().equals(obj.getCategory().getLabel())){
+            holder.label.setText(obj.getLabel());
+        } else {
+            holder.label.setText(obj.getLabel() + " (" + obj.getCategory().getLabel() + ")");
+        }
+
+        if (obj.getDay() == 1){
+            holder.date.setText(context.getString(R.string.fragment_automatic_expense_income_first_day_of_month));
+        }else{
+            holder.date.setText(context.getString(R.string.fragment_automatic_expense_income_day_of_month, String.valueOf(obj.getDay())));
+        }
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        String textAmount = context.getString(R.string.amount,df.format(obj.getAmount()));
-        holder.amount.setText(textAmount);
-        
+        String textAutomaticAmount = context.getString(R.string.amount,df.format(obj.getAmount()));
+        holder.amount.setText(textAutomaticAmount);
+
         holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -72,9 +80,9 @@ public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, 
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
                 if (obj.getCategory().isIncome()){
-                    title.setText(context.getString(R.string.activity_amount_update_income_label,obj.getLabel()));
+                    title.setText(context.getString(R.string.fragment_automatic_income_update_income_label,obj.getLabel()));
                 }else{
-                    title.setText(context.getString(R.string.activity_amount_update_expense_label,obj.getLabel()));
+                    title.setText(context.getString(R.string.fragment_automatic_expense_update_expense_label,obj.getLabel()));
                 }
                 builder.setCustomTitle(title);
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -92,13 +100,13 @@ public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, 
                         if(!etUpdateAmount.getText().toString().equals("")){
                             amount = Double.parseDouble(etUpdateAmount.getText().toString());
                         }
-                        databaseHandler.updateAmount(obj,label,day,amount);
+                        databaseHandler.updateAutomaticAmount(obj,label,day,amount);
                         if (obj.getCategory().isIncome()){
-                            Snackbar snackbar = Snackbar.make(v , R.string.activity_amount_update_income_success, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(v , R.string.fragment_automatic_expense_update_expense_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                             snackbar.show();
                         }else{
-                            Snackbar snackbar = Snackbar.make(v , R.string.activity_amount_update_expense_success, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(v , R.string.fragment_automatic_income_update_income_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                             snackbar.show();
                         }
@@ -124,30 +132,26 @@ public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, 
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
                 if (obj.getCategory().isIncome()){
-                    title.setText(R.string.activity_amount_delete_income_label);
-                    builder.setMessage(context.getString(R.string.activity_amount_delete_income_message,obj.getLabel()));
+                    title.setText(R.string.fragment_automatic_income_delete_income_label);
+                    builder.setMessage(context.getString(R.string.fragment_automatic_income_delete_income_message,obj.getLabel()));
                 }else{
-                    title.setText(R.string.activity_amount_delete_expense_label);
-                    builder.setMessage(context.getString(R.string.activity_amount_delete_expense_message,obj.getLabel()));
+                    title.setText(R.string.fragment_automatic_expense_delete_expense_label);
+                    builder.setMessage(context.getString(R.string.fragment_automatic_expense_delete_expense_message,obj.getLabel()));
                 }
                 builder.setCustomTitle(title);
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Boolean isIncome = obj.getCategory().isIncome();
-                        databaseHandler.deleteAmount(obj);
+                        databaseHandler.deleteAutomaticAmount(obj);
                         if (isIncome){
-                            Snackbar snackbar = Snackbar.make(v, R.string.activity_amount_delete_income_success, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(v, R.string.fragment_automatic_income_delete_income_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                             snackbar.show();
                         }else{
-                            Snackbar snackbar = Snackbar.make(v , R.string.activity_amount_delete_expense_success, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(v , R.string.fragment_automatic_expense_delete_expense_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                             snackbar.show();
-                        }
-                        //noinspection ConstantConditions
-                        if(getData().size() == 0){
-                            ((Activity)context).finish();
                         }
                     }
                 });
@@ -160,7 +164,6 @@ public class AmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<Amount, 
                 dialog.show();
             }
         });
-
     }
 
     @Override

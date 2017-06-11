@@ -16,7 +16,7 @@
 
             <android.support.v7.widget.Toolbar
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/activity_main_toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -31,13 +31,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/ll_statistic"
                 android:paddingTop="?attr/actionBarSize"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp">
 
                 <TextView
-                    android:id="@+id/tv_no_data_available"
+                    android:id="@+id/activity_statistic_tv_no_data_available"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/activity_statistic_no_data_available"
@@ -49,17 +48,17 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/rv_main_charts"/>
+                    android:id="@+id/activity_statistic_rv_main_charts"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/rv_charts_expenses"/>
+                    android:id="@+id/activity_statistic_rv_charts_expenses"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/rv_charts_incomes"/>
+                    android:id="@+id/activity_statistic_rv_charts_incomes"/>
 
             </LinearLayout>
 

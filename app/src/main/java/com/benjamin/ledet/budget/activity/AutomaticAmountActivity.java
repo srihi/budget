@@ -6,23 +6,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
-import com.benjamin.ledet.budget.fragment.CategoryExpenseFragment;
-import com.benjamin.ledet.budget.fragment.CategoryIncomeFragment;
+import com.benjamin.ledet.budget.fragment.AutomaticExpenseFragment;
+import com.benjamin.ledet.budget.fragment.AutomaticIncomeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CategoryManagementActivity extends AppCompatActivity {
+public class AutomaticAmountActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.activity_category_management_vp)
+    @BindView(R.id.activity_automatic_amount_vp)
     ViewPager viewPager;
 
-    @BindView(R.id.activity_category_management_tb)
+    @BindView(R.id.activity_automatic_amount_tl)
     TabLayout tabLayout;
 
     //return to the previous fragment
@@ -40,11 +41,11 @@ public class CategoryManagementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_management);
+        setContentView(R.layout.activity_automatic_amount);
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(R.string.title_activity_category_management);
+        toolbar.setTitle(R.string.title_activity_automatic_amount);
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){
@@ -58,11 +59,11 @@ public class CategoryManagementActivity extends AppCompatActivity {
 
     //display viewPager with the tabs
     private void setupViewPager(ViewPager viewPager) {
-        CategoryExpenseFragment categoryExpenseFragment = new CategoryExpenseFragment();
-        CategoryIncomeFragment categoryIncomeFragment = new CategoryIncomeFragment();
+        AutomaticExpenseFragment automaticExpenseFragment = new AutomaticExpenseFragment();
+        AutomaticIncomeFragment automaticIncomeFragment = new AutomaticIncomeFragment();
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(categoryExpenseFragment, getString(R.string.title_fragment_category_expense));
-        adapter.addFragment(categoryIncomeFragment, getString(R.string.title_fragment_category_income));
+        adapter.addFragment(automaticExpenseFragment, getString(R.string.title_fragment_automatic_expense));
+        adapter.addFragment(automaticIncomeFragment, getString(R.string.title_fragment_automatic_income));
         viewPager.setAdapter(adapter);
     }
 }

@@ -8,7 +8,7 @@
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/cl_activity_backup">
+        android:id="@+id/activity_backup_cl">
 
         <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +18,7 @@
 
             <android.support.v7.widget.Toolbar
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/activity_main_toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -29,12 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:id="@+id/activity_backup_loading_panel">
+            android:id="@+id/activity_backup_rl_loading_panel">
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/activity_backup_progress_bar"
+                android:id="@+id/activity_backup_pb"
                 android:indeterminate="true" />
 
         </RelativeLayout>
@@ -44,7 +44,6 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/ll_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -55,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:clickable="true"
-                    android:id="@+id/rl_folder"
+                    android:id="@+id/activity_backup_rl_folder"
                     android:background="?android:attr/selectableItemBackground"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
@@ -63,7 +62,7 @@
                     android:paddingBottom="10dp">
 
                     <TextView
-                        android:id="@+id/tv_backup_folder_label"
+                        android:id="@+id/activity_backup_tv_backup_folder_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activity_backup_backup_folder_label"
@@ -71,16 +70,16 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_backup_folder_description"
+                        android:id="@+id/activity_backup_tv_backup_folder_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/tv_backup_folder_label"
-                        android:layout_below="@+id/tv_backup_folder_label"
+                        android:layout_alignStart="@+id/activity_backup_tv_backup_folder_label"
+                        android:layout_below="@+id/activity_backup_tv_backup_folder_label"
                         android:text="@string/activity_backup_backup_folder_description"
-                        android:layout_toStartOf="@+id/iv_backup_folder" />
+                        android:layout_toStartOf="@+id/activity_backup_iv_backup_folder" />
 
                     <ImageView
-                        android:id="@+id/iv_backup_folder"
+                        android:id="@+id/activity_backup_iv_backup_folder"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
@@ -97,7 +96,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/rl_backup"
+                    android:id="@+id/activity_backup_rl_backup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -109,7 +108,7 @@
                     android:paddingBottom="10dp">
 
                     <TextView
-                        android:id="@+id/tv_backup_now_label"
+                        android:id="@+id/activity_backup_tv_backup_now_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activity_backup_backup_now_label"
@@ -117,11 +116,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_backup_now_description"
+                        android:id="@+id/activity_backup_tv_backup_now_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/tv_backup_now_label"
-                        android:layout_below="@+id/tv_backup_now_label"
+                        android:layout_alignStart="@+id/activity_backup_tv_backup_now_label"
+                        android:layout_below="@+id/activity_backup_tv_backup_now_label"
                         android:text="@string/activity_backup_backup_now_description" />
 
                 </RelativeLayout>
@@ -141,7 +140,7 @@
                     android:paddingBottom="10dp">
 
                     <TextView
-                        android:id="@+id/tv_last_backup_label"
+                        android:id="@+id/activity_backup_tv_last_backup_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activity_backup_last_backup_label"
@@ -149,11 +148,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_last_backup_description"
+                        android:id="@+id/activity_backup_tv_last_backup_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/tv_last_backup_label"
-                        android:layout_below="@+id/tv_last_backup_label"
+                        android:layout_alignStart="@+id/activity_backup_tv_last_backup_label"
+                        android:layout_below="@+id/activity_backup_tv_last_backup_label"
                         android:text="@string/activity_backup_last_backup_description" />
 
                 </RelativeLayout>
@@ -168,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:orientation="vertical"
-                    android:id="@+id/rl_restore"
+                    android:id="@+id/activity_backup_rl_restore"
                     android:background="?android:attr/selectableItemBackground"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
@@ -176,7 +175,7 @@
                     android:paddingBottom="10dp">
 
                     <TextView
-                        android:id="@+id/tv_restore_label"
+                        android:id="@+id/activity_backup_tv_restore_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activity_backup_restore_label"
@@ -184,11 +183,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_restore_description"
+                        android:id="@+id/activity_backup_tv_restore_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/tv_restore_label"
-                        android:layout_below="@+id/tv_restore_label"
+                        android:layout_alignStart="@+id/activity_backup_tv_restore_label"
+                        android:layout_below="@+id/activity_backup_tv_restore_label"
                         android:text="@string/activity_backup_restore_description" />
 
                 </RelativeLayout>
@@ -208,7 +207,7 @@
                     android:paddingBottom="10dp">
 
                     <TextView
-                        android:id="@+id/tv_last_restore_label"
+                        android:id="@+id/activity_backup_tv_last_restore_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activity_backup_last_restore_label"
@@ -216,11 +215,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_last_restore_description"
+                        android:id="@+id/activity_backup_tv_last_restore_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/tv_last_restore_label"
-                        android:layout_below="@+id/tv_last_restore_label"
+                        android:layout_alignStart="@+id/activity_backup_tv_last_restore_label"
+                        android:layout_below="@+id/activity_backup_tv_last_restore_label"
                         android:text="@string/activity_backup_last_restore_description" />
 
                 </RelativeLayout>
@@ -231,7 +230,6 @@
                     android:background="@android:color/darker_gray"/>
 
             </LinearLayout>
-
 
         </ScrollView>
 

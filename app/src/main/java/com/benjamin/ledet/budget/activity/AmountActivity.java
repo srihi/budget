@@ -22,11 +22,11 @@ import io.realm.OrderedRealmCollection;
 
 public class AmountActivity extends AppCompatActivity {
 
-    @BindView(R.id.activity_main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.rv_amount)
-    RecyclerView amountRecyclerView;
+    @BindView(R.id.activity_amount_rv)
+    RecyclerView recyclerView;
 
     //return to the previous fragment
     @Override
@@ -53,7 +53,7 @@ public class AmountActivity extends AppCompatActivity {
         OrderedRealmCollection<Amount> amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         //display toolbar
-        toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),AmountActivity.this) + " " + month.getYear() + " - " + category.getLabel());
+        toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),this) + " " + month.getYear() + " - " + category.getLabel());
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){
@@ -61,12 +61,12 @@ public class AmountActivity extends AppCompatActivity {
         }
 
         //setup recylerView
-        RecyclerView.LayoutManager layoutManagerAmount = new LinearLayoutManager(AmountActivity.this);
-        AmountRecyclerViewAdapter amountAdapter = new AmountRecyclerViewAdapter(amounts, AmountActivity.this);
-        amountRecyclerView.setLayoutManager(layoutManagerAmount);
-        amountRecyclerView.setAdapter(amountAdapter);
-        amountRecyclerView.setHasFixedSize(true);
-        amountRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        AmountRecyclerViewAdapter adapter = new AmountRecyclerViewAdapter(amounts,this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
     }
 }

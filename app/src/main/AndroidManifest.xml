@@ -30,7 +30,7 @@
         <activity android:name="com.benjamin.ledet.budget.activity.PreferencesActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.AutomaticAmountsActivity">
+        <activity android:name="com.benjamin.ledet.budget.activity.AutomaticAmountActivity">
             <intent-filter>
                 <action android:name="automatic_amounts" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -35,12 +35,12 @@ import butterknife.ButterKnife;
 
 public class SignInActivity extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener  {
 
-    @BindView(R.id.google_sign_in)
+    @BindView(R.id.activity_sign_in_bt)
     Button googleSignIn;
 
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
         ButterKnife.bind(this);
 
         BudgetApplication budgetApplication = (BudgetApplication) getApplication();
-        databaseHandler = budgetApplication.getDBHandler();
-        sharedPreferences = budgetApplication.getPreferences();
+        databaseHandler = budgetApplication.getDatabaseHandler();
+        sharedPreferences = budgetApplication.getSharedPreferences();
 
         //build the google sign in api
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -58,7 +58,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
                 .requestId()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
@@ -82,9 +82,9 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
         googleSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mGoogleApiClient != null){
-                    mGoogleApiClient.stopAutoManage(SignInActivity.this);
-                    mGoogleApiClient.disconnect();
+                if(googleApiClient != null){
+                    googleApiClient.stopAutoManage(SignInActivity.this);
+                    googleApiClient.disconnect();
                 }
                 signIn();
             }
@@ -94,7 +94,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
 
     //show the google sign in api
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent,9001);
     }
 
@@ -127,7 +127,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
         TextView title = new TextView(this);
-        title.setText(R.string.activity_sign_in_change_account_title);
+        title.setText(R.string.activity_sign_in_change_account_label);
         title.setTextColor(ContextCompat.getColor(this,R.color.PrimaryColor));
         title.setGravity(Gravity.CENTER);
         title.setTextSize(22);
@@ -137,7 +137,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(@Nullable Status status) {
@@ -167,7 +167,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
 
     //disconnect account
     private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@Nullable Status status) {
@@ -199,7 +199,7 @@ public class SignInActivity extends AppCompatActivity  implements GoogleApiClien
         if(isTaskRoot()){
             super.onBackPressed();
         }else {
-            Snackbar snackbar = Snackbar.make(googleSignIn , R.string.activity_sign_in_on_back_pressed , Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(googleSignIn , R.string.activity_sign_in_choose_account_message, Snackbar.LENGTH_SHORT);
             snackbar.getView().setBackgroundColor(Color.RED);
             snackbar.show();
         }

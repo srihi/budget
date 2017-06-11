@@ -68,34 +68,34 @@ import io.realm.Realm;
 
 public class BackupActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener {
 
-    @BindView(R.id.cl_activity_backup)
+    @BindView(R.id.activity_backup_cl)
     CoordinatorLayout clPrincipal;
 
-    @BindView(R.id.activity_main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.rl_folder)
+    @BindView(R.id.activity_backup_rl_folder)
     RelativeLayout rlFolder;
 
-    @BindView(R.id.rl_backup)
+    @BindView(R.id.activity_backup_rl_backup)
     RelativeLayout rlBackup;
 
-    @BindView(R.id.rl_restore)
+    @BindView(R.id.activity_backup_rl_restore)
     RelativeLayout rlRestore;
 
-    @BindView(R.id.iv_backup_folder)
+    @BindView(R.id.activity_backup_iv_backup_folder)
     ImageView ivFolder;
 
-    @BindView(R.id.tv_backup_folder_description)
+    @BindView(R.id.activity_backup_tv_backup_folder_description)
     TextView tvFolder;
 
-    @BindView(R.id.tv_last_backup_description)
+    @BindView(R.id.activity_backup_tv_last_backup_description)
     TextView tvLastBackup;
 
-    @BindView(R.id.tv_last_restore_description)
+    @BindView(R.id.activity_backup_tv_last_restore_description)
     TextView tvLastRestore;
 
-    @BindView(R.id.activity_backup_loading_panel)
+    @BindView(R.id.activity_backup_rl_loading_panel)
     RelativeLayout loadingPanel;
 
     private static final String TAG = "budget_drive_backup";
@@ -199,13 +199,13 @@ public class BackupActivity extends AppCompatActivity implements  GoogleApiClien
                 //last backup
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(budgetBackup.getModifiedDate());
-                tvLastBackup.setText(getString(R.string.activity_backup_date,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                tvLastBackup.setText(getString(R.string.full_date_time,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
 
                 //last restoration
                 long date = sharedPreferences.getLong("last_restore", 0);
                 if (date != 0){
                     calendar.setTimeInMillis(date);
-                    tvLastRestore.setText(getString(R.string.activity_backup_date,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                    tvLastRestore.setText(getString(R.string.full_date_time,calendar.get(Calendar.DAY_OF_MONTH),calendar.getDisplayName(Calendar.MONTH,Calendar.SHORT,Locale.getDefault()),calendar.get(Calendar.YEAR),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
                 }
             }
             loadingPanel.setVisibility(View.GONE);
@@ -227,8 +227,8 @@ public class BackupActivity extends AppCompatActivity implements  GoogleApiClien
         }
 
         BudgetApplication budgetApplication = (BudgetApplication) getApplicationContext();
-        sharedPreferences = budgetApplication.getPreferences();
-        realm = budgetApplication.getDBHandler().getRealmInstance();
+        sharedPreferences = budgetApplication.getSharedPreferences();
+        realm = budgetApplication.getDatabaseHandler().getRealmInstance();
 
         //if the folder as changed or there is a backup, show a message
         if(getIntent().getExtras() != null){
@@ -275,12 +275,12 @@ public class BackupActivity extends AppCompatActivity implements  GoogleApiClien
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this,R.style.CustomAlertDialog);
                     TextView title = new TextView(BackupActivity.this);
-                    title.setText(R.string.save_data_label);
+                    title.setText(R.string.activity_backup_backup_label);
                     title.setTextColor(ContextCompat.getColor(BackupActivity.this,R.color.PrimaryColor));
                     title.setGravity(Gravity.CENTER);
                     title.setTextSize(22);
                     builder.setCustomTitle(title);
-                    builder.setMessage(R.string.save_data_description);
+                    builder.setMessage(R.string.activity_backup_backup_message);
                     builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -309,12 +309,12 @@ public class BackupActivity extends AppCompatActivity implements  GoogleApiClien
                     if (budgetBackup != null){
                         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this, R.style.CustomAlertDialog);
                         TextView title = new TextView(BackupActivity.this);
-                        title.setText(R.string.restore_data_label);
+                        title.setText(R.string.activity_backup_restore_label);
                         title.setTextColor(ContextCompat.getColor(BackupActivity.this,R.color.PrimaryColor));
                         title.setGravity(Gravity.CENTER);
                         title.setTextSize(22);
                         builder.setCustomTitle(title);
-                        builder.setMessage(R.string.restore_data_description);
+                        builder.setMessage(R.string.activity_backup_restore_message);
                         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

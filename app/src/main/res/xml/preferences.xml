@@ -2,24 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/activity_preferences_expenses_and_incomes">
+        android:title="@string/activity_preferences_expenses_and_incomes_label">
 
         <Preference
-            android:key="pref_automatic_expenses"
-            android:title="@string/activity_preferences_automatic_expenses">
-
-            <intent android:action="automatic_amounts">
-                <extra android:name="amount" android:value="expenses" />
-            </intent>
-        </Preference>
-
-        <Preference
-            android:key="pref_automatic_incomes"
-            android:title="@string/activity_preferences_automatic_incomes">
-
-            <intent android:action="automatic_amounts">
-                <extra android:name="amount" android:value="incomes" />
-            </intent>
+            android:key="pref_automatic_incomes_expenses"
+            android:title="@string/title_activity_automatic_amount">
+            <intent android:action="automatic_amounts"/>
         </Preference>
 
     </PreferenceCategory>
@@ -29,9 +17,9 @@
 
         <ListPreference
             android:defaultValue="@string/activity_preferences_line_chart"
-            android:dialogTitle="@string/activity_preferences_chart_type"
+            android:dialogTitle="@string/activity_preferences_chart_type_label"
             android:key="pref_chart_type"
-            android:title="@string/activity_preferences_chart_type" />
+            android:title="@string/activity_preferences_chart_type_label" />
 
     </PreferenceCategory>
 
@@ -39,30 +27,30 @@
         android:title="@string/month">
 
         <EditTextPreference
-            android:dialogTitle="@string/activity_preferences_add_month"
+            android:dialogTitle="@string/activity_preferences_add_month_label"
             android:inputType="date"
             android:key="pref_add_month"
             android:hint="@string/activity_preferences_example_month"
-            android:title="@string/activity_preferences_add_month" />
+            android:title="@string/activity_preferences_add_month_label" />
 
         <ListPreference
-            android:dialogTitle="@string/activity_preferences_delete_month"
+            android:dialogTitle="@string/activity_preferences_delete_month_label"
             android:key="pref_delete_month"
-            android:title="@string/activity_preferences_delete_month" />
+            android:title="@string/activity_preferences_delete_month_label" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/activity_preferences_account">
+        android:title="@string/activity_preferences_account_label">
 
         <Preference
             android:key="pref_my_account"
-            android:title="@string/activity_preferences_my_account"
+            android:title="@string/activity_preferences_my_account_label"
             android:selectable="false"/>
 
         <Preference
             android:key="pref_update_account"
-            android:title="@string/activity_preferences_change_account">
+            android:title="@string/activity_preferences_change_account_label">
 
             <intent android:action="change_account" />
 
@@ -75,14 +63,14 @@
 
         <Preference
             android:key="pref_feedback"
-            android:title="@string/activity_preferences_about_feedback" />
+            android:title="@string/activity_preferences_about_feedback_label" />
         <Preference
             android:key="pref_rate"
-            android:title="@string/activity_preferences_about_rate" />
+            android:title="@string/activity_preferences_rate_label" />
         <Preference
             android:key="pref_version"
             android:summary="@string/version"
-            android:title="@string/activity_preferences_about_version"
+            android:title="@string/activity_preferences_version_label"
             android:selectable="false"/>
 
     </PreferenceCategory>

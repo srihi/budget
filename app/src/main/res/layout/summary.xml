@@ -2,7 +2,7 @@
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:id="@+id/ll_summary"
+     android:id="@+id/summary_ll"
      android:background="@color/PrimaryColor"
      android:clickable="true"
      android:paddingStart="20dp"
@@ -11,20 +11,20 @@
      <TextView
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:text="@string/fragment_expense_income_balance_label"
+         android:text="@string/summary_balance_label"
          android:textColor="@android:color/background_light"
-         android:id="@+id/summary_balance_text"/>
+         android:id="@+id/summary_tv_balance_label"/>
 
      <TextView
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:id="@+id/summary_balance"
-         android:layout_below="@id/summary_balance_text" />
+         android:id="@+id/summary_tv_balance"
+         android:layout_below="@id/summary_tv_balance_label" />
 
      <ImageView
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:id="@+id/summary_arrow"
+         android:id="@+id/summary_iv_arrow"
          app:srcCompat="@drawable/ic_arrow_drop_down"
          android:contentDescription="@string/arrow_drop_down"
          android:layout_alignParentEnd="true" />
@@ -33,44 +33,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/ll_summary_more"
+        android:id="@+id/summary_ll_more"
         android:background="@color/PrimaryColor"
         android:clickable="true"
-        android:layout_below="@id/summary_balance"
+        android:layout_below="@id/summary_tv_balance"
         android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/fragment_expense_income_total_expense_label"
+            android:text="@string/summary_total_expense_label"
             android:textColor="@android:color/background_light" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/summary_total_expenses" />
+            android:id="@+id/summary_tv_total_expenses" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/fragment_expense_income_total_income_label"
+            android:text="@string/summary_total_income_label"
             android:textColor="@android:color/background_light" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/summary_total_income" />
+            android:id="@+id/summary_tv_total_income" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/fragment_expense_income_percentage_label"
+            android:text="@string/summary_percentage_label"
             android:textColor="@android:color/background_light" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/summary_pourcentage" />
+            android:id="@+id/summary_tv_percentage" />
 
     </LinearLayout>
 

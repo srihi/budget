@@ -6,11 +6,11 @@
     android:padding="10dp">
 
     <EditText
-        android:id="@+id/alert_dialog_update_edit_amount_amount"
+        android:id="@+id/alert_dialog_update_amount_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="10"
-        android:hint="@string/alert_dialog_update_new_amount"
+        android:hint="@string/alert_dialog_update_amount_new_amount"
         android:inputType="numberDecimal"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp" />
@@ -20,9 +20,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/alert_dialog_update_amount_new_label"
-        android:id="@+id/alert_dialog_update_edit_amount_label"
+        android:id="@+id/alert_dialog_update_amount_label"
         android:maxLength="25"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/alert_dialog_update_amount_new_day"
+        android:id="@+id/alert_dialog_update_amount_day"
+        android:maxLength="25"
+        android:inputType="number"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp" />
 
 </LinearLayout>

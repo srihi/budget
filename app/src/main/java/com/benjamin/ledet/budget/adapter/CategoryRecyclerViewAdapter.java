@@ -45,7 +45,6 @@ public class CategoryRecyclerViewAdapter extends RealmRecyclerViewAdapter<Catego
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Category obj = getItem(position);
-        holder.data = obj;
         //noinspection ConstantConditions
         holder.icon.setImageDrawable(obj.getIcon());
         holder.label.setText(obj.getLabel());
@@ -72,8 +71,6 @@ public class CategoryRecyclerViewAdapter extends RealmRecyclerViewAdapter<Catego
 
         @BindView(R.id.row_category_sum)
         TextView sum;
-
-        public Category data;
 
         MyViewHolder(View view) {
             super(view);

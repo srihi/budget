@@ -19,6 +19,8 @@ public class Category extends RealmObject {
 
     private RealmList<Amount> amounts;
 
+    private RealmList<AutomaticAmount> automaticAmounts;
+
     @Ignore
     private TextDrawable icon;
 
@@ -61,6 +63,14 @@ public class Category extends RealmObject {
 
     public void setAmounts(RealmList<Amount> amounts) {
         this.amounts = amounts;
+    }
+
+    public RealmList<AutomaticAmount> getAutomaticAmounts() {
+        return automaticAmounts;
+    }
+
+    public void setAutomaticAmounts(RealmList<AutomaticAmount> automaticAmounts) {
+        this.automaticAmounts = automaticAmounts;
     }
 
     public TextDrawable getIcon() {

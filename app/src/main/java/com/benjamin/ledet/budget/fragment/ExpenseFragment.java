@@ -38,15 +38,15 @@ import io.realm.OrderedRealmCollection;
 
 public class ExpenseFragment extends Fragment {
 
-    @BindView(R.id.fab_category_expense)
+    @BindView(R.id.fragment_expense_fab)
     FloatingActionButton floatingActionButton;
 
-    @BindView(R.id.rv_category_expense)
-    RecyclerView categoriesExpenseRecyclerView;
+    @BindView(R.id.fragment_expense_rv)
+    RecyclerView recyclerView;
 
     private DatabaseHandler databaseHandler;
     private Month month;
-    private OrderedRealmCollection<Category> categoriesExpenseNotEmpty;
+    private OrderedRealmCollection<Category> categoriesExpenseWithExpenses;
     private OrderedRealmCollection<Category> categoriesExpense;
 
     @Override
@@ -58,10 +58,10 @@ public class ExpenseFragment extends Fragment {
         categoriesExpense = databaseHandler.getCategoriesExpense();
 
         //setup RecyclerView for categories expense
-        RecyclerView.LayoutManager layoutManagerCategoriesExpense = new LinearLayoutManager(getContext());
-        categoriesExpenseRecyclerView.setLayoutManager(layoutManagerCategoriesExpense);
-        categoriesExpenseRecyclerView.setHasFixedSize(true);
-        categoriesExpenseRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add expense
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class ExpenseFragment extends Fragment {
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
-                title.setText(R.string.fragment_expense_add_expense);
+                title.setText(R.string.fragment_expense_add_expense_label);
                 title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
@@ -101,10 +101,9 @@ public class ExpenseFragment extends Fragment {
                             amount.setDay(Integer.parseInt(etDay.getText().toString()));
                         }
                         amount.setAmount(Double.parseDouble(etAmount.getText().toString()));
-                        amount.setAutomatic(false);
                         databaseHandler.addAmount(amount);
 
-                        Snackbar snackbar = Snackbar.make(view , R.string.fragment_expense_add_expense_message, Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar = Snackbar.make(view , R.string.fragment_expense_add_expense_success, Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                         snackbar.show();
 
@@ -132,7 +131,7 @@ public class ExpenseFragment extends Fragment {
         String id = getArguments().getString("id");
         if (id != null){
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
-            categoriesExpenseNotEmpty = databaseHandler.getCategoriesExpenseNotEmptyForMonth(month);
+            categoriesExpenseWithExpenses = databaseHandler.getCategoriesExpenseWithExpensesOfMonth(month);
         }
         //title
         ((MainActivity) getActivity()).setActionBarTitle(Month.intMonthToStringMonth(month.getMonth(),getContext()) + " " + month.getYear());
@@ -140,13 +139,13 @@ public class ExpenseFragment extends Fragment {
         ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories expense
-        CategoryRecyclerViewAdapter categoriesExpenseAdapter = new CategoryRecyclerViewAdapter(categoriesExpenseNotEmpty, month, getContext());
-        categoriesExpenseRecyclerView.setAdapter(categoriesExpenseAdapter);
+        CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter(categoriesExpenseWithExpenses, month, getContext());
+        recyclerView.setAdapter(adapter);
 
-        categoriesExpenseRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), categoriesExpenseRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Category category = categoriesExpenseNotEmpty.get(position);
+                Category category = categoriesExpenseWithExpenses.get(position);
                 Intent intent = new Intent(getContext(),AmountActivity.class);
                 intent.putExtra("month", month.getMonth());
                 intent.putExtra("year", month.getYear());

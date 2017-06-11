@@ -64,26 +64,35 @@ class Migration implements RealmMigration {
 
 
         if (oldVersion == 4) {
-            schema.get("Amount")
-                    .addField("isAutomatic", Boolean.class)
-                    .transform(new RealmObjectSchema.Function() {
-                        @Override
-                        public void apply(DynamicRealmObject obj) {
-                            obj.setBoolean("isAutomatic",false);
-                    }});
-            oldVersion++;
-        }
-
-        if (oldVersion == 5){
             schema.get("Category")
                     .addRealmListField("amounts",schema.get("Amount"))
                     .transform(new RealmObjectSchema.Function() {
                         @Override
                         public void apply(DynamicRealmObject obj) {
                             for (DynamicRealmObject amount : realm.where("Amount").equalTo("category.id",obj.getInt("id")).findAll())
-                            obj.getList("amounts").add(amount);
+                                obj.getList("amounts").add(amount);
                         }
                     });
+
+            schema.create("AutomaticAmount")
+                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
+                    .addRealmObjectField("category", schema.get("Category"))
+                    .addField("day", int.class)
+                    .addField("label", String.class)
+                    .addField("amount", double.class);
+
+            schema.get("Category")
+                    .addRealmListField("automaticAmounts",schema.get("AutomaticAmount"));
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 5) {
+
+            schema.get("AutomaticAmount")
+                    .addRealmObjectField("monthOfCreation", schema.get("Month"))
+                    .addField("nextMonth",boolean.class);
+
             oldVersion++;
         }
 

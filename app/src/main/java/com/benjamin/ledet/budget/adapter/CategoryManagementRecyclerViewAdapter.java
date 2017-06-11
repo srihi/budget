@@ -47,7 +47,6 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Category obj = getItem(position);
-        holder.data = obj;
         //noinspection ConstantConditions
         holder.label.setText(obj.getLabel());
         holder.icon.setImageDrawable(obj.getIcon());
@@ -59,7 +58,7 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                 final View inflator = LayoutInflater.from(context).inflate(R.layout.alert_dialog_update_category, null);
                 builder.setView(inflator);
                 TextView title = new TextView(context);
-                title.setText(context.getString(R.string.activity_category_management_update_category_label,obj.getLabel()));
+                title.setText(context.getString(R.string.fragment_category_expense_income_update_category_label,obj.getLabel()));
                 title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
@@ -67,7 +66,7 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_edit_category);
+                        final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_category_label);
                         Category category;
                         if (obj.isIncome()){
                             category = databaseHandler.findCategoryIncomeByLabel(etUpdateLabel.getText().toString());
@@ -78,18 +77,25 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                         if (category != null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
                             TextView title = new TextView(context);
-                            title.setText(context.getString(R.string.activity_category_management_update_category_label,obj.getLabel()));
+                            title.setText(context.getString(R.string.fragment_category_expense_income_update_category_label,obj.getLabel()));
                             title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
                             title.setGravity(Gravity.CENTER);
                             title.setTextSize(22);
                             builder.setCustomTitle(title);
-                            builder.setMessage(R.string.activity_category_management_duplicate_category_update);
+                            if (obj.isIncome()){
+                                builder.setMessage(R.string.fragment_category_income_update_duplicate_category_message);
+                            }else{
+                                builder.setMessage(R.string.fragment_category_expense_update_duplicate_category_message);
+                            }
                             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
-                                   // notifyDataSetChanged();
-                                    Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
+                                    String message = context.getString(R.string.fragment_category_expense_update_category_success);
+                                    if (obj.isIncome()){
+                                        message = context.getString(R.string.fragment_category_income_update_category_success);
+                                    }
+                                    Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
                                     snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                                     snackbar.show();
                                 }
@@ -102,9 +108,12 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                             AlertDialog dialog = builder.create();
                             dialog.show();
                         } else {
-                            databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
-                           // notifyDataSetChanged();
-                            Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_update_category_message, Snackbar.LENGTH_SHORT);
+                            databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());;
+                            String message = context.getString(R.string.fragment_category_expense_update_category_success);
+                            if (obj.isIncome()){
+                                message = context.getString(R.string.fragment_category_income_update_category_success);
+                            }
+                            Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                             snackbar.show();
                         }
@@ -135,7 +144,6 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         databaseHandler.deleteCategory(obj);
-                        //notifyDataSetChanged();
                         Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_delete_category_message, Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                         snackbar.show();
@@ -172,8 +180,6 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
 
         @BindView(R.id.row_category_management_update)
         Button update;
-
-        public Category data;
 
         MyViewHolder(View view) {
             super(view);

@@ -1,15 +1,24 @@
 <resources>
+
     <!-- Global -->
     <string name="app_name">Budget</string>
     <string name="version">1.0</string>
     <string name="about">À propos</string>
-    <string name="error">Erreur</string>
     <string name="amount">%1$s €</string>
     <string name="percentage">%1$s %%</string>
+    <string name="full_date">le %1$d/%2$d/%3$d</string>
+    <string name="full_date_time">Le %1$d %2$s %3$d à %4$d:%5$d</string>
     <string name="icon_category">icone de la catégorie</string>
     <string name="optional">(facultatif)</string>
     <string name="arrow_drop_down">arrow drop down</string>
     <string name="arrow_drop_up">arrow drop up</string>
+    <string name="confirm">Confirmer </string>
+    <string name="cancel">Annuler </string>
+    <string name="close">Fermer</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="ok">OK</string>
+    <string name="error">Erreur</string>
 
     <!-- header !-->
     <string name="header_unknown_user">Utilisateur inconnu</string>
@@ -23,67 +32,47 @@
     <string name="title_activity_category_management">Gestion des catégories</string>
     <string name="title_activity_backup">Sauvegarder &amp; restaurer</string>
     <string name="title_activity_amount">Détails</string>
+    <string name="title_activity_automatic_amount">Dépenses et revenus automatiques</string>
     <string name="title_activity_statistic">Statistiques</string>
     <string name="title_fragment_category_expense">Catégories dépenses</string>
     <string name="title_fragment_category_income">Catégories revenus</string>
     <string name="title_fragment_expense">Dépenses</string>
     <string name="title_fragment_income">Revenus</string>
-
-    <!-- alert_dialog -->
-    <string name="confirm">Confirmer </string>
-    <string name="cancel">Annuler </string>
-    <string name="close">Fermer</string>
-    <string name="yes">Oui</string>
-    <string name="no">Non</string>
-    <string name="ok">OK</string>
-
-    <!-- alert_dialog Backup & Restore-->
-    <string name="save_data_label">Sauvegarder les données</string>
-    <string name="save_data_description">Ceci va écraser la précédente sauvegarde. Voulez-vous vraiment sauvegarder vos données?</string>
-    <string name="restore_data_label">Restaurer les données</string>
-    <string name="restore_data_description">Ceci va écraser vos données actuelles. Voulez-vous vraiment restaurer à partir de la dernière sauvegarde?</string>
+    <string name="title_fragment_automatic_expense">Dépenses automatiques</string>
+    <string name="title_fragment_automatic_income">Revenus automatiques</string>
 
     <!-- alert_dialog_add_category -->
     <string name="alert_dialog_add_category_label">Libellé </string>
     <string name="alert_dialog_add_category_expense">Dépense </string>
     <string name="alert_dialog_add_category_income">Revenu </string>
 
+    <!-- alert_dialog_update_category -->
+    <string name="alert_dialog_update_category_new_label">Nouveau libellé</string>
+
     <!-- alert_dialog_add_amount -->
     <string name="alert_dialog_add_amount_category">Sélectionnez une catégorie :</string>
     <string name="alert_dialog_add_amount_amount">Montant</string>
     <string name="alert_dialog_add_amount_label">Libellé (facultatif)</string>
-    <string name="alert_dialog_add_amount_day">Jour (facultatif)</string>
+    <string name="alert_dialog_add_amount_day_optional">Jour (facultatif)</string>
+    <string name="alert_dialog_add_amount_day_default">Jour (1 par défault)</string>
 
-    <!-- alert_dialog_update_category & update_amount-->
-    <string name="alert_dialog_update_category_new_label">Nouveau libellé</string>
+    <!--  alert_dialog_update_amount-->
+    <string name="alert_dialog_update_amount_new_amount">Nouveau montant (facultatif)</string>
     <string name="alert_dialog_update_amount_new_label">Nouveau libellé (facultatif)</string>
-    <string name="alert_dialog_update_new_amount">Nouveau montant</string>
-
-    <!-- activity_category_management -->
-    <string name="activity_category_management_categories_income">Catégories revenus : </string>
-    <string name="activity_category_management_categories_expense">Catégories dépenses : </string>
-    <string name="activity_category_management_add_category">Ajouter une catégorie</string>
-    <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
-    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
-    <string name="activity_category_management_duplicate_category_add">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
-    <string name="activity_category_management_duplicate_category_update">Une catégorie ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
-    <string name="activity_category_management_update_category_label">Catégorie %1$s</string>
-    <string name="activity_category_management_add_category_expense_message">La catégorie de dépense a bien été ajoutée.</string>
-    <string name="activity_category_management_add_category_income_message">La catégorie de revenu a bien été ajoutée.</string>
-    <string name="activity_category_management_update_category_message">La catégorie a bien été modifiée.</string>
-    <string name="activity_category_management_delete_category_message">La catégorie a bien été supprimée.</string>
+    <string name="alert_dialog_update_amount_new_day">Nouveau jour (facultatif)</string>
 
     <!-- activity_amount -->
-    <string name="activity_amount_delete_expense_label">Supprimer une dépense</string>
-    <string name="activity_amount_delete_income_label">Supprimer un revenu</string>
-    <string name="activity_amount_delete_expense_description">Voulez-vous vraiment supprimer la dépense \"%1$s\" ?</string>
-    <string name="activity_amount_delete_income_description">Voulez-vous vraiment supprimer le revenu \"%1$s\" ?</string>
     <string name="activity_amount_update_expense_label">Dépense %1$s</string>
+    <string name="activity_amount_update_expense_success">La dépense a bien été modifiée.</string>
+    <string name="activity_amount_delete_expense_label">Supprimer une dépense</string>
+    <string name="activity_amount_delete_expense_message">Voulez-vous vraiment supprimer la dépense \"%1$s\" ?</string>
+    <string name="activity_amount_delete_expense_success">La dépense a bien été supprimée.</string>
+
     <string name="activity_amount_update_income_label">Revenu %1$s</string>
-    <string name="activity_amount_delete_expense_message">La dépense a bien été supprimée.</string>
-    <string name="activity_amount_delete_income_message">Le revenu a bien été supprimé.</string>
-    <string name="activity_amount_update_expense_message">La dépense a bien été modifiée.</string>
-    <string name="activity_amount_update_income_message">Le revenu a bien été modifié.</string>
+    <string name="activity_amount_update_income_success">Le revenu a bien été modifié.</string>
+    <string name="activity_amount_delete_income_label">Supprimer un revenu</string>
+    <string name="activity_amount_delete_income_message">Voulez-vous vraiment supprimer le revenu \"%1$s\" ?</string>
+    <string name="activity_amount_delete_income_success">Le revenu a bien été supprimé.</string>
 
     <!-- activity_backup -->
     <string name="activity_backup_backup_folder_label">Dossier de sauvegarde</string>
@@ -92,11 +81,13 @@
     <string name="activity_backup_backup_now_description">Sauvegarde immédiatement les données.</string>
     <string name="activity_backup_last_backup_label">Dernière sauvegarde</string>
     <string name="activity_backup_last_backup_description">Aucune sauvegarde trouvée.</string>
-    <string name="activity_backup_restore_label">Restaurer</string>
+    <string name="activity_backup_restore_label">Restaurer les données</string>
     <string name="activity_backup_restore_description">Restaure les données à partir de la dernière sauvegarde.</string>
+    <string name="activity_backup_restore_message">Ceci va écraser vos données actuelles. Voulez-vous vraiment restaurer à partir de la dernière sauvegarde?</string>
     <string name="activity_backup_last_restore_label">Dernière restauration</string>
     <string name="activity_backup_last_restore_description">Vous n\'avez pas encore effectué de restauration sur cet appareil.</string>
-    <string name="activity_backup_date">Le %1$d %2$s %3$d à %4$d:%5$d</string>
+    <string name="activity_backup_backup_label">Sauvegarder les données</string>
+    <string name="activity_backup_backup_message">Ceci va écraser la précédente sauvegarde. Voulez-vous vraiment sauvegarder vos données?</string>
     <string name="activity_backup_backup_success">Sauvegarde correctement effectuée.</string>
     <string name="activity_backup_backup_error">Il n\'y a pas de sauvegarde à restaurer!</string>
     <string name="activity_backup_restore_success">Vos données ont bien été restaurées.</string>
@@ -104,66 +95,103 @@
     <string name="activity_backup_folder_error">Vous devez d\'abord sélectionner un dosser!</string>
     <string name="activity_backup_global_error">Quelque chose c\'est mal passé, veuillez réessayer.</string>
 
+    <!-- activity_main -->
+    <string name="activity_main_one_expense_added">Une dépense automatique à été ajoutée.</string>
+    <string name="activity_main_several_expenses_added">Des dépenses automatiques ont été ajoutées.</string>
+    <string name="activity_main_one_income_added">Un revenu automatique à été ajouté.</string>
+    <string name="activity_main_several_incomes_added">Des revenus automatiques ont été ajoutés.</string>
+    <string name="activity_main_several_incomes_expenses_added">Des revenus et dépenses automatiques ont été ajoutés.</string>
+
     <!-- activity_statistic -->
     <string name="activity_statistic_no_data_available">Pas de données disponibles.</string>
     <string name="activity_statistic_enlarge">Agrandir</string>
-    <string name="activity_statistic_expenses_incomes">Dépenses et revenus :</string>
-    <string name="activity_statistic_textview_balance">Soldes :</string>
-    <string name="activity_statistic_select_category_expense">Sélectionnez une catégorie de dépense :</string>
-    <string name="activity_statistic_select_category_income">Sélectionnez une catégorie de revenu :</string>
+    <string name="activity_statistic_expenses_incomes_label">Dépenses et revenus :</string>
+    <string name="activity_statistic_balance_label">Soldes :</string>
     <string name="activity_statistic_expenses">Dépenses</string>
     <string name="activity_statistic_incomes">Revenus</string>
     <string name="activity_statistic_balance">Soldes</string>
 
     <!-- activity_sign_in -->
-    <string name="activity_sign_in_change_account_title">Changer de compte</string>
+    <string name="activity_sign_in_change_account_label">Changer de compte</string>
     <string name="activity_sign_in_change_account_message">Voulez-vous vraiment changer de compte? Vos données ne seront pas perdues.</string>
-    <string name="activity_sign_in_on_back_pressed">Vous devez choisir un compte!</string>
+    <string name="activity_sign_in_choose_account_message">Vous devez choisir un compte!</string>
 
     <!-- activity_preferences -->
-    <string name="activity_preferences_chart_type">Type de graphique</string>
+    <string name="activity_preferences_chart_type_label">Type de graphique</string>
     <string name="activity_preferences_bar_chart">Histogramme</string>
     <string name="activity_preferences_line_chart">Linéaire</string>
-    <string name="activity_preferences_add_month">Ajouter un ancien mois</string>
+    <string name="activity_preferences_add_month_label">Ajouter un ancien mois</string>
     <string name="activity_preferences_example_month">Exemple : 01/2017</string>
-    <string name="activity_preferences_add_month_error">Le format est incorrect. Écrivez sous la forme : xx/xxxx</string>
+    <string name="activity_preferences_add_month_wrong_format">Le format est incorrect. Écrivez sous la forme : xx/xxxx</string>
     <string name="activity_preferences_add_month_already_exist">Ce mois existe déjà.</string>
     <string name="activity_preferences_add_month_not_yet">Vous ne pouvez pas ajouter en avance un futur mois.</string>
     <string name="activity_preferences_add_month_success">Le mois a bien été ajouté.</string>
-    <string name="activity_preferences_delete_month">Supprimer un mois</string>
+    <string name="activity_preferences_delete_month_label">Supprimer un mois</string>
     <string name="activity_preferences_delete_month_message">Voulez vous vraiment supprimer le mois %1$s ? Celà supprimera toutes les données de ce mois. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
     <string name="activity_preferences_delete_month_success">Le mois a bien été supprimé.</string>
-    <string name="activity_preferences_expenses_and_incomes">Dépenses et revenus</string>
-    <string name="activity_preferences_automatic_expenses">Dépenses automatiques</string>
-    <string name="activity_preferences_automatic_incomes">Revenus automatiques</string>
-    <string name="activity_preferences_account">Compte</string>
-    <string name="activity_preferences_my_account">Mon compte Google</string>
-    <string name="activity_preferences_change_account">Changer de compte</string>
-    <string name="activity_preferences_about_feedback">Envoyez vos commentaires</string>
+    <string name="activity_preferences_expenses_and_incomes_label">Dépenses et revenus</string>
+    <string name="activity_preferences_account_label">Compte</string>
+    <string name="activity_preferences_my_account_label">Mon compte Google</string>
+    <string name="activity_preferences_change_account_label">Changer de compte</string>
+    <string name="activity_preferences_about_feedback_label">Envoyez vos commentaires</string>
     <string name="activity_preferences_no_email_app">Il n\'y a pas d\'application de mail installée. Envoyez s\'il vous plait un mail à ledet.benjamin23@gmail.com</string>
-    <string name="activity_preferences_about_rate">Noter Budget</string>
-    <string name="activity_preferences_about_version">Version</string>
+    <string name="activity_preferences_rate_label">Noter Budget</string>
+    <string name="activity_preferences_version_label">Version</string>
 
-    <!-- fragment_expense-->
-    <string name="fragment_expense_add_expense">Ajouter une dépense</string>
-    <string name="fragment_expense_add_expense_message">La dépense a bien été ajoutée.</string>
+    <!-- summary-->
+    <string name="summary_total_expense_label">Dépenses mensuelles totales :</string>
+    <string name="summary_total_income_label">Revenu mensuel total :</string>
+    <string name="summary_percentage_label">Pourcentage du revenu dépensé :</string>
+    <string name="summary_balance_label">Solde :</string>
 
-    <!-- fragment_income-->
-    <string name="fragment_income_add_income">Ajouter un revenu</string>
-    <string name="fragment_income_add_income_message">Le revenu a bien été ajouté.</string>
+    <!-- fragment_category_expense & income -->
+    <string name="fragment_category_expense_add_category_label">Ajouter une catégorie de dépense</string>
+    <string name="fragment_category_expense_add_category_success">La catégorie de dépense a bien été ajoutée.</string>
+    <string name="fragment_category_expense_add_duplicate_category_message">Une catégorie de dépense ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
+    <string name="fragment_category_expense_update_duplicate_category_message">Une catégorie de dépense ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
+    <string name="fragment_category_expense_update_category_success">La catégorie de dépense a bien été modifiée.</string>
+    <string name="fragment_category_expense_delete_category_label">Supprimer une catégorie de dépense</string>
+
+    <string name="fragment_category_income_add_category_label">Ajouter une catégorie de revenu</string>
+    <string name="fragment_category_income_add_category_success">La catégorie de revenu a bien été ajoutée.</string>
+    <string name="fragment_category_income_add_duplicate_category_message">Une catégorie de revenu ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
+    <string name="fragment_category_income_update_duplicate_category_message">Une catégorie de revenu ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
+    <string name="fragment_category_income_update_category_success">La catégorie de revenu a bien été modifiée.</string>
+    <string name="fragment_category_income_delete_category_label">Supprimer une catégorie de revenu</string>
+
+    <string name="fragment_category_expense_income_update_category_label">Catégorie %1$s</string>
+    <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
+    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
+    <string name="activity_category_management_delete_category_message">La catégorie a bien été supprimée.</string>
 
     <!-- fragment_expense & income-->
-    <string name="fragment_expense_income_total_expense_label">Dépenses mensuelles totales :</string>
-    <string name="fragment_expense_income_total_income_label">Revenu mensuel total :</string>
-    <string name="fragment_expense_income_percentage_label">Pourcentage du revenu dépensé :</string>
-    <string name="fragment_expense_income_balance_label">Solde :</string>
-    <string name="fragment_expense_income_total_expense_amount">%1$s €</string>
-    <string name="fragment_expense_income_total_income_amount">%1$s €</string>
-    <string name="fragment_expense_income_percentage_amount">%1$s %</string>
-    <string name="fragment_expense_income_balance_amount">%1$s €</string>
+    <string name="fragment_expense_add_expense_label">Ajouter une dépense</string>
+    <string name="fragment_expense_add_expense_success">La dépense a bien été ajoutée.</string>
 
-    <!-- AmountRecyclerViewAdapter -->
-    <string name="amount_recycler_view_adapter_date">le %1$d/%2$d/%3$d</string>
+    <string name="fragment_income_add_income_label">Ajouter un revenu</string>
+    <string name="fragment_income_add_income_success">Le revenu a bien été ajouté.</string>
+
+    <!-- fragment_automatic_expense & income-->
+    <string name="fragment_automatic_expense_add_expense_label">Ajouter une dépense automatique</string>
+    <string name="fragment_automatic_expense_add_expense_message">Voulez-vous que la dépense prenne effet ce mois-ci? Si non, elle sera active dès le mois prochain.</string>
+    <string name="fragment_automatic_expense_add_expense_success">La dépense automatique a bien été ajoutée.</string>
+    <string name="fragment_automatic_expense_delete_expense_label">Supprimer une dépense automatique</string>
+    <string name="fragment_automatic_expense_delete_expense_message">Voulez-vous vraiment supprimer la dépense automatique \"%1$s\" ?</string>
+    <string name="fragment_automatic_expense_delete_expense_success">La dépense automatique a bien été supprimée.</string>
+    <string name="fragment_automatic_expense_update_expense_label">Dépense automatique %1$s</string>
+    <string name="fragment_automatic_expense_update_expense_success">La dépense automatique à bien été modifiée.</string>
+
+    <string name="fragment_automatic_income_add_income_label">Ajouter un revenu automatique</string>
+    <string name="fragment_automatic_income_add_income_message">Voulez-vous que le revenu prenne effet ce mois-ci? Si non, il sera actif dès le mois prochain.</string>
+    <string name="fragment_automatic_income_add_income_success">Le revenu automatique a bien été ajouté.</string>
+    <string name="fragment_automatic_income_delete_income_label">Supprimer un revenu automatique</string>
+    <string name="fragment_automatic_income_delete_income_message">Voulez-vous vraiment supprimer le revenu automatique \"%1$s\" ?</string>
+    <string name="fragment_automatic_income_delete_income_success">Le revenu automatique a bien été supprimé.</string>
+    <string name="fragment_automatic_income_update_income_label">Revenu automatique %1$s</string>
+    <string name="fragment_automatic_income_update_income_success">Le revenu automatique à bien été modifié.</string>
+
+    <string name="fragment_automatic_expense_income_first_day_of_month">le 1er du mois.</string>
+    <string name="fragment_automatic_expense_income_day_of_month">le %1$s du mois.</string>
 
     <!-- Months -->
     <string name="month">Mois</string>

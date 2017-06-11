@@ -15,11 +15,11 @@ public class BudgetApplication extends Application {
     }
 
     @NonNull
-    public DatabaseHandler getDBHandler() {
+    public DatabaseHandler getDatabaseHandler() {
         return new DatabaseHandler(getApplicationContext());
     }
 
-    public SharedPreferences getPreferences(){
+    public SharedPreferences getSharedPreferences(){
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
 

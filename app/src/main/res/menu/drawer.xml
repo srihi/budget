@@ -34,7 +34,7 @@
 
         <item
             android:orderInCategory="3"
-            android:id="@+id/preference"
+            android:id="@+id/preferences"
             android:checked="false"
             android:checkable="false"
             android:icon="@drawable/ic_settings"

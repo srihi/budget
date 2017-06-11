@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,6 +33,8 @@ import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
+import com.benjamin.ledet.budget.model.Amount;
+import com.benjamin.ledet.budget.model.AutomaticAmount;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -48,13 +52,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity{
 
-    @BindView(R.id.activity_main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.tabsMain)
+    @BindView(R.id.activity_main_tl)
     TabLayout tabLayout;
 
-    @BindView(R.id.viewpagerMain)
+    @BindView(R.id.activity_main_vp)
     ViewPager viewPager;
 
     @BindView(R.id.navigation_view)
@@ -63,25 +67,25 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
 
-    @BindView(R.id.summary_total_expenses)
+    @BindView(R.id.summary_tv_total_expenses)
     TextView tvTotalExpenses;
 
-    @BindView(R.id.summary_total_income)
+    @BindView(R.id.summary_tv_total_income)
     TextView tvTotalIncome;
 
-    @BindView(R.id.summary_balance)
+    @BindView(R.id.summary_tv_balance)
     TextView tvBalance;
 
-    @BindView(R.id.summary_pourcentage)
+    @BindView(R.id.summary_tv_percentage)
     TextView tvPercentage;
 
-    @BindView(R.id.summary_arrow)
+    @BindView(R.id.summary_iv_arrow)
     ImageView ivArrow;
 
-    @BindView(R.id.ll_summary)
+    @BindView(R.id.summary_ll)
     RelativeLayout llSummary;
 
-    @BindView(R.id.ll_summary_more)
+    @BindView(R.id.summary_ll_more)
     LinearLayout llSummaryMore;
 
     private ValueAnimator animator;
@@ -100,8 +104,8 @@ public class MainActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         BudgetApplication budgetApplication = (BudgetApplication) getApplication();
-        SharedPreferences sharedPreferences = budgetApplication.getPreferences();
-        databaseHandler = budgetApplication.getDBHandler();
+        SharedPreferences sharedPreferences = budgetApplication.getSharedPreferences();
+        databaseHandler = budgetApplication.getDatabaseHandler();
 
         // display the toolbar
         setSupportActionBar(toolbar);
@@ -124,6 +128,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         checkNewMonth();
+        checkAutomaticAmounts();
 
         final Menu menu = navigationView.getMenu();
         setupNavigationViewMenu(menu);
@@ -156,7 +161,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //open the preference activity
-                if( menuItem.getItemId() == R.id.preference){
+                if( menuItem.getItemId() == R.id.preferences){
                     //close the menu
                     drawerLayout.closeDrawers();
                     Intent intent = new Intent(MainActivity.this,PreferencesActivity.class);
@@ -343,23 +348,12 @@ public class MainActivity extends AppCompatActivity{
         return animator;
     }
 
-    //check if it's a new month and add it
-    private void checkNewMonth(){
-        if(databaseHandler.getMonth(actualMonth, actualYear) == null){
-            Month month = new Month();
-            month.setId(databaseHandler.getMonthNextKey());
-            month.setMonth(actualMonth);
-            month.setYear(actualYear);
-            databaseHandler.addMonth(month);
-        }
-    }
-
     //displays information of the user
     public void setupUserHeader(){
         View header = navigationView.getHeaderView(0);
-        CircleImageView profileImage = ButterKnife.findById(header,R.id.header_profile_image);
-        TextView displayName = ButterKnife.findById(header,R.id.header_username);
-        TextView email = ButterKnife.findById(header,R.id.header_email);
+        CircleImageView profileImage = ButterKnife.findById(header,R.id.header_civ_profile);
+        TextView displayName = ButterKnife.findById(header,R.id.header_tv_display_name);
+        TextView email = ButterKnife.findById(header,R.id.header_tv_email);
 
         User user = databaseHandler.getUser();
         displayName.setText(user.getDisplayName());
@@ -423,6 +417,73 @@ public class MainActivity extends AppCompatActivity{
         viewPager.setAdapter(adapter);
     }
 
+    //check if it's a new month and add it
+    private void checkNewMonth(){
+        if(databaseHandler.getActualMonth() == null){
+            Month month = new Month();
+            month.setId(databaseHandler.getMonthNextKey());
+            month.setMonth(actualMonth);
+            month.setYear(actualYear);
+            databaseHandler.addMonth(month);
+        }
+    }
+
+    //check if there are automatic amounts to add
+    private void checkAutomaticAmounts(){
+        int countIncomes = 0;
+        int countExpenses = 0;
+        boolean waitForNextMonth = false;
+        for (AutomaticAmount automaticAmount : databaseHandler.getAutomaticAmounts()){
+
+            if (automaticAmount.getMonthOfCreation().getId() == databaseHandler.getActualMonth().getId()){
+                if (automaticAmount.isNextMonth()){
+                    waitForNextMonth = true;
+                }
+            }
+            if (!waitForNextMonth){
+                int actualDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                if (automaticAmount.getDay() <= actualDay ){
+                    if (databaseHandler.findAmoutByAutomaticAmountAndMonth(automaticAmount, databaseHandler.getActualMonth()) == null){
+                        Amount amount = new Amount();
+                        amount.setId(databaseHandler.getAmountNextKey());
+                        amount.setCategory(automaticAmount.getCategory());
+                        amount.setDay(automaticAmount.getDay());
+                        amount.setMonth(databaseHandler.getActualMonth());
+                        amount.setLabel(automaticAmount.getLabel());
+                        amount.setAmount(automaticAmount.getAmount());
+                        databaseHandler.addAmount(amount);
+                        if(amount.getCategory().isIncome()){
+                            countIncomes ++;
+                        }else{
+                            countExpenses ++;
+                        }
+                    }
+                }
+            }
+        }
+        if (countIncomes >0 || countExpenses >0){
+            String message = "";
+            if (countIncomes == 1){
+                message = getString(R.string.activity_main_one_income_added);
+            }
+            if (countIncomes > 1){
+                message = getString(R.string.activity_main_several_incomes_added);
+            }
+            if (countExpenses == 1){
+                message = getString(R.string.activity_main_one_expense_added);
+            }
+            if (countExpenses > 1){
+                message = getString(R.string.activity_main_several_expenses_added);
+            }
+            if(countExpenses >=1 && countIncomes >=1){
+                message = getString(R.string.activity_main_several_incomes_expenses_added);
+            }
+            Snackbar snackbar = Snackbar.make(drawerLayout , message, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.PrimaryColor));
+            snackbar.show();
+        }
+    }
+
     //add some categories
     private void addCategories(){
         databaseHandler.addCategory(new Category(1,getString(R.string.category_various_purchases),false));
@@ -431,4 +492,9 @@ public class MainActivity extends AppCompatActivity{
         databaseHandler.addCategory(new Category(4,getString(R.string.category_salary),true));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkAutomaticAmounts();
+    }
 }

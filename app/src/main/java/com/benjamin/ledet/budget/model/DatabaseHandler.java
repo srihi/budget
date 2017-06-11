@@ -1,8 +1,10 @@
 package com.benjamin.ledet.budget.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -70,7 +72,7 @@ public class DatabaseHandler {
                 .findAllSorted("label");
     }
 
-    public RealmResults<Category> getCategoriesIncomeNotEmptyForMonth(Month month) {
+    public RealmResults<Category> getCategoriesIncomeWithIncomesOfMonth(Month month) {
 
         return realm.where(Category.class)
                 .equalTo("isIncome",true)
@@ -85,7 +87,7 @@ public class DatabaseHandler {
                 .findAllSorted("label");
     }
 
-    public RealmResults<Category> getCategoriesExpenseNotEmptyForMonth(Month month) {
+    public RealmResults<Category> getCategoriesExpenseWithExpensesOfMonth(Month month) {
 
         return realm.where(Category.class)
                 .equalTo("isIncome",false)
@@ -117,6 +119,7 @@ public class DatabaseHandler {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(category);
+                Log.d("add category ", category.toString());
             }
         });
     }
@@ -127,6 +130,7 @@ public class DatabaseHandler {
             public void execute(Realm realm) {
                 category.setLabel(label);
                 realm.insertOrUpdate(category);
+                Log.d("update category ", category.toString());
             }
         });
     }
@@ -135,6 +139,7 @@ public class DatabaseHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Log.d("delete category ", category.toString());
                 realm.where(Category.class).equalTo("id",category.getId()).findFirst().deleteFromRealm();
             }
         });
@@ -196,11 +201,19 @@ public class DatabaseHandler {
                 .findFirst();
     }
 
+    public Month getActualMonth(){
+        return realm.where(Month.class)
+                .equalTo("month", Calendar.getInstance().get(Calendar.MONTH) + 1)
+                .equalTo("year", Calendar.getInstance().get(Calendar.YEAR))
+                .findFirst();
+    }
+
     public void addMonth(final Month month){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(month);
+                Log.d("add month ", month.toString());
             }
         });
     }
@@ -209,6 +222,7 @@ public class DatabaseHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Log.d("delete month ", month.toString());
                 realm.where(Month.class).equalTo("id",month.getId()).findFirst().deleteFromRealm();
             }
         });
@@ -232,26 +246,19 @@ public class DatabaseHandler {
                 .findAll();
     }
 
-    public RealmResults<Amount> getAutomaticsIncomes() {
-
-        return realm.where(Amount.class)
-                .equalTo("isAutomatic",true)
-                .equalTo("category.isIncome",true)
-                .findAll();
-    }
-
-    public RealmResults<Amount> getAutomaticsExpenses() {
-
-        return realm.where(Amount.class)
-                .equalTo("isAutomatic",true)
-                .equalTo("category.isIncome",false)
-                .findAll();
-    }
-
     public Amount getAmount(long id) {
 
         return realm.where(Amount.class)
                 .equalTo("id", id)
+                .findFirst();
+    }
+
+    public Amount findAmoutByAutomaticAmountAndMonth(AutomaticAmount automaticAmount, Month month){
+        return realm.where(Amount.class)
+                .equalTo("category.id",automaticAmount.getCategory().getId())
+                .equalTo("label",automaticAmount.getLabel())
+                .equalTo("amount",automaticAmount.getAmount())
+                .equalTo("month.id",month.getId())
                 .findFirst();
     }
 
@@ -305,17 +312,20 @@ public class DatabaseHandler {
             public void execute(Realm realm) {
                 realm.insertOrUpdate(amount);
                 amount.getCategory().getAmounts().add(amount);
+                Log.d("add amount ", amount.toString());
             }
         });
     }
 
-    public void updateAmount(final Amount amount, final String label, final double sum){
+    public void updateAmount(final Amount amount, final String label, final int day, final double sum){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 amount.setLabel(label);
                 amount.setAmount(sum);
+                amount.setDay(day);
                 realm.insertOrUpdate(amount);
+                Log.d("update amount ", amount.toString());
             }
         });
     }
@@ -324,6 +334,7 @@ public class DatabaseHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Log.d("delete amount ", amount.toString());
                 realm.where(Amount.class).equalTo("id",amount.getId()).findFirst().deleteFromRealm();
             }
         });
@@ -342,6 +353,7 @@ public class DatabaseHandler {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(user);
+                Log.d("add user ", user.toString());
             }
         });
     }
@@ -350,7 +362,82 @@ public class DatabaseHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Log.d("delete user ", user.toString());
                 realm.where(User.class).equalTo("id",user.getId()).findFirst().deleteFromRealm();
+            }
+        });
+    }
+
+    // Automatic Amount
+
+    public int getAutomaticAmountNextKey() {
+        try {
+            return realm.where(AutomaticAmount.class)
+                    .max("id").intValue() + 1;
+        }
+        catch (NullPointerException e) {
+            return 1;
+        }
+    }
+
+    public RealmResults<AutomaticAmount> getAutomaticAmounts() {
+
+        return realm.where(AutomaticAmount.class)
+                .findAll();
+    }
+
+    public RealmResults<AutomaticAmount> getAutomaticsIncomes() {
+
+        return realm.where(AutomaticAmount.class)
+                .equalTo("category.isIncome",true)
+                .findAllSorted("category.label");
+    }
+
+    public RealmResults<AutomaticAmount> getAutomaticsExpenses() {
+
+        return realm.where(AutomaticAmount.class)
+                .equalTo("category.isIncome",false)
+                .findAllSorted("category.label");
+    }
+
+    public AutomaticAmount getAutomaticAmount(long id) {
+
+        return realm.where(AutomaticAmount.class)
+                .equalTo("id", id)
+                .findFirst();
+    }
+
+    public void addAutomaticAmount(final AutomaticAmount automaticAmount){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(automaticAmount);
+                automaticAmount.getCategory().getAutomaticAmounts().add(automaticAmount);
+                Log.d("add automatic amount ", automaticAmount.toString());
+            }
+        });
+    }
+
+    public void updateAutomaticAmount(final AutomaticAmount automaticAmount, final String label, final int day, final double sum){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                automaticAmount.setLabel(label);
+                automaticAmount.setDay(day);
+                automaticAmount.setAmount(sum);
+                realm.insertOrUpdate(automaticAmount);
+                Log.d("update auto amount ", automaticAmount.toString());
+            }
+        });
+    }
+
+    public void deleteAutomaticAmount(final AutomaticAmount automaticAmount){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Log.d("delete auto amount ", automaticAmount.toString());
+                realm.where(AutomaticAmount.class).equalTo("id",automaticAmount.getId()).findFirst().deleteFromRealm();
+
             }
         });
     }

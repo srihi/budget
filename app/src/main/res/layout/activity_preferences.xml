@@ -15,17 +15,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <android.support.v7.widget.Toolbar
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/activity_main_toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:background="@color/PrimaryColor" />
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/preferencesFrame"
+                android:id="@+id/activity_preferences_fl"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:paddingTop="?attr/actionBarSize"/>

@@ -29,11 +29,11 @@ import io.realm.OrderedRealmCollection;
 
 public class CategoryIncomeFragment extends Fragment {
 
-    @BindView(R.id.fab_category_income)
+    @BindView(R.id.fragment_category_income_fab)
     FloatingActionButton floatingActionButton;
 
-    @BindView(R.id.rv_category_income)
-    RecyclerView categoriesIncomeRecyclerView;
+    @BindView(R.id.fragment_category_income_rv)
+    RecyclerView recyclerView;
 
     private DatabaseHandler databaseHandler;
 
@@ -47,12 +47,12 @@ public class CategoryIncomeFragment extends Fragment {
         OrderedRealmCollection<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
 
         //setup RecyclerView for categories income
-        RecyclerView.LayoutManager layoutManagerCategoriesIncome = new LinearLayoutManager(getContext());
-        CategoryManagementRecyclerViewAdapter categoriesIncomeAdapter = new CategoryManagementRecyclerViewAdapter(categoriesIncome,getContext());
-        categoriesIncomeRecyclerView.setLayoutManager(layoutManagerCategoriesIncome);
-        categoriesIncomeRecyclerView.setAdapter(categoriesIncomeAdapter);
-        categoriesIncomeRecyclerView.setHasFixedSize(true);
-        categoriesIncomeRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        CategoryManagementRecyclerViewAdapter adapter = new CategoryManagementRecyclerViewAdapter(categoriesIncome,getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add category
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -60,10 +60,10 @@ public class CategoryIncomeFragment extends Fragment {
             public void onClick(final View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialog);
                 final View inflator = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_add_category, null);
-                final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_label_category);
+                final EditText etAddLibelleCategorie = (EditText) inflator.findViewById(R.id.alert_dialog_add_category_label);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
-                title.setText(R.string.activity_category_management_add_category);
+                title.setText(R.string.fragment_category_income_add_category_label);
                 title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
@@ -75,18 +75,18 @@ public class CategoryIncomeFragment extends Fragment {
                         if (databaseHandler.findCategoryIncomeByLabel(etAddLibelleCategorie.getText().toString()) != null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
                             TextView title = new TextView(getContext());
-                            title.setText(R.string.activity_category_management_add_category);
+                            title.setText(R.string.fragment_category_income_add_category_label);
                             title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
                             title.setGravity(Gravity.CENTER);
                             title.setTextSize(22);
                             builder.setCustomTitle(title);
-                            builder.setMessage(R.string.activity_category_management_duplicate_category_add);
+                            builder.setMessage(R.string.fragment_category_income_add_duplicate_category_message);
                             builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
                                     databaseHandler.addCategory(categoryToAdd);
-                                    Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
+                                    Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_expense_add_category_success, Snackbar.LENGTH_SHORT);
                                     snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                                     snackbar.show();
                                 }
@@ -101,7 +101,7 @@ public class CategoryIncomeFragment extends Fragment {
                         } else {
                             Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
                             databaseHandler.addCategory(categoryToAdd);
-                            Snackbar snackbar = Snackbar.make(view, R.string.activity_category_management_add_category_expense_message, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_expense_add_category_success, Snackbar.LENGTH_SHORT);
                             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
                             snackbar.show();
                         }

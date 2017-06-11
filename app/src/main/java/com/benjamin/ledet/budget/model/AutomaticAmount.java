@@ -3,20 +3,22 @@ package com.benjamin.ledet.budget.model;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Amount extends RealmObject {
+public class AutomaticAmount extends RealmObject {
 
     @PrimaryKey
     private long id;
 
     private Category category;
 
-    private int day;
+    private Month monthOfCreation;
 
-    private Month month;
+    private int day;
 
     private String label;
 
     private double amount;
+
+    private boolean nextMonth;
 
     public long getId() {
         return id;
@@ -34,20 +36,20 @@ public class Amount extends RealmObject {
         this.category = category;
     }
 
+    public Month getMonthOfCreation() {
+        return monthOfCreation;
+    }
+
+    public void setMonthOfCreation(Month monthOfCreation) {
+        this.monthOfCreation = monthOfCreation;
+    }
+
     public int getDay() {
         return day;
     }
 
     public void setDay(int day) {
         this.day = day;
-    }
-
-    public Month getMonth() {
-        return month;
-    }
-
-    public void setMonth(Month month) {
-        this.month = month;
     }
 
     public String getLabel() {
@@ -66,13 +68,22 @@ public class Amount extends RealmObject {
         this.amount = amount;
     }
 
+    public boolean isNextMonth() {
+        return nextMonth;
+    }
+
+    public void setNextMonth(boolean nextMonth) {
+        this.nextMonth = nextMonth;
+    }
+
     @Override
     public String toString() {
         return  "id : " + id + " - " +
+                "monthOfCreation : " + monthOfCreation.toString() + " - " +
                 "category : " + category.toString() + " - " +
                 "day : " + day + " - " +
-                "month : " + month.toString() + " - " +
                 "label : " + label + " - " +
-                "amount : " + amount;
+                "amount : " + amount +
+                "nextMonth : " + nextMonth;
     }
 }

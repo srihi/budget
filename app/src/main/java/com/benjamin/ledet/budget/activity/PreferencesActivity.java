@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 
 public class PreferencesActivity extends AppCompatActivity {
 
-    @BindView(R.id.activity_main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     public static final String KEY_PREF_CHART_TYPE = "pref_chart_type";
@@ -55,7 +55,7 @@ public class PreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preferences);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.preferencesFrame, new MyPreferenceFragment()).commit();
+                .replace(R.id.activity_preferences_fl, new MyPreferenceFragment()).commit();
 
         ButterKnife.bind(this);
 
@@ -95,7 +95,6 @@ public class PreferencesActivity extends AppCompatActivity {
             myAccount = findPreference("pref_my_account");
             feedbackPref = findPreference("pref_feedback");
             ratePref = findPreference("pref_rate");
-
 
             //chart type pref
             setChartTypePref();
@@ -161,7 +160,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
                     }catch (NumberFormatException e){
                         e.printStackTrace();
-                        builder.setMessage(R.string.activity_preferences_add_month_error);
+                        builder.setMessage(R.string.activity_preferences_add_month_wrong_format);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
@@ -177,7 +176,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, final Object newValue) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.CustomAlertDialog);
                     TextView title = new TextView(getActivity());
-                    title.setText(R.string.activity_preferences_delete_month);
+                    title.setText(R.string.activity_preferences_delete_month_label);
                     title.setTextColor(Color.RED);
                     title.setGravity(Gravity.CENTER);
                     title.setTextSize(22);

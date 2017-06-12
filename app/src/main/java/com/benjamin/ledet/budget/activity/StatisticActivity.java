@@ -14,10 +14,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.adapter.CustomBarChartRecyclerViewAdapter;
 import com.benjamin.ledet.budget.adapter.CustomLineChartRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
+import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.tool.CustomBarChart;
 import com.benjamin.ledet.budget.tool.CustomLineChart;
@@ -29,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 public class StatisticActivity extends AppCompatActivity {
 
@@ -60,6 +61,7 @@ public class StatisticActivity extends AppCompatActivity {
     private List<Month> months;
     private String[] monthsDisplay;
 
+    private SharedPreferences sharedPreferences;
     private boolean barChart = false;
     private boolean lineChart = false;
 
@@ -89,7 +91,7 @@ public class StatisticActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(sharedPreferences.getString(PreferencesActivity.KEY_PREF_CHART_TYPE,"").equals(getString(R.string.activity_preferences_bar_chart))){
             barChart = true;
@@ -244,9 +246,16 @@ public class StatisticActivity extends AppCompatActivity {
 
     private void addChartsCategoriesExpense(){
 
+        OrderedRealmCollection<Category> categoriesExpense;
+        if(sharedPreferences.getBoolean(PreferencesActivity.KEY_PREF_ARCHIVED_CATEGORIES,true)){
+            categoriesExpense = databaseHandler.getCategoriesExpense();
+        } else {
+            categoriesExpense = databaseHandler.getUnarchivedCategoriesExpense();
+        }
+
         if(barChart){
 
-            for (Category category : databaseHandler.getCategoriesExpense()){
+            for (Category category : categoriesExpense){
 
                 List<BarEntry> barEntries = new ArrayList<>();
 
@@ -265,7 +274,7 @@ public class StatisticActivity extends AppCompatActivity {
 
         if(lineChart){
 
-            for (Category category : databaseHandler.getCategoriesExpense()){
+            for (Category category : categoriesExpense){
 
                 List<Entry> lineEntries = new ArrayList<>();
 
@@ -285,9 +294,16 @@ public class StatisticActivity extends AppCompatActivity {
 
     private void addChartsCategoriesIncome(){
 
+        OrderedRealmCollection<Category> categoriesIncome;
+        if(sharedPreferences.getBoolean(PreferencesActivity.KEY_PREF_ARCHIVED_CATEGORIES,true)){
+           categoriesIncome = databaseHandler.getCategoriesIncome();
+        } else {
+            categoriesIncome = databaseHandler.getUnarchivedCategoriesIncome();
+        }
+
         if(barChart){
 
-            for (Category category : databaseHandler.getCategoriesIncome()){
+            for (Category category : categoriesIncome){
 
                 List<BarEntry> barEntries = new ArrayList<>();
 
@@ -306,8 +322,7 @@ public class StatisticActivity extends AppCompatActivity {
 
         if(lineChart){
 
-            for (Category category : databaseHandler.getCategoriesIncome()){
-
+            for (Category category : categoriesIncome){
                 List<Entry> lineEntries = new ArrayList<>();
 
                 for (int i = 0; i < months.size(); i++){

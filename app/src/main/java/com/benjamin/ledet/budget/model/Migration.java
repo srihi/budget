@@ -96,5 +96,19 @@ class Migration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 6) {
+
+            schema.get("Category")
+                    .addField("isArchived",boolean.class)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            obj.setBoolean("isArchived",false);
+                        }
+                    });
+
+            oldVersion++;
+        }
+
     }
 }

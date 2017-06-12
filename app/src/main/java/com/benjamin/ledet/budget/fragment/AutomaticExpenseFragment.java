@@ -44,7 +44,7 @@ public class AutomaticExpenseFragment extends Fragment {
 
         final DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
         OrderedRealmCollection<AutomaticAmount> automaticExpenses = databaseHandler.getAutomaticsExpenses();
-        final OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
+        final OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getUnarchivedCategoriesExpense();
 
         //setup recylerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

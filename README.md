@@ -13,10 +13,7 @@ Fonctionnalités :
 - Possibilité d’ajouter des anciens mois et d'en supprimer
 - Ajouter, modifier, supprimer des catégories de dépenses (courses, loisirs, ...) et de revenus (salaire, APL, ...)
 - Ajouter, modifier, supprimer des dépenses et revenus par catégorie
+- Possibilité de définir des dépenses et revenus automatiques
 - Connexion avec google
-- Sauvegarde et restauration des données avec Google Drive, avec Google Drive installé sur le téléphone, l'application ne nécessite pas de connexion internet!
+- Sauvegarde et restauration des données avec Google Drive
 - Statistiques : graphiques (linéaire ou histogramme) pour voir l'évolution de son budget à travers les mois
-
-À venir :
-- ajouter des revenus et dépenses automatiques
-- tutoriel de prise en main

@@ -29,12 +29,16 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
 
     private Context context;
     private DatabaseHandler databaseHandler;
+    private TextView tvNoArchived;
+    private RecyclerView archivedRecyclerView;
 
-    public CategoryManagementRecyclerViewAdapter(OrderedRealmCollection<Category> data, Context context) {
+    public CategoryManagementRecyclerViewAdapter(OrderedRealmCollection<Category> data, Context context, TextView tvNoArchived, RecyclerView archivedRecyclerView) {
         super(data, true);
         setHasStableIds(true);
         this.context = context;
         this.databaseHandler = new DatabaseHandler(context);
+        this.tvNoArchived = tvNoArchived;
+        this.archivedRecyclerView = archivedRecyclerView;
     }
 
     @Override
@@ -50,6 +54,13 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
         //noinspection ConstantConditions
         holder.label.setText(obj.getLabel());
         holder.icon.setImageDrawable(obj.getIcon());
+
+        if(obj.isArchived()) {
+            holder.update.setVisibility(View.GONE);
+            holder.archive.setVisibility(View.GONE);
+            holder.unarchive.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
+        }
 
         holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +140,76 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
             }
         });
 
+        holder.archive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
+                TextView title = new TextView(context);
+                title.setText(R.string.activity_category_management_archive_category_label);
+                title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
+                builder.setMessage(context.getString(R.string.activity_category_management_archive_category_description,obj.getLabel()));
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        databaseHandler.archiveCategory(obj);
+                        tvNoArchived.setVisibility(View.GONE);
+                        int padding_in_dp = 70;  // 70 dps
+                        final float scale = context.getResources().getDisplayMetrics().density;
+                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                        archivedRecyclerView.setPadding(0,0,0,padding_in_px);
+                        Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_archive_category_success, Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                        snackbar.show();
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        holder.unarchive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
+                TextView title = new TextView(context);
+                title.setText(R.string.activity_category_management_unarchive_category_label);
+                title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
+                builder.setMessage(context.getString(R.string.activity_category_management_unarchive_category_description,obj.getLabel()));
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //noinspection ConstantConditions
+                        databaseHandler.unarchiveCategory(obj);
+                        if(getData().isEmpty()){
+                            tvNoArchived.setVisibility(View.VISIBLE);
+                            archivedRecyclerView.setPadding(0,0,0,0);
+                        }
+                        Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_unarchive_category_success, Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                        snackbar.show();
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -144,7 +225,11 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         databaseHandler.deleteCategory(obj);
-                        Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_delete_category_message, Snackbar.LENGTH_SHORT);
+                        if(getData().isEmpty()){
+                            tvNoArchived.setVisibility(View.VISIBLE);
+                            archivedRecyclerView.setPadding(0,0,0,0);
+                        }
+                        Snackbar snackbar = Snackbar.make(v , R.string.activity_category_management_delete_category_success, Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
                         snackbar.show();
                     }
@@ -180,6 +265,12 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
 
         @BindView(R.id.row_category_management_update)
         Button update;
+
+        @BindView(R.id.row_category_management_archive)
+        Button archive;
+
+        @BindView(R.id.row_category_management_unarchive)
+        Button unarchive;
 
         MyViewHolder(View view) {
             super(view);

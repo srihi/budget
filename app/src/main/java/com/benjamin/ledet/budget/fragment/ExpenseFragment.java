@@ -55,7 +55,7 @@ public class ExpenseFragment extends Fragment {
         ButterKnife.bind(this,v);
 
         databaseHandler = new DatabaseHandler(getContext());
-        categoriesExpense = databaseHandler.getCategoriesExpense();
+        categoriesExpense = databaseHandler.getUnarchivedCategoriesExpense();
 
         //setup RecyclerView for categories expense
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -9,8 +9,27 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:contentDescription="@string/icon_category"
-        />
+        android:contentDescription="@string/icon_category" />
+
+    <Button
+        android:id="@+id/row_category_management_update"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/row_category_management_archive"
+        android:background="@drawable/ic_edit"
+        android:backgroundTint="@color/PrimaryColor" />
+
+    <Button
+        android:id="@+id/row_category_management_archive"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/ic_archive"
+        android:backgroundTint="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/row_category_management_delete"
@@ -20,17 +39,20 @@
         android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
         android:background="@drawable/ic_delete"
-        android:backgroundTint="@android:color/darker_gray" />
+        android:backgroundTint="@android:color/darker_gray"
+        android:visibility="gone"/>
 
     <Button
-        android:id="@+id/row_category_management_update"
+        android:id="@+id/row_category_management_unarchive"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@id/row_category_management_delete"
-        android:background="@drawable/ic_edit"
-        android:backgroundTint="@color/PrimaryColor" />
+        android:background="@drawable/ic_unarchive"
+        android:backgroundTint="@color/PrimaryColor"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/row_category_management_label"
@@ -40,7 +62,6 @@
         android:layout_marginTop="15dp"
         android:textStyle="bold"
         android:layout_toStartOf="@id/row_category_management_update"
-        android:layout_toEndOf="@+id/row_category_management_icon"
-        />
+        android:layout_toEndOf="@+id/row_category_management_icon" />
 
 </RelativeLayout>

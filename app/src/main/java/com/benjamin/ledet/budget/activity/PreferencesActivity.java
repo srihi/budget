@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class PreferencesActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     public static final String KEY_PREF_CHART_TYPE = "pref_chart_type";
+    public static final String KEY_PREF_ARCHIVED_CATEGORIES = "pref_archived_categories";
 
     //return to the previous fragment
     @Override
@@ -74,6 +76,7 @@ public class PreferencesActivity extends AppCompatActivity {
         private SharedPreferences sharedPreferences;
 
         private ListPreference chartTypePref;
+        private SwitchPreference archivedCategories;
         private EditTextPreference addMonthPref;
         private ListPreference deleteMonthPref;
         private Preference myAccount;
@@ -90,6 +93,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             chartTypePref = (ListPreference) findPreference(KEY_PREF_CHART_TYPE);
+            archivedCategories = (SwitchPreference) findPreference(KEY_PREF_ARCHIVED_CATEGORIES);
             addMonthPref = (EditTextPreference) findPreference("pref_add_month");
             deleteMonthPref = (ListPreference) findPreference("pref_delete_month");
             myAccount = findPreference("pref_my_account");
@@ -106,6 +110,9 @@ public class PreferencesActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            //archived categories pref
+
 
             //add month pref
             addMonthPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

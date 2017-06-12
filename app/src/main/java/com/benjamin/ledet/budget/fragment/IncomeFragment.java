@@ -55,7 +55,7 @@ public class IncomeFragment extends Fragment {
         ButterKnife.bind(this,v);
 
         databaseHandler = new DatabaseHandler(getContext());
-        categoriesIncome = databaseHandler.getCategoriesIncome();
+        categoriesIncome = databaseHandler.getUnarchivedCategoriesIncome();
 
         //setup RecyclerView for categories income
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

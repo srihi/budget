@@ -26,7 +26,7 @@ public class DatabaseHandler {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()
-                    .schemaVersion(6)
+                    .schemaVersion(7)
                     .migration(new Migration())
                     .build();
         }
@@ -72,6 +72,22 @@ public class DatabaseHandler {
                 .findAllSorted("label");
     }
 
+    public RealmResults<Category> getArchivedCategoriesIncome() {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",true)
+                .equalTo("isArchived",true)
+                .findAllSorted("label");
+    }
+
+    public RealmResults<Category> getUnarchivedCategoriesIncome() {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",true)
+                .equalTo("isArchived",false)
+                .findAllSorted("label");
+    }
+
     public RealmResults<Category> getCategoriesIncomeWithIncomesOfMonth(Month month) {
 
         return realm.where(Category.class)
@@ -84,6 +100,22 @@ public class DatabaseHandler {
 
         return realm.where(Category.class)
                 .equalTo("isIncome",false)
+                .findAllSorted("label");
+    }
+
+    public RealmResults<Category> getArchivedCategoriesExpense() {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",false)
+                .equalTo("isArchived",true)
+                .findAllSorted("label");
+    }
+
+    public RealmResults<Category> getUnarchivedCategoriesExpense() {
+
+        return realm.where(Category.class)
+                .equalTo("isIncome",false)
+                .equalTo("isArchived",false)
                 .findAllSorted("label");
     }
 
@@ -120,6 +152,28 @@ public class DatabaseHandler {
             public void execute(Realm realm) {
                 realm.insertOrUpdate(category);
                 Log.d("add category ", category.toString());
+            }
+        });
+    }
+
+    public void archiveCategory(final Category category){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                category.setArchived(true);
+                realm.insertOrUpdate(category);
+                Log.d("archive category ", category.toString());
+            }
+        });
+    }
+
+    public void unarchiveCategory(final Category category){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                category.setArchived(false);
+                realm.insertOrUpdate(category);
+                Log.d("unarchive category ", category.toString());
             }
         });
     }

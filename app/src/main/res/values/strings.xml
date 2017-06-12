@@ -117,9 +117,11 @@
     <string name="activity_sign_in_choose_account_message">Vous devez choisir un compte!</string>
 
     <!-- activity_preferences -->
+    <string name="activity_preferences_expenses_and_incomes_label">Dépenses et revenus</string>
     <string name="activity_preferences_chart_type_label">Type de graphique</string>
     <string name="activity_preferences_bar_chart">Histogramme</string>
     <string name="activity_preferences_line_chart">Linéaire</string>
+    <string name="activity_preferences_archived_categories">Afficher les catégories archivées</string>
     <string name="activity_preferences_add_month_label">Ajouter un ancien mois</string>
     <string name="activity_preferences_example_month">Exemple : 01/2017</string>
     <string name="activity_preferences_add_month_wrong_format">Le format est incorrect. Écrivez sous la forme : xx/xxxx</string>
@@ -129,7 +131,6 @@
     <string name="activity_preferences_delete_month_label">Supprimer un mois</string>
     <string name="activity_preferences_delete_month_message">Voulez vous vraiment supprimer le mois %1$s ? Celà supprimera toutes les données de ce mois. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
     <string name="activity_preferences_delete_month_success">Le mois a bien été supprimé.</string>
-    <string name="activity_preferences_expenses_and_incomes_label">Dépenses et revenus</string>
     <string name="activity_preferences_account_label">Compte</string>
     <string name="activity_preferences_my_account_label">Mon compte Google</string>
     <string name="activity_preferences_change_account_label">Changer de compte</string>
@@ -162,7 +163,15 @@
     <string name="fragment_category_expense_income_update_category_label">Catégorie %1$s</string>
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
     <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
-    <string name="activity_category_management_delete_category_message">La catégorie a bien été supprimée.</string>
+    <string name="activity_category_management_delete_category_success">La catégorie a bien été supprimée.</string>
+    <string name="activity_category_management_archived_categories_label">Catégories archivées</string>
+    <string name="activity_category_management_no_archived_categories_label">Aucune catégories archivées.</string>
+    <string name="activity_category_management_archive_category_label">Archiver une catégorie</string>
+    <string name="activity_category_management_archive_category_description">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? La catégorie sera conservée mais ne sera plus utilisable. Vous pouvez à tout moment revenir en arrière ou la supprimer complétement plus bas.</string>
+    <string name="activity_category_management_archive_category_success">La catégorie a bien été archivée.</string>
+    <string name="activity_category_management_unarchive_category_label">Désarchiver une catégorie</string>
+    <string name="activity_category_management_unarchive_category_description">Voulez-vous désarchiver la catégorie \"%1$s\" ?</string>
+    <string name="activity_category_management_unarchive_category_success">La catégorie est de nouveau disponible.</string>
 
     <!-- fragment_expense & income-->
     <string name="fragment_expense_add_expense_label">Ajouter une dépense</string>

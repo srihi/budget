@@ -44,7 +44,7 @@ public class AutomaticIncomeFragment extends Fragment {
 
         final DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
         OrderedRealmCollection<AutomaticAmount> automaticIncomes = databaseHandler.getAutomaticsIncomes();
-        final OrderedRealmCollection<Category> categoriesIncome = databaseHandler.getCategoriesIncome();
+        final OrderedRealmCollection<Category> categoriesIncome = databaseHandler.getUnarchivedCategoriesIncome();
 
         //setup recylerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

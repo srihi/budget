@@ -21,6 +21,13 @@
             android:key="pref_chart_type"
             android:title="@string/activity_preferences_chart_type_label" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_archived_categories"
+            android:persistent="true"
+            android:title="@string/activity_category_management_archived_categories_label"
+            android:summary="@string/activity_preferences_archived_categories"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -45,8 +52,7 @@
 
         <Preference
             android:key="pref_my_account"
-            android:title="@string/activity_preferences_my_account_label"
-            android:selectable="false"/>
+            android:title="@string/activity_preferences_my_account_label" />
 
         <Preference
             android:key="pref_update_account"
@@ -70,8 +76,7 @@
         <Preference
             android:key="pref_version"
             android:summary="@string/version"
-            android:title="@string/activity_preferences_version_label"
-            android:selectable="false"/>
+            android:title="@string/activity_preferences_version_label" />
 
     </PreferenceCategory>
 

@@ -17,6 +17,8 @@ public class Category extends RealmObject {
 
     private boolean isIncome;
 
+    private boolean isArchived;
+
     private RealmList<Amount> amounts;
 
     private RealmList<AutomaticAmount> automaticAmounts;
@@ -57,6 +59,18 @@ public class Category extends RealmObject {
         isIncome = income;
     }
 
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
+    }
+
+    public void setIcon(TextDrawable icon) {
+        this.icon = icon;
+    }
+
     public RealmList<Amount> getAmounts() {
         return amounts;
     }
@@ -85,7 +99,8 @@ public class Category extends RealmObject {
     public String toString() {
         return  "id : " + id + " - " +
                 "label : " + label + " - " +
-                "income : " + isIncome;
+                "income : " + isIncome + " - " +
+                "archived : " + isArchived;
     }
 
 }

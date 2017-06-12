@@ -35,6 +35,12 @@ public class CategoryExpenseFragment extends Fragment {
     @BindView(R.id.fragment_category_expense_rv)
     RecyclerView recyclerView;
 
+    @BindView(R.id.fragment_category_expense_archived_rv)
+    RecyclerView archivedRecyclerView;
+
+    @BindView(R.id.fragment_category_expense_tv_no_archived_categories)
+    TextView tvNoArchived;
+
     private DatabaseHandler databaseHandler;
 
     @Nullable
@@ -44,15 +50,29 @@ public class CategoryExpenseFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         databaseHandler = new DatabaseHandler(getContext());
-        OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getCategoriesExpense();
+        OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getUnarchivedCategoriesExpense();
+        OrderedRealmCollection<Category> archivedCategoriesExpense = databaseHandler.getArchivedCategoriesExpense();
+
+        if (archivedCategoriesExpense.isEmpty()){
+            tvNoArchived.setVisibility(View.VISIBLE);
+            archivedRecyclerView.setPadding(0,0,0,0);
+        }
 
         //setup RecyclerView for categories expense
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        CategoryManagementRecyclerViewAdapter adapter = new CategoryManagementRecyclerViewAdapter(categoriesExpense, getContext());
+        CategoryManagementRecyclerViewAdapter adapter = new CategoryManagementRecyclerViewAdapter(categoriesExpense, getContext(), tvNoArchived, archivedRecyclerView);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        //setup RecyclerView for archived categories expense
+        RecyclerView.LayoutManager archivedLayoutManager = new LinearLayoutManager(getContext());
+        CategoryManagementRecyclerViewAdapter archivedAdapter = new CategoryManagementRecyclerViewAdapter(archivedCategoriesExpense, getContext(), tvNoArchived, archivedRecyclerView);
+        archivedRecyclerView.setLayoutManager(archivedLayoutManager);
+        archivedRecyclerView.setAdapter(archivedAdapter);
+        archivedRecyclerView.setHasFixedSize(false);
+        archivedRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         //add category
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/alert_dialog_update_category_new_label"
         android:id="@+id/alert_dialog_update_category_label"
+        android:inputType="text"
+        android:maxLines="1"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:maxLength="25">

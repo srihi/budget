@@ -67,6 +67,7 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
             public void onClick(final View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
                 final View inflator = LayoutInflater.from(context).inflate(R.layout.alert_dialog_update_category, null);
+                final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_category_label);
                 builder.setView(inflator);
                 TextView title = new TextView(context);
                 title.setText(context.getString(R.string.fragment_category_expense_income_update_category_label,obj.getLabel()));
@@ -77,57 +78,64 @@ public class CategoryManagementRecyclerViewAdapter extends RealmRecyclerViewAdap
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final EditText etUpdateLabel = (EditText) inflator.findViewById(R.id.alert_dialog_update_category_label);
-                        Category category;
-                        if (obj.isIncome()){
-                            category = databaseHandler.findCategoryIncomeByLabel(etUpdateLabel.getText().toString());
-                        }else{
-                            category = databaseHandler.findCategoryExpenseByLabel(etUpdateLabel.getText().toString());
-                        }
-                        //duplicate category
-                        if (category != null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
-                            TextView title = new TextView(context);
-                            title.setText(context.getString(R.string.fragment_category_expense_income_update_category_label,obj.getLabel()));
-                            title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
-                            title.setGravity(Gravity.CENTER);
-                            title.setTextSize(22);
-                            builder.setCustomTitle(title);
-                            if (obj.isIncome()){
-                                builder.setMessage(R.string.fragment_category_income_update_duplicate_category_message);
-                            }else{
-                                builder.setMessage(R.string.fragment_category_expense_update_duplicate_category_message);
-                            }
-                            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
-                                    String message = context.getString(R.string.fragment_category_expense_update_category_success);
-                                    if (obj.isIncome()){
-                                        message = context.getString(R.string.fragment_category_income_update_category_success);
-                                    }
-                                    Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
-                                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
-                                    snackbar.show();
-                                }
-                            });
-                            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        } else {
-                            databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());;
-                            String message = context.getString(R.string.fragment_category_expense_update_category_success);
-                            if (obj.isIncome()){
-                                message = context.getString(R.string.fragment_category_income_update_category_success);
-                            }
-                            Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
-                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+
+                        if(etUpdateLabel.getText().toString().equals("")){
+                            Snackbar snackbar = Snackbar.make(v , context.getString(R.string.fragment_category_expense_income_empty_label_message), Snackbar.LENGTH_SHORT);
+                            snackbar.getView().setBackgroundColor(Color.RED);
                             snackbar.show();
+                        } else {
+                            Category category;
+                            if (obj.isIncome()){
+                                category = databaseHandler.findCategoryIncomeByLabel(etUpdateLabel.getText().toString());
+                            }else{
+                                category = databaseHandler.findCategoryExpenseByLabel(etUpdateLabel.getText().toString());
+                            }
+                            //duplicate category
+                            if (category != null) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
+                                TextView title = new TextView(context);
+                                title.setText(context.getString(R.string.fragment_category_expense_income_update_category_label,obj.getLabel()));
+                                title.setTextColor(ContextCompat.getColor(context,R.color.PrimaryColor));
+                                title.setGravity(Gravity.CENTER);
+                                title.setTextSize(22);
+                                builder.setCustomTitle(title);
+                                if (obj.isIncome()){
+                                    builder.setMessage(R.string.fragment_category_income_update_duplicate_category_message);
+                                }else{
+                                    builder.setMessage(R.string.fragment_category_expense_update_duplicate_category_message);
+                                }
+                                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());
+                                        String message = context.getString(R.string.fragment_category_expense_update_category_success);
+                                        if (obj.isIncome()){
+                                            message = context.getString(R.string.fragment_category_income_update_category_success);
+                                        }
+                                        Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
+                                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                                        snackbar.show();
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } else {
+                                databaseHandler.updateCategory(obj,etUpdateLabel.getText().toString());;
+                                String message = context.getString(R.string.fragment_category_expense_update_category_success);
+                                if (obj.isIncome()){
+                                    message = context.getString(R.string.fragment_category_income_update_category_success);
+                                }
+                                Snackbar snackbar = Snackbar.make(v , message, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.PrimaryColor));
+                                snackbar.show();
+                            }
                         }
+
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

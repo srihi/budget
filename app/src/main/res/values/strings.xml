@@ -160,6 +160,7 @@
     <string name="fragment_category_income_update_category_success">La catégorie de revenu a bien été modifiée.</string>
     <string name="fragment_category_income_delete_category_label">Supprimer une catégorie de revenu</string>
 
+    <string name="fragment_category_expense_income_empty_label_message">Vous n\'avez pas renseigné de label.</string>
     <string name="fragment_category_expense_income_update_category_label">Catégorie %1$s</string>
     <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
     <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>

@@ -2,6 +2,7 @@ package com.benjamin.ledet.budget.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -91,39 +92,46 @@ public class CategoryIncomeFragment extends Fragment {
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //add the category in database
-                        if (databaseHandler.findCategoryIncomeByLabel(etAddLibelleCategorie.getText().toString()) != null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog);
-                            TextView title = new TextView(getContext());
-                            title.setText(R.string.fragment_category_income_add_category_label);
-                            title.setTextColor(ContextCompat.getColor(getContext(),R.color.PrimaryColor));
-                            title.setGravity(Gravity.CENTER);
-                            title.setTextSize(22);
-                            builder.setCustomTitle(title);
-                            builder.setMessage(R.string.fragment_category_income_add_duplicate_category_message);
-                            builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
-                                    databaseHandler.addCategory(categoryToAdd);
-                                    Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_income_add_category_success, Snackbar.LENGTH_SHORT);
-                                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
-                                    snackbar.show();
-                                }
-                            });
-                            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        } else {
-                            Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
-                            databaseHandler.addCategory(categoryToAdd);
-                            Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_income_add_category_success, Snackbar.LENGTH_SHORT);
-                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
+
+                        if(etAddLibelleCategorie.getText().toString().equals("")){
+                            Snackbar snackbar = Snackbar.make(view , getString(R.string.fragment_category_expense_income_empty_label_message), Snackbar.LENGTH_SHORT);
+                            snackbar.getView().setBackgroundColor(Color.RED);
                             snackbar.show();
+                        } else {
+                        //add the category in database
+                            if (databaseHandler.findCategoryIncomeByLabel(etAddLibelleCategorie.getText().toString()) != null) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog);
+                                TextView title = new TextView(getContext());
+                                title.setText(R.string.fragment_category_income_add_category_label);
+                                title.setTextColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
+                                title.setGravity(Gravity.CENTER);
+                                title.setTextSize(22);
+                                builder.setCustomTitle(title);
+                                builder.setMessage(R.string.fragment_category_income_add_duplicate_category_message);
+                                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
+                                        databaseHandler.addCategory(categoryToAdd);
+                                        Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_income_add_category_success, Snackbar.LENGTH_SHORT);
+                                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
+                                        snackbar.show();
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } else {
+                                Category categoryToAdd = new Category(databaseHandler.getCategoryNextKey(), etAddLibelleCategorie.getText().toString(), true);
+                                databaseHandler.addCategory(categoryToAdd);
+                                Snackbar snackbar = Snackbar.make(view, R.string.fragment_category_income_add_category_success, Snackbar.LENGTH_SHORT);
+                                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.PrimaryColor));
+                                snackbar.show();
+                            }
                         }
                     }
                 });

@@ -2,11 +2,15 @@ package com.benjamin.ledet.budget.model;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.benjamin.ledet.budget.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -26,7 +30,7 @@ public class DatabaseHandler {
         if (mRealmConfig == null) {
             Realm.init(mContext);
             mRealmConfig = new RealmConfiguration.Builder()
-                    .schemaVersion(7)
+                    .schemaVersion(8)
                     .migration(new Migration())
                     .build();
         }
@@ -132,16 +136,18 @@ public class DatabaseHandler {
         return realm.where(Category.class).equalTo("id", id).findFirst();
     }
 
-    public Category findCategoryExpenseByLabel(String label){
+    public Category findCategoryExpenseByLabel(String label, long id){
         return realm.where(Category.class)
-                .like("label", label)
+                .equalTo("label", label, Case.INSENSITIVE)
+                .notEqualTo("id",id)
                 .equalTo("isIncome",false)
                 .findFirst();
     }
 
-    public Category findCategoryIncomeByLabel(String label){
+    public Category findCategoryIncomeByLabel(String label, long id){
         return realm.where(Category.class)
-                .like("label", label)
+                .equalTo("label", label, Case.INSENSITIVE)
+                .notEqualTo("id",id)
                 .equalTo("isIncome",true)
                 .findFirst();
     }
@@ -151,6 +157,7 @@ public class DatabaseHandler {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(category);
+                Toast.makeText(mContext,mContext.getString(R.string.category_added), Toast.LENGTH_SHORT).show();
                 Log.d("add category ", category.toString());
             }
         });
@@ -163,6 +170,7 @@ public class DatabaseHandler {
                 category.setArchived(true);
                 realm.insertOrUpdate(category);
                 Log.d("archive category ", category.toString());
+                Toast.makeText(mContext,mContext.getString(R.string.category_archived), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -174,6 +182,7 @@ public class DatabaseHandler {
                 category.setArchived(false);
                 realm.insertOrUpdate(category);
                 Log.d("unarchive category ", category.toString());
+                Toast.makeText(mContext,mContext.getString(R.string.category_unarchived), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -185,6 +194,20 @@ public class DatabaseHandler {
                 category.setLabel(label);
                 realm.insertOrUpdate(category);
                 Log.d("update category ", category.toString());
+                Toast.makeText(mContext,mContext.getString(R.string.category_updated), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void updateCategory(final Category category, final String label, final double budget){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                category.setLabel(label);
+                category.setBudget(budget);
+                realm.insertOrUpdate(category);
+                Log.d("update category ", category.toString());
+                Toast.makeText(mContext,mContext.getString(R.string.category_updated), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -195,6 +218,7 @@ public class DatabaseHandler {
             public void execute(Realm realm) {
                 Log.d("delete category ", category.toString());
                 realm.where(Category.class).equalTo("id",category.getId()).findFirst().deleteFromRealm();
+                Toast.makeText(mContext,mContext.getString(R.string.category_deleted), Toast.LENGTH_SHORT).show();
             }
         });
     }

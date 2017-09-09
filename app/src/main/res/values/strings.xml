@@ -13,12 +13,20 @@
     <string name="arrow_drop_down">arrow drop down</string>
     <string name="arrow_drop_up">arrow drop up</string>
     <string name="confirm">Confirmer </string>
+    <string name="save">Sauvegarder</string>
     <string name="cancel">Annuler </string>
+    <string name="delete">Supprimer</string>
+    <string name="archive">Archiver</string>
+    <string name="unarchive">Désarchiver</string>
+    <string name="merge_categories">Fusionner des catégories</string>
     <string name="close">Fermer</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="ok">OK</string>
     <string name="error">Erreur</string>
+    <string name="expenses">Dépenses</string>
+    <string name="incomes">Revenus</string>
+    <string name="what_do_you_want_to_do">Que voulez-vous faire?</string>
 
     <!-- header !-->
     <string name="header_unknown_user">Utilisateur inconnu</string>
@@ -29,15 +37,11 @@
 
     <!-- titles -->
     <string name="title_activity_preferences">Réglages</string>
-    <string name="title_activity_category_management">Gestion des catégories</string>
     <string name="title_activity_backup">Sauvegarder &amp; restaurer</string>
     <string name="title_activity_amount">Détails</string>
     <string name="title_activity_automatic_amount">Dépenses et revenus automatiques</string>
     <string name="title_activity_statistic">Statistiques</string>
-    <string name="title_fragment_category_expense">Catégories dépenses</string>
-    <string name="title_fragment_category_income">Catégories revenus</string>
-    <string name="title_fragment_expense">Dépenses</string>
-    <string name="title_fragment_income">Revenus</string>
+
     <string name="title_fragment_automatic_expense">Dépenses automatiques</string>
     <string name="title_fragment_automatic_income">Revenus automatiques</string>
 
@@ -145,34 +149,24 @@
     <string name="summary_percentage_label">Pourcentage du revenu dépensé :</string>
     <string name="summary_balance_label">Solde :</string>
 
-    <!-- fragment_category_expense & income -->
-    <string name="fragment_category_expense_add_category_label">Ajouter une catégorie de dépense</string>
-    <string name="fragment_category_expense_add_category_success">La catégorie de dépense a bien été ajoutée.</string>
-    <string name="fragment_category_expense_add_duplicate_category_message">Une catégorie de dépense ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
-    <string name="fragment_category_expense_update_duplicate_category_message">Une catégorie de dépense ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
-    <string name="fragment_category_expense_update_category_success">La catégorie de dépense a bien été modifiée.</string>
-    <string name="fragment_category_expense_delete_category_label">Supprimer une catégorie de dépense</string>
-
-    <string name="fragment_category_income_add_category_label">Ajouter une catégorie de revenu</string>
-    <string name="fragment_category_income_add_category_success">La catégorie de revenu a bien été ajoutée.</string>
-    <string name="fragment_category_income_add_duplicate_category_message">Une catégorie de revenu ayant le même nom semble déjà exister, voulez-vous vraiment l\'ajouter?</string>
-    <string name="fragment_category_income_update_duplicate_category_message">Une catégorie de revenu ayant le même nom semble déjà exister, voulez-vous vraiment effectuer la modification?</string>
-    <string name="fragment_category_income_update_category_success">La catégorie de revenu a bien été modifiée.</string>
-    <string name="fragment_category_income_delete_category_label">Supprimer une catégorie de revenu</string>
-
-    <string name="fragment_category_expense_income_empty_label_message">Vous n\'avez pas renseigné de label.</string>
-    <string name="fragment_category_expense_income_update_category_label">Catégorie %1$s</string>
-    <string name="activity_category_management_delete_category_label">Supprimer une catégorie</string>
-    <string name="activity_category_management_delete_category_description">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? Celà supprimera toutes les données associées à cette catégorie. Nous vous conseillons de sauvegarder vos données avant pour pouvoir revenir en arrière.</string>
-    <string name="activity_category_management_delete_category_success">La catégorie a bien été supprimée.</string>
-    <string name="activity_category_management_archived_categories_label">Catégories archivées</string>
-    <string name="activity_category_management_no_archived_categories_label">Aucune catégories archivées.</string>
-    <string name="activity_category_management_archive_category_label">Archiver une catégorie</string>
-    <string name="activity_category_management_archive_category_description">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? La catégorie sera conservée mais ne sera plus utilisable. Vous pouvez à tout moment revenir en arrière ou la supprimer complétement plus bas.</string>
-    <string name="activity_category_management_archive_category_success">La catégorie a bien été archivée.</string>
-    <string name="activity_category_management_unarchive_category_label">Désarchiver une catégorie</string>
-    <string name="activity_category_management_unarchive_category_description">Voulez-vous désarchiver la catégorie \"%1$s\" ?</string>
-    <string name="activity_category_management_unarchive_category_success">La catégorie est de nouveau disponible.</string>
+    <!-- categories -->
+    <string name="categories">Catégories</string>
+    <string name="archived_categories">Catégories archivées</string>
+    <string name="new_category">Nouvelle catégorie</string>
+    <string name="enter_label">Entrez un libellé</string>
+    <string name="enter_budget">Entrez un budget (optionnel)</string>
+    <string name="you_must_enter_label">Vous devez entrer un libellé.</string>
+    <string name="same_label">Une catégorie avec le même libellé existe déjà.</string>
+    <string name="budget_amount">Budget : %1$s €</string>
+    <string name="no_budget_defined">Pas de budget défini</string>
+    <string name="category_added">La catégorie a bien été ajoutée.</string>
+    <string name="category_updated">La catégorie a bien été modifiée.</string>
+    <string name="category_deleted">La catégorie a bien été supprimée.</string>
+    <string name="category_archived">La catégorie a bien été archivée.</string>
+    <string name="category_unarchived">La catégorie a bien été désarchivée.</string>
+    <string name="delete_category_message">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? \n Toutes les données associées à cette catégorie seront définitivement supprimées.</string>
+    <string name="archive_category_message">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? \n La catégorie sera conservée mais ne sera plus utilisable. Vous pourrez la retrouver dans la section Catégories archivées.</string>
+    <string name="unarchive_category_message">Voulez-vous désarchiver la catégorie \"%1$s\" ? \n Elle sera de nouveau disponible dans la section Catégories.</string>
 
     <!-- fragment_expense & income-->
     <string name="fragment_expense_add_expense_label">Ajouter une dépense</string>

@@ -17,6 +17,8 @@ public class Category extends RealmObject {
 
     private boolean isIncome;
 
+    private double budget;
+
     private boolean isArchived;
 
     private RealmList<Amount> amounts;
@@ -33,6 +35,13 @@ public class Category extends RealmObject {
         this.id = id;
         this.label = label;
         this.isIncome = isIncome;
+    }
+
+    public Category(int id, String label, boolean isIncome, double budget) {
+        this.id = id;
+        this.label = label;
+        this.isIncome = isIncome;
+        this.budget = budget;
     }
 
     public long getId() {
@@ -57,6 +66,14 @@ public class Category extends RealmObject {
 
     public void setIncome(boolean income) {
         isIncome = income;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(double budget) {
+        this.budget = budget;
     }
 
     public boolean isArchived() {
@@ -100,6 +117,7 @@ public class Category extends RealmObject {
         return  "id : " + id + " - " +
                 "label : " + label + " - " +
                 "income : " + isIncome + " - " +
+                "budget : " + budget + " - " +
                 "archived : " + isArchived;
     }
 

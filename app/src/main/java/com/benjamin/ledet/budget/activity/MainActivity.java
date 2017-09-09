@@ -168,11 +168,19 @@ public class MainActivity extends AppCompatActivity{
                     startActivity(intent);
                     return true;
                 }
-                //open the management category activity
-                else if(menuItem.getItemId() == R.id.category_management){
+                //open the categories activity
+                else if(menuItem.getItemId() == R.id.categories){
                     //close the menu
                     drawerLayout.closeDrawers();
-                    Intent intent = new Intent(MainActivity.this,CategoryManagementActivity.class);
+                    Intent intent = new Intent(MainActivity.this,CategoriesActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                //open the archived categories activity
+                else if(menuItem.getItemId() == R.id.archivedCategories){
+                    //close the menu
+                    drawerLayout.closeDrawers();
+                    Intent intent = new Intent(MainActivity.this,ArchivedCategoriesActivity.class);
                     startActivity(intent);
                     return true;
                 }
@@ -389,12 +397,8 @@ public class MainActivity extends AppCompatActivity{
                 String id = year + "" + month;
                 menu.add(0,Integer.parseInt(id),0,Month.intMonthToStringMonth(month,getApplicationContext()));
                 MenuItem menuItemMonth = menu.findItem(Integer.parseInt(id));
-                if(year != actualYear){
-                    menuItemYear.setActionView(R.layout.row_year_open);
-                    menuItemMonth.setVisible(false);
-                }else{
-                    menuItemYear.setActionView(R.layout.row_year_close);
-                }
+                menuItemYear.setActionView(R.layout.row_year_open);
+                menuItemMonth.setVisible(false);
             }
         }
         MenuItem menuItem = menu.findItem(Integer.parseInt(actualYear + "" + actualMonth));
@@ -412,8 +416,8 @@ public class MainActivity extends AppCompatActivity{
         expenseFragment.setArguments(bundle);
         incomeFragment.setArguments(bundle);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(expenseFragment, getString(R.string.title_fragment_expense));
-        adapter.addFragment(incomeFragment, getString(R.string.title_fragment_income));
+        adapter.addFragment(expenseFragment, getString(R.string.expenses));
+        adapter.addFragment(incomeFragment, getString(R.string.incomes));
         viewPager.setAdapter(adapter);
     }
 

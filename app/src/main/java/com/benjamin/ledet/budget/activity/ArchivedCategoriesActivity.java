@@ -8,21 +8,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
-import com.benjamin.ledet.budget.fragment.CategoryExpenseFragment;
-import com.benjamin.ledet.budget.fragment.CategoryIncomeFragment;
+import com.benjamin.ledet.budget.fragment.ArchivedCategoriesExpenseFragment;
+import com.benjamin.ledet.budget.fragment.ArchivedCategoriesIncomeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CategoryManagementActivity extends AppCompatActivity {
+public class ArchivedCategoriesActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.activity_category_management_vp)
+    @BindView(R.id.activity_archived_categories_vp)
     ViewPager viewPager;
 
-    @BindView(R.id.activity_category_management_tb)
+    @BindView(R.id.activity_archived_categories_tb)
     TabLayout tabLayout;
 
     //return to the previous fragment
@@ -40,11 +40,11 @@ public class CategoryManagementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_management);
+        setContentView(R.layout.activity_archived_categories);
         ButterKnife.bind(this);
 
         //display toolbar
-        toolbar.setTitle(R.string.title_activity_category_management);
+        toolbar.setTitle(R.string.archived_categories);
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){
@@ -58,11 +58,11 @@ public class CategoryManagementActivity extends AppCompatActivity {
 
     //display viewPager with the tabs
     private void setupViewPager(ViewPager viewPager) {
-        CategoryExpenseFragment categoryExpenseFragment = new CategoryExpenseFragment();
-        CategoryIncomeFragment categoryIncomeFragment = new CategoryIncomeFragment();
+        ArchivedCategoriesExpenseFragment archivedCategoriesExpenseFragment = new ArchivedCategoriesExpenseFragment();
+        ArchivedCategoriesIncomeFragment archivedCategoriesIncomeFragment = new ArchivedCategoriesIncomeFragment();
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(categoryExpenseFragment, getString(R.string.title_fragment_category_expense));
-        adapter.addFragment(categoryIncomeFragment, getString(R.string.title_fragment_category_income));
+        adapter.addFragment(archivedCategoriesExpenseFragment, getString(R.string.expenses));
+        adapter.addFragment(archivedCategoriesIncomeFragment, getString(R.string.incomes));
         viewPager.setAdapter(adapter);
     }
 }

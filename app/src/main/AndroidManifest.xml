@@ -37,7 +37,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.CategoryManagementActivity">
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoriesActivity">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.ArchivedCategoriesActivity">
         </activity>
 
         <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity">
@@ -47,6 +50,12 @@
         </activity>
 
         <activity android:name="com.benjamin.ledet.budget.activity.StatisticActivity">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryExpenseActivity" android:windowSoftInputMode="stateVisible">
+        </activity>
+
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryIncomeActivity" android:windowSoftInputMode="stateVisible">
         </activity>
 
     </application>

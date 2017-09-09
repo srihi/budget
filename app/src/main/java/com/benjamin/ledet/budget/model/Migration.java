@@ -110,5 +110,20 @@ class Migration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 7) {
+
+            schema.get("Category")
+                    .addField("budget",double.class)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            obj.setDouble("budget",0);
+                        }
+                    });
+
+            oldVersion++;
+
+        }
+
     }
 }

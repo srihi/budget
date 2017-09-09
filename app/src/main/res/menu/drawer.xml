@@ -18,11 +18,18 @@
 
         <item
             android:orderInCategory="1"
-            android:id="@+id/category_management"
+            android:id="@+id/categories"
             android:checked="false"
             android:checkable="false"
             android:icon="@drawable/ic_edit"
-            android:title="@string/title_activity_category_management" />
+            android:title="@string/categories" />
+        <item
+            android:orderInCategory="1"
+            android:id="@+id/archivedCategories"
+            android:checked="false"
+            android:checkable="false"
+            android:icon="@drawable/ic_unarchive"
+            android:title="@string/archived_categories" />
 
         <item
             android:orderInCategory="2"

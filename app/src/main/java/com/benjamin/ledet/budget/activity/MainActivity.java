@@ -20,12 +20,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.BudgetApplication;
@@ -43,7 +47,6 @@ import com.squareup.picasso.Picasso;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity{
 
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
+
+    @BindView(R.id.spinner_months)
+    Spinner spinnerMonths;
 
     @BindView(R.id.summary_tv_total_expenses)
     TextView tvTotalExpenses;
@@ -96,6 +102,7 @@ public class MainActivity extends AppCompatActivity{
     private int actualYear = calendar.get(Calendar.YEAR);
     private int actualMonth = calendar.get(Calendar.MONTH) + 1;
     private DatabaseHandler databaseHandler;
+    private boolean userSelectSpinnerMonth = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +116,8 @@ public class MainActivity extends AppCompatActivity{
 
         // display the toolbar
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if(sharedPreferences.getBoolean("first_launch",true)){
             //set default preferences at the first launch of the application
@@ -155,6 +164,8 @@ public class MainActivity extends AppCompatActivity{
         //add actionBarToggle to drawerLayout
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+        setupSpinnerMonths();
 
         //on item menu click
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -356,6 +367,43 @@ public class MainActivity extends AppCompatActivity{
         return animator;
     }
 
+    public void setupSpinnerMonths(){
+        ArrayAdapter<Month> adapter =
+                new ArrayAdapter<Month>(getApplicationContext(), R.layout.spinner_month, databaseHandler.getMonths());
+        adapter.setDropDownViewResource(R.layout.spinner_month);
+        spinnerMonths.setAdapter(adapter);
+        spinnerMonths.setSelection(databaseHandler.getMonths().size() - 1);
+
+        spinnerMonths.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                userSelectSpinnerMonth = true;
+                return false;
+            }
+        });
+        spinnerMonths.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(userSelectSpinnerMonth) {
+                    Month monthSelected = (Month) parent.getItemAtPosition(position);
+                    bundle.clear();
+                    bundle.putString("id",monthSelected.getYear() + "" + monthSelected.getMonth());
+                    expenseFragment.getArguments().putAll(bundle);
+                    incomeFragment.getArguments().putAll(bundle);
+                    //display fragments according to the selected month
+                    expenseFragment.onStart();
+                    incomeFragment.onStart();
+                    userSelectSpinnerMonth = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     //displays information of the user
     public void setupUserHeader(){
         View header = navigationView.getHeaderView(0);
@@ -373,9 +421,8 @@ public class MainActivity extends AppCompatActivity{
 
     //manages the user's click to view or closing the months of a year
     private void showOrCloseMonths(Menu menu,int year){
-        ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
-        for (Integer month: months) {
-            String id = year + "" + month;
+        for (Month month:databaseHandler.getMonthsOfYear(year)){
+            String id = year + "" + month.getMonth();
             MenuItem item = menu.findItem(Integer.parseInt(id));
             if (item.isVisible()){
                 item.setVisible(false);
@@ -387,15 +434,13 @@ public class MainActivity extends AppCompatActivity{
 
     //display the navigationView
     private void setupNavigationViewMenu(Menu menu){
-        ArrayList<Integer> years = databaseHandler.getYears();
-        for (Integer year: years) {
-            menu.add(0, year, 0, year.toString());
+        for (Integer year: databaseHandler.getYears()){
+            menu.add(0,year,0, year.toString());
             MenuItem menuItemYear = menu.findItem(year);
             menuItemYear.setIcon(R.drawable.ic_today);
-            ArrayList<Integer> months = databaseHandler.getMonthsOfYear(year);
-            for (Integer month: months) {
-                String id = year + "" + month;
-                menu.add(0,Integer.parseInt(id),0,Month.intMonthToStringMonth(month,getApplicationContext()));
+            for (Month month: databaseHandler.getMonthsOfYear(year)){
+                String id = month.getYear() + "" + month.getMonth();
+                menu.add(0,Integer.parseInt(id),0,month.monthString());
                 MenuItem menuItemMonth = menu.findItem(Integer.parseInt(id));
                 menuItemYear.setActionView(R.layout.row_year_open);
                 menuItemMonth.setVisible(false);

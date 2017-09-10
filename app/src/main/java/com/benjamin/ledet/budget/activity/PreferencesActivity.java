@@ -194,7 +194,7 @@ public class PreferencesActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             int position = newValue.toString().indexOf(" ");
-                            Month month = databaseHandler.getMonth(Month.stringMonthToIntMonth(newValue.toString().substring(0,position),getActivity()),Integer.parseInt(newValue.toString().substring(position + 1)));
+                            Month month = databaseHandler.getMonth(Month.stringMonthToIntMonth(newValue.toString().substring(0,position)),Integer.parseInt(newValue.toString().substring(position + 1)));
                             databaseHandler.deleteMonth(month);
                             setDeleteMonthPref();
                             //noinspection ConstantConditions
@@ -270,7 +270,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
             ArrayList<String> monthArray = new ArrayList<>();
             for (Month month : databaseHandler.getMonths()){
-                monthArray.add(Month.intMonthToStringMonth(month.getMonth(), getActivity()) + " " + month.getYear());
+                monthArray.add(month.toString());
             }
 
             final CharSequence[] chartMonths = monthArray.toArray(new CharSequence[monthArray.size()]);

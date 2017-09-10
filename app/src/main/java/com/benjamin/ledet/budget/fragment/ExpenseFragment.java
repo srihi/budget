@@ -133,8 +133,6 @@ public class ExpenseFragment extends Fragment {
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
             categoriesExpenseWithExpenses = databaseHandler.getCategoriesExpenseWithExpensesOfMonth(month);
         }
-        //title
-        ((MainActivity) getActivity()).setActionBarTitle(Month.intMonthToStringMonth(month.getMonth(),getContext()) + " " + month.getYear());
 
         ((MainActivity)getActivity()).setupSummary(month);
 

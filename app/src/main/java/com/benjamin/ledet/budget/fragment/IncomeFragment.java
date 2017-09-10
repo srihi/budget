@@ -133,8 +133,6 @@ public class IncomeFragment extends Fragment {
             month = databaseHandler.getMonth(Integer.parseInt(id.substring(4)),Integer.parseInt(id.substring(0,4)));
             categoriesIncomeWithIncomes = databaseHandler.getCategoriesIncomeWithIncomesOfMonth(month);
         }
-        //title
-        ((MainActivity) getActivity()).setActionBarTitle(Month.intMonthToStringMonth(month.getMonth(),getContext()) + " " + month.getYear());
 
         ((MainActivity)getActivity()).setupSummary(month);
 

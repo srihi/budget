@@ -8,7 +8,6 @@ import com.benjamin.ledet.budget.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import io.realm.Case;
 import io.realm.Realm;
@@ -251,24 +250,9 @@ public class DatabaseHandler {
         return list;
     }
 
-    public ArrayList<Integer> getMonthsOfYear(int year){
-        ArrayList<Integer> list = new ArrayList<>();
-        RealmResults<Month> months = realm.where(Month.class)
-                .equalTo("year",year)
-                .findAll()
-                .sort("month");
-        for (Month month: months){
-            list.add(month.getMonth());
-        }
-        return list;
-    }
+    public RealmResults<Month> getMonthsOfYear(int year) {
 
-    public String[] getDisplayMonths(List<Month> months){
-        String[] list = new String[months.size()];
-        for (int i = 0; i < months.size(); i++){
-            list[i] = Month.intMonthToStringMonth(months.get(i).getMonth(), mContext);
-        }
-        return  list;
+        return realm.where(Month.class).equalTo("year",year).findAll();
     }
 
     public Month getMonth(int month, int year) {
@@ -276,6 +260,13 @@ public class DatabaseHandler {
         return realm.where(Month.class)
                 .equalTo("month", month)
                 .equalTo("year", year)
+                .findFirst();
+    }
+
+    public Month getMonth(long id) {
+
+        return realm.where(Month.class)
+                .equalTo("id", id)
                 .findFirst();
     }
 

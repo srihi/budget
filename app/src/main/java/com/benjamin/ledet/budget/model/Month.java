@@ -1,7 +1,6 @@
 package com.benjamin.ledet.budget.model;
 
-import android.content.Context;
-
+import com.benjamin.ledet.budget.BudgetApplication;
 import com.benjamin.ledet.budget.R;
 
 import io.realm.RealmObject;
@@ -54,75 +53,29 @@ public class Month extends RealmObject {
         this.year = year;
     }
 
-    public static String intMonthToStringMonth(int month, Context context){
-        String monthString = "";
-        switch (month){
-            case 1:
-                monthString = context.getString(january);
-                break;
-            case 2:
-                monthString = context.getString(R.string.february);
-                break;
-            case 3:
-                monthString = context.getString(R.string.march);
-                break;
-            case 4:
-                monthString = context.getString(R.string.april);
-                break;
-            case 5:
-                monthString = context.getString(R.string.may);
-                break;
-            case 6:
-                monthString = context.getString(R.string.june);
-                break;
-            case 7:
-                monthString = context.getString(R.string.july);
-                break;
-            case 8:
-                monthString = context.getString(R.string.august);
-                break;
-            case 9:
-                monthString = context.getString(R.string.september);
-                break;
-            case 10:
-                monthString = context.getString(R.string.october);
-                break;
-            case 11:
-                monthString = context.getString(R.string.november);
-                break;
-            case 12:
-                monthString = context.getString(R.string.december);
-                break;
-            default:
-                monthString = context.getString(R.string.error);
-                break;
-        }
-        return  monthString;
-    }
-
-    public static int stringMonthToIntMonth(String month, Context context){
+    public static int stringMonthToIntMonth(String month){
         int monthInt;
-        if(month.equals(context.getString(january))){
+        if(month.equals(BudgetApplication.getContext().getString(january))){
             monthInt = 1;
-        }else if(month.equals(context.getString(february))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(february))) {
             monthInt = 2;
-        }else if(month.equals(context.getString(march))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(march))) {
             monthInt = 3;
-        }else if(month.equals(context.getString(april))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(april))) {
             monthInt = 4;
-        }else if(month.equals(context.getString(may))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(may))) {
             monthInt = 5;
-        }else if(month.equals(context.getString(june))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(june))) {
             monthInt = 6;
-        }else if(month.equals(context.getString(july))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(july))) {
             monthInt = 7;
-        }else if(month.equals(context.getString(august))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(august))) {
             monthInt = 8;
-        }else if(month.equals(context.getString(september))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(september))) {
             monthInt = 9;
-        }else if(month.equals(context.getString(october))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(october))) {
             monthInt = 10;
-        }else if(month.equals(context.getString(november))) {
+        }else if(month.equals(BudgetApplication.getContext().getString(november))) {
             monthInt = 11;
         }else {
             monthInt = 12;
@@ -130,10 +83,96 @@ public class Month extends RealmObject {
         return monthInt;
     }
 
+    public String monthString(){
+        String monthString = "";
+        switch (month){
+            case 1:
+                monthString = BudgetApplication.getContext().getString(january);
+                break;
+            case 2:
+                monthString = BudgetApplication.getContext().getString(R.string.february);
+                break;
+            case 3:
+                monthString = BudgetApplication.getContext().getString(R.string.march);
+                break;
+            case 4:
+                monthString = BudgetApplication.getContext().getString(R.string.april);
+                break;
+            case 5:
+                monthString = BudgetApplication.getContext().getString(R.string.may);
+                break;
+            case 6:
+                monthString = BudgetApplication.getContext().getString(R.string.june);
+                break;
+            case 7:
+                monthString = BudgetApplication.getContext().getString(R.string.july);
+                break;
+            case 8:
+                monthString = BudgetApplication.getContext().getString(R.string.august);
+                break;
+            case 9:
+                monthString = BudgetApplication.getContext().getString(R.string.september);
+                break;
+            case 10:
+                monthString = BudgetApplication.getContext().getString(R.string.october);
+                break;
+            case 11:
+                monthString = BudgetApplication.getContext().getString(R.string.november);
+                break;
+            case 12:
+                monthString = BudgetApplication.getContext().getString(R.string.december);
+                break;
+            default:
+                monthString = BudgetApplication.getContext().getString(R.string.error);
+                break;
+        }
+        return  monthString;
+    }
+
     @Override
     public String toString() {
-        return  "id : " + id + " - " +
-                "month : " + month + " - " +
-                "year : " + year;
+        String monthString = "";
+        switch (month){
+            case 1:
+                monthString = BudgetApplication.getContext().getString(january);
+                break;
+            case 2:
+                monthString = BudgetApplication.getContext().getString(R.string.february);
+                break;
+            case 3:
+                monthString = BudgetApplication.getContext().getString(R.string.march);
+                break;
+            case 4:
+                monthString = BudgetApplication.getContext().getString(R.string.april);
+                break;
+            case 5:
+                monthString = BudgetApplication.getContext().getString(R.string.may);
+                break;
+            case 6:
+                monthString = BudgetApplication.getContext().getString(R.string.june);
+                break;
+            case 7:
+                monthString = BudgetApplication.getContext().getString(R.string.july);
+                break;
+            case 8:
+                monthString = BudgetApplication.getContext().getString(R.string.august);
+                break;
+            case 9:
+                monthString = BudgetApplication.getContext().getString(R.string.september);
+                break;
+            case 10:
+                monthString = BudgetApplication.getContext().getString(R.string.october);
+                break;
+            case 11:
+                monthString = BudgetApplication.getContext().getString(R.string.november);
+                break;
+            case 12:
+                monthString = BudgetApplication.getContext().getString(R.string.december);
+                break;
+            default:
+                monthString = BudgetApplication.getContext().getString(R.string.error);
+                break;
+        }
+        return  monthString + " " + year;
     }
 }

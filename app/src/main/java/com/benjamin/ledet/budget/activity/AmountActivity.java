@@ -53,7 +53,7 @@ public class AmountActivity extends AppCompatActivity {
         OrderedRealmCollection<Amount> amounts = databaseHandler.getAmountsOfMonthOfCategory(month,category);
 
         //display toolbar
-        toolbar.setTitle(Month.intMonthToStringMonth(month.getMonth(),this) + " " + month.getYear() + " - " + category.getLabel());
+        toolbar.setTitle(month.toString() + " - " + category.getLabel());
         setSupportActionBar(toolbar);
         //display back button
         if (getSupportActionBar() != null){

@@ -103,7 +103,11 @@ public class StatisticActivity extends AppCompatActivity {
         databaseHandler = new DatabaseHandler(StatisticActivity.this);
 
         months = databaseHandler.getMonths();
-        monthsDisplay = databaseHandler.getDisplayMonths(months);
+
+        monthsDisplay = new String[months.size()];
+        for (int i = 0; i < months.size(); i++){
+            monthsDisplay[i] = months.get(i).toString();
+        }
 
         if(databaseHandler.getAmounts().size() != 0){
 

@@ -125,5 +125,11 @@ class Migration implements RealmMigration {
 
         }
 
+        if (oldVersion == 8){
+
+            schema.get("AutomaticAmount").removeField("nextMonth");
+            oldVersion++;
+        }
+
     }
 }

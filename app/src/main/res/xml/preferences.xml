@@ -6,7 +6,7 @@
 
         <Preference
             android:key="pref_automatic_incomes_expenses"
-            android:title="@string/title_activity_automatic_amount">
+            android:title="@string/automatic_transactions">
             <intent android:action="automatic_amounts"/>
         </Preference>
 

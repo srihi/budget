@@ -9,7 +9,7 @@
         android:id="@+id/row_alert_dialog_category_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:contentDescription="@string/icon_category"
+        android:contentDescription="@string/category_icon"
         />
 
     <TextView

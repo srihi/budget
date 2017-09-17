@@ -33,7 +33,6 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="text"
             android:hint="@string/enter_label" />
 
@@ -41,9 +40,8 @@
             android:id="@+id/activity_category_expense_budget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="numberDecimal"
-            android:hint="@string/enter_budget" />
+            android:hint="@string/enter_budget_optionnal" />
 
         <TextView
             android:id="@+id/activity_category_expense_error"

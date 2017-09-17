@@ -1,36 +1,25 @@
 package com.benjamin.ledet.budget.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.activity.AmountActivity;
+import com.benjamin.ledet.budget.activity.AmountsActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
 import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
-import com.benjamin.ledet.budget.adapter.CategorySpinAdapter;
-import com.benjamin.ledet.budget.model.Amount;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.tool.RecyclerItemClickListener;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,13 +56,18 @@ public class ExpenseFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                Intent intent = new Intent(getActivity(), AmountActivity.class);
+                intent.putExtra("month", month.getMonth());
+                intent.putExtra("year", month.getYear());
+                startActivity(intent);
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
                 final View inflator = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_add_amount, null);
                 final EditText etLabel = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_label);
                 final EditText etAmount = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_amount);
                 final EditText etDay = (EditText) inflator.findViewById(R.id.alert_dialog_add_amount_day);
                 final Spinner spCategories = (Spinner) inflator.findViewById(R.id.alert_dialog_add_amount_categories);
-                CategorySpinAdapter categoriesSpinAdapter = new CategorySpinAdapter(getContext(),categoriesExpense);
+                CategoriesSpinAdapter categoriesSpinAdapter = new CategoriesSpinAdapter(getContext(),categoriesExpense);
                 spCategories.setAdapter(categoriesSpinAdapter);
                 builder.setView(inflator);
                 TextView title = new TextView(getContext());
@@ -117,6 +111,7 @@ public class ExpenseFragment extends Fragment {
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                */
             }
         });
 
@@ -144,7 +139,7 @@ public class ExpenseFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Category category = categoriesExpenseWithExpenses.get(position);
-                Intent intent = new Intent(getContext(),AmountActivity.class);
+                Intent intent = new Intent(getContext(),AmountsActivity.class);
                 intent.putExtra("month", month.getMonth());
                 intent.putExtra("year", month.getYear());
                 intent.putExtra("category",category.getId());

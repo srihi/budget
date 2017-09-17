@@ -30,7 +30,7 @@
         <activity android:name="com.benjamin.ledet.budget.activity.PreferencesActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.AutomaticAmountActivity">
+        <activity android:name="com.benjamin.ledet.budget.activity.AutomaticTransactionsActivity">
             <intent-filter>
                 <action android:name="automatic_amounts" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -46,16 +46,16 @@
         <activity android:name="com.benjamin.ledet.budget.activity.BackupActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity">
+        <activity android:name="com.benjamin.ledet.budget.activity.AmountsActivity">
         </activity>
 
         <activity android:name="com.benjamin.ledet.budget.activity.StatisticActivity">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.CategoryExpenseActivity" android:windowSoftInputMode="stateVisible">
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryActivity" android:windowSoftInputMode="stateVisible">
         </activity>
 
-        <activity android:name="com.benjamin.ledet.budget.activity.CategoryIncomeActivity" android:windowSoftInputMode="stateVisible">
+        <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity" android:windowSoftInputMode="stateVisible">
         </activity>
 
     </application>

@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.activity.CategoryExpenseActivity;
+import com.benjamin.ledet.budget.activity.CategoryActivity;
 import com.benjamin.ledet.budget.adapter.CategoryExpenseRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
@@ -69,8 +69,9 @@ public class CategoriesExpenseFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Category category = categoriesExpense.get(position);
-                Intent intent = new Intent(getContext(),CategoryExpenseActivity.class);
+                Intent intent = new Intent(getContext(),CategoryActivity.class);
                 intent.putExtra("category",category.getId());
+                intent.putExtra("expense",true);
                 startActivity(intent);
             }
 
@@ -150,7 +151,8 @@ public class CategoriesExpenseFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),CategoryExpenseActivity.class);
+                Intent intent = new Intent(getActivity(),CategoryActivity.class);
+                intent.putExtra("expense",true);
                 startActivity(intent);
             }
         });

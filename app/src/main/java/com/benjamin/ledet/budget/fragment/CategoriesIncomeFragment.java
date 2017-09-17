@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.activity.CategoryIncomeActivity;
+import com.benjamin.ledet.budget.activity.CategoryActivity;
 import com.benjamin.ledet.budget.adapter.CategoryIncomeRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
@@ -57,7 +57,7 @@ public class CategoriesIncomeFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Category category = categoriesIncome.get(position);
-                Intent intent = new Intent(getContext(),CategoryIncomeActivity.class);
+                Intent intent = new Intent(getContext(),CategoryActivity.class);
                 intent.putExtra("category",category.getId());
                 startActivity(intent);
             }
@@ -137,7 +137,7 @@ public class CategoriesIncomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),CategoryIncomeActivity.class);
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 startActivity(intent);
             }
         });

@@ -18,6 +18,14 @@
 
         <item
             android:orderInCategory="1"
+            android:id="@+id/automaticTransactions"
+            android:checked="false"
+            android:checkable="false"
+            android:icon="@drawable/ic_transform"
+            android:title="@string/automatic_transactions" />
+
+        <item
+            android:orderInCategory="1"
             android:id="@+id/categories"
             android:checked="false"
             android:checkable="false"
@@ -32,7 +40,7 @@
             android:title="@string/archived_categories" />
 
         <item
-            android:orderInCategory="2"
+            android:orderInCategory="1"
             android:id="@+id/backup"
             android:checked="false"
             android:checkable="false"
@@ -40,7 +48,7 @@
             android:title="@string/title_activity_backup" />
 
         <item
-            android:orderInCategory="3"
+            android:orderInCategory="1"
             android:id="@+id/preferences"
             android:checked="false"
             android:checkable="false"

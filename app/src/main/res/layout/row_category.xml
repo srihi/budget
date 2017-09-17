@@ -8,7 +8,7 @@
         android:id="@+id/row_category_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:contentDescription="@string/icon_category"
+        android:contentDescription="@string/category_icon"
         />
 
     <TextView

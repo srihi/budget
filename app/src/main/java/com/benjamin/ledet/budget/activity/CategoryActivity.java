@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,7 +25,7 @@ import com.benjamin.ledet.budget.model.DatabaseHandler;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CategoryExpenseActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -39,6 +40,7 @@ public class CategoryExpenseActivity extends AppCompatActivity {
     TextView errorTextview;
 
     private boolean addMode = true;
+    private boolean expenseMode = false;
     private DatabaseHandler databaseHandler;
     private Category category;
 
@@ -78,15 +80,23 @@ public class CategoryExpenseActivity extends AppCompatActivity {
             case R.id.action_save:
                 if (checkCategory()){
                     double budget = 0;
-                    if (!TextUtils.isEmpty(budgetEditText.getText().toString().trim())){
-                        budget = Double.valueOf(budgetEditText.getText().toString());
+                    if (expenseMode) {
+                        if (!TextUtils.isEmpty(budgetEditText.getText().toString().trim())){
+                            budget = Double.valueOf(budgetEditText.getText().toString());
+                        }
                     }
                     if (addMode){
                         category.setLabel(labelEditText.getText().toString());
-                        category.setBudget(budget);
+                        if (expenseMode){
+                            category.setBudget(budget);
+                        }
                         databaseHandler.addCategory(category);
                     } else {
-                        databaseHandler.updateCategory(category,labelEditText.getText().toString(),budget);
+                        if (expenseMode){
+                            databaseHandler.updateCategory(category,labelEditText.getText().toString(),budget);
+                        } else {
+                            databaseHandler.updateCategory(category,labelEditText.getText().toString());
+                        }
                     }
                     finish();
                 }
@@ -150,7 +160,7 @@ public class CategoryExpenseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_expense);
+        setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
 
         //display toolbar
@@ -164,7 +174,7 @@ public class CategoryExpenseActivity extends AppCompatActivity {
 
         databaseHandler = new DatabaseHandler(this);
 
-        if (getIntent().getExtras() != null ){
+        if (getIntent().hasExtra("category") ){
             addMode = false;
             category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
             labelEditText.setText(category.getLabel());
@@ -174,12 +184,23 @@ public class CategoryExpenseActivity extends AppCompatActivity {
             toolbar.setTitle(category.getLabel());
         }
 
+        if (getIntent().hasExtra("expense")){
+            expenseMode = true;
+        }
+
+        if (!expenseMode){
+            budgetEditText.setVisibility(View.GONE);
+        }
+
         if (addMode){
             category = new Category();
             category.setId(databaseHandler.getCategoryNextKey());
-            category.setIncome(false);
+            if (expenseMode){
+                category.setIncome(false);
+            } else {
+                category.setIncome(true);
+            }
         }
-
     }
 
     private boolean checkCategory(){
@@ -189,11 +210,20 @@ public class CategoryExpenseActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(labelEditText.getText().toString().trim())){
 
-            if (databaseHandler.findCategoryExpenseByLabel(labelEditText.getText().toString(), category.getId()) == null){
-                result = true;
+            if (expenseMode){
+                if (databaseHandler.findCategoryExpenseByLabel(labelEditText.getText().toString(), category.getId()) == null){
+                    result = true;
+                } else {
+                    text = getString(R.string.same_label);
+                }
             } else {
-                text = getString(R.string.same_label);
+                if (databaseHandler.findCategoryIncomeByLabel(labelEditText.getText().toString(), category.getId()) == null){
+                    result = true;
+                } else {
+                    text = getString(R.string.same_label);
+                }
             }
+
         } else {
             text = getString(R.string.you_must_enter_label);
         }

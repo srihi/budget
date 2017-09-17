@@ -211,6 +211,14 @@ public class MainActivity extends AppCompatActivity{
                     startActivity(intent);
                     return true;
                 }
+                //open the automatic transactions activity
+                else if(menuItem.getItemId() == R.id.automaticTransactions){
+                    //close the menu
+                    drawerLayout.closeDrawers();
+                    Intent intent = new Intent(MainActivity.this,AutomaticTransactionsActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
                 //on the click of a year
                 else if(String.valueOf(menuItem.getItemId()).length() == 4) {
 
@@ -481,34 +489,26 @@ public class MainActivity extends AppCompatActivity{
     private void checkAutomaticAmounts(){
         int countIncomes = 0;
         int countExpenses = 0;
-        boolean waitForNextMonth = false;
-        for (AutomaticAmount automaticAmount : databaseHandler.getAutomaticAmounts()){
+        for (AutomaticAmount automaticAmount : databaseHandler.getAutomaticTransactions()){
+        int actualDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        if (automaticAmount.getDay() <= actualDay ){
+            if (databaseHandler.findAmoutByAutomaticAmountAndMonth(automaticAmount, databaseHandler.getActualMonth()) == null){
+                Amount amount = new Amount();
+                amount.setId(databaseHandler.getAmountNextKey());
+                amount.setCategory(automaticAmount.getCategory());
+                amount.setDay(automaticAmount.getDay());
+                amount.setMonth(databaseHandler.getActualMonth());
+                amount.setLabel(automaticAmount.getLabel());
+                amount.setAmount(automaticAmount.getAmount());
+                databaseHandler.addAmount(amount);
+                if(amount.getCategory().isIncome()){
+                    countIncomes ++;
+                }else{
+                    countExpenses ++;
+                }
+            }
+        }
 
-            if (automaticAmount.getMonthOfCreation().getId() == databaseHandler.getActualMonth().getId()){
-                if (automaticAmount.isNextMonth()){
-                    waitForNextMonth = true;
-                }
-            }
-            if (!waitForNextMonth){
-                int actualDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-                if (automaticAmount.getDay() <= actualDay ){
-                    if (databaseHandler.findAmoutByAutomaticAmountAndMonth(automaticAmount, databaseHandler.getActualMonth()) == null){
-                        Amount amount = new Amount();
-                        amount.setId(databaseHandler.getAmountNextKey());
-                        amount.setCategory(automaticAmount.getCategory());
-                        amount.setDay(automaticAmount.getDay());
-                        amount.setMonth(databaseHandler.getActualMonth());
-                        amount.setLabel(automaticAmount.getLabel());
-                        amount.setAmount(automaticAmount.getAmount());
-                        databaseHandler.addAmount(amount);
-                        if(amount.getCategory().isIncome()){
-                            countIncomes ++;
-                        }else{
-                            countExpenses ++;
-                        }
-                    }
-                }
-            }
         }
         if (countIncomes >0 || countExpenses >0){
             String message = "";

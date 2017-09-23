@@ -3,7 +3,7 @@ package com.benjamin.ledet.budget.model;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class AutomaticAmount extends RealmObject {
+public class AutomaticTransaction extends RealmObject {
 
     @PrimaryKey
     private long id;

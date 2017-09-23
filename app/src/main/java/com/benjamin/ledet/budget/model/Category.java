@@ -23,7 +23,7 @@ public class Category extends RealmObject {
 
     private RealmList<Amount> amounts;
 
-    private RealmList<AutomaticAmount> automaticAmounts;
+    private RealmList<AutomaticTransaction> automaticTransactions;
 
     @Ignore
     private TextDrawable icon;
@@ -96,12 +96,12 @@ public class Category extends RealmObject {
         this.amounts = amounts;
     }
 
-    public RealmList<AutomaticAmount> getAutomaticAmounts() {
-        return automaticAmounts;
+    public RealmList<AutomaticTransaction> getAutomaticTransactions() {
+        return automaticTransactions;
     }
 
-    public void setAutomaticAmounts(RealmList<AutomaticAmount> automaticAmounts) {
-        this.automaticAmounts = automaticAmounts;
+    public void setAutomaticTransactions(RealmList<AutomaticTransaction> automaticTransactions) {
+        this.automaticTransactions = automaticTransactions;
     }
 
     public TextDrawable getIcon() {

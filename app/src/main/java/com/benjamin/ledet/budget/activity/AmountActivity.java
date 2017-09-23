@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.adapter.CategoriesSpinAdapter;
 import com.benjamin.ledet.budget.model.Amount;
-import com.benjamin.ledet.budget.model.AutomaticAmount;
+import com.benjamin.ledet.budget.model.AutomaticTransaction;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -61,7 +61,7 @@ public class AmountActivity extends AppCompatActivity {
     private boolean automaticTransactionMode = false;
     private DatabaseHandler databaseHandler;
     private Amount amount;
-    private AutomaticAmount automaticAmount;
+    private AutomaticTransaction automaticTransaction;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,13 +107,13 @@ public class AmountActivity extends AppCompatActivity {
                     }
                     if (automaticTransactionMode){
                         if (addMode){
-                            automaticAmount.setCategory(categorySelected);
-                            automaticAmount.setAmount(Double.valueOf(amountEditText.getText().toString()));
-                            automaticAmount.setDay(day);
-                            automaticAmount.setLabel(label);
-                            databaseHandler.addAutomaticAmount(automaticAmount);
+                            automaticTransaction.setCategory(categorySelected);
+                            automaticTransaction.setAmount(Double.valueOf(amountEditText.getText().toString()));
+                            automaticTransaction.setDay(day);
+                            automaticTransaction.setLabel(label);
+                            databaseHandler.addAutomaticAmount(automaticTransaction);
                         } else {
-                            databaseHandler.updateAutomaticAmount(automaticAmount,categorySelected,label,day,Double.valueOf(amountEditText.getText().toString()));
+                            databaseHandler.updateAutomaticAmount(automaticTransaction,categorySelected,label,day,Double.valueOf(amountEditText.getText().toString()));
                         }
                     } else {
                         if (addMode){
@@ -140,15 +140,15 @@ public class AmountActivity extends AppCompatActivity {
                     title.setGravity(Gravity.CENTER);
                     title.setTextSize(22);
                     builder.setCustomTitle(title);
-                    if (automaticAmount.getCategory().isIncome()){
-                        builder.setMessage(getString(R.string.delete_automatic_income_message,automaticAmount.getLabel()));
+                    if (automaticTransaction.getCategory().isIncome()){
+                        builder.setMessage(getString(R.string.delete_automatic_income_message, automaticTransaction.getLabel()));
                     } else {
-                        builder.setMessage(getString(R.string.delete_automatic_expense_message,automaticAmount.getLabel()));
+                        builder.setMessage(getString(R.string.delete_automatic_expense_message, automaticTransaction.getLabel()));
                     }
                     builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            databaseHandler.deleteAutomaticAmount(automaticAmount);
+                            databaseHandler.deleteAutomaticAmount(automaticTransaction);
                             finish();
                         }
                     });
@@ -247,12 +247,12 @@ public class AmountActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("automatic_amount") ){
             addMode = false;
-            automaticAmount = databaseHandler.getAutomaticAmount(getIntent().getExtras().getLong("automatic_amount"));
-            categoriesSpinner.setSelection(categories.indexOf(automaticAmount.getCategory()));
-            amountEditText.setText(String.valueOf(automaticAmount.getAmount()));
-            labelEditText.setText(automaticAmount.getLabel());
-            dayEditText.setText(String.valueOf(automaticAmount.getDay()));
-            toolbar.setTitle(automaticAmount.getLabel());
+            automaticTransaction = databaseHandler.getAutomaticAmount(getIntent().getExtras().getLong("automatic_amount"));
+            categoriesSpinner.setSelection(categories.indexOf(automaticTransaction.getCategory()));
+            amountEditText.setText(String.valueOf(automaticTransaction.getAmount()));
+            labelEditText.setText(automaticTransaction.getLabel());
+            dayEditText.setText(String.valueOf(automaticTransaction.getDay()));
+            toolbar.setTitle(automaticTransaction.getLabel());
         }
 
         if (addMode){
@@ -260,9 +260,9 @@ public class AmountActivity extends AppCompatActivity {
             amount.setId(databaseHandler.getAmountNextKey());
             amount.setMonth(month);
 
-            automaticAmount = new AutomaticAmount();
-            automaticAmount.setId(databaseHandler.getAutomaticTransactionNextKey());
-            automaticAmount.setMonthOfCreation(month);
+            automaticTransaction = new AutomaticTransaction();
+            automaticTransaction.setId(databaseHandler.getAutomaticTransactionNextKey());
+            automaticTransaction.setMonthOfCreation(month);
         }
 
     }

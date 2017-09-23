@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.adapter.AutomaticAmountRecyclerViewAdapter;
-import com.benjamin.ledet.budget.model.AutomaticAmount;
+import com.benjamin.ledet.budget.model.AutomaticTransaction;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -43,7 +43,7 @@ public class AutomaticIncomesFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         final DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
-        final OrderedRealmCollection<AutomaticAmount> automaticIncomes = databaseHandler.getAutomaticsIncomes();
+        final OrderedRealmCollection<AutomaticTransaction> automaticIncomes = databaseHandler.getAutomaticsIncomes();
         final OrderedRealmCollection<Category> categoriesIncome = databaseHandler.getUnarchivedCategoriesIncome();
         final Month month = databaseHandler.getActualMonth();
 
@@ -57,9 +57,9 @@ public class AutomaticIncomesFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                AutomaticAmount automaticAmount = automaticIncomes.get(position);
+                AutomaticTransaction automaticTransaction = automaticIncomes.get(position);
                 Intent intent = new Intent(getActivity(), AmountActivity.class);
-                intent.putExtra("automatic_amount", automaticAmount.getId());
+                intent.putExtra("automatic_amount", automaticTransaction.getId());
                 intent.putExtra("month", month.getMonth());
                 intent.putExtra("year", month.getYear());
                 intent.putExtra("income", true);
@@ -69,7 +69,7 @@ public class AutomaticIncomesFragment extends Fragment {
 
             @Override
             public void onLongItemClick(View view, int position) {
-                final AutomaticAmount automaticAmount = automaticIncomes.get(position);
+                final AutomaticTransaction automaticTransaction = automaticIncomes.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
                 TextView title = new TextView(getContext());
                 title.setText(R.string.delete);
@@ -77,11 +77,11 @@ public class AutomaticIncomesFragment extends Fragment {
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
                 builder.setCustomTitle(title);
-                builder.setMessage(getString(R.string.delete_automatic_income_message,automaticAmount.getLabel()));
+                builder.setMessage(getString(R.string.delete_automatic_income_message, automaticTransaction.getLabel()));
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        databaseHandler.deleteAutomaticAmount(automaticAmount);
+                        databaseHandler.deleteAutomaticAmount(automaticTransaction);
                     }
                 });
                 builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

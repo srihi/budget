@@ -38,7 +38,7 @@ import com.benjamin.ledet.budget.adapter.ViewPagerAdapter;
 import com.benjamin.ledet.budget.fragment.ExpenseFragment;
 import com.benjamin.ledet.budget.fragment.IncomeFragment;
 import com.benjamin.ledet.budget.model.Amount;
-import com.benjamin.ledet.budget.model.AutomaticAmount;
+import com.benjamin.ledet.budget.model.AutomaticTransaction;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -489,17 +489,17 @@ public class MainActivity extends AppCompatActivity{
     private void checkAutomaticAmounts(){
         int countIncomes = 0;
         int countExpenses = 0;
-        for (AutomaticAmount automaticAmount : databaseHandler.getAutomaticTransactions()){
+        for (AutomaticTransaction automaticTransaction : databaseHandler.getAutomaticTransactions()){
         int actualDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        if (automaticAmount.getDay() <= actualDay ){
-            if (databaseHandler.findAmoutByAutomaticAmountAndMonth(automaticAmount, databaseHandler.getActualMonth()) == null){
+        if (automaticTransaction.getDay() <= actualDay ){
+            if (databaseHandler.findAmoutByAutomaticAmountAndMonth(automaticTransaction, databaseHandler.getActualMonth()) == null){
                 Amount amount = new Amount();
                 amount.setId(databaseHandler.getAmountNextKey());
-                amount.setCategory(automaticAmount.getCategory());
-                amount.setDay(automaticAmount.getDay());
+                amount.setCategory(automaticTransaction.getCategory());
+                amount.setDay(automaticTransaction.getDay());
                 amount.setMonth(databaseHandler.getActualMonth());
-                amount.setLabel(automaticAmount.getLabel());
-                amount.setAmount(automaticAmount.getAmount());
+                amount.setLabel(automaticTransaction.getLabel());
+                amount.setAmount(automaticTransaction.getAmount());
                 databaseHandler.addAmount(amount);
                 if(amount.getCategory().isIncome()){
                     countIncomes ++;

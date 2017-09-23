@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.adapter.AutomaticAmountRecyclerViewAdapter;
-import com.benjamin.ledet.budget.model.AutomaticAmount;
+import com.benjamin.ledet.budget.model.AutomaticTransaction;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -43,7 +43,7 @@ public class AutomaticExpensesFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         final DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
-        final OrderedRealmCollection<AutomaticAmount> automaticExpenses = databaseHandler.getAutomaticsExpenses();
+        final OrderedRealmCollection<AutomaticTransaction> automaticExpenses = databaseHandler.getAutomaticsExpenses();
         final OrderedRealmCollection<Category> categoriesExpense = databaseHandler.getUnarchivedCategoriesExpense();
         final Month month = databaseHandler.getActualMonth();
 
@@ -57,9 +57,9 @@ public class AutomaticExpensesFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                AutomaticAmount automaticAmount = automaticExpenses.get(position);
+                AutomaticTransaction automaticTransaction = automaticExpenses.get(position);
                 Intent intent = new Intent(getActivity(), AmountActivity.class);
-                intent.putExtra("automatic_amount", automaticAmount.getId());
+                intent.putExtra("automatic_amount", automaticTransaction.getId());
                 intent.putExtra("month", month.getMonth());
                 intent.putExtra("year", month.getYear());
                 intent.putExtra("automatic",true);
@@ -68,7 +68,7 @@ public class AutomaticExpensesFragment extends Fragment {
 
             @Override
             public void onLongItemClick(View view, int position) {
-                final AutomaticAmount automaticAmount = automaticExpenses.get(position);
+                final AutomaticTransaction automaticTransaction = automaticExpenses.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
                 TextView title = new TextView(getContext());
                 title.setText(R.string.delete);
@@ -76,11 +76,11 @@ public class AutomaticExpensesFragment extends Fragment {
                 title.setGravity(Gravity.CENTER);
                 title.setTextSize(22);
                 builder.setCustomTitle(title);
-                builder.setMessage(getString(R.string.delete_automatic_expense_message,automaticAmount.getLabel()));
+                builder.setMessage(getString(R.string.delete_automatic_expense_message, automaticTransaction.getLabel()));
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        databaseHandler.deleteAutomaticAmount(automaticAmount);
+                        databaseHandler.deleteAutomaticAmount(automaticTransaction);
                     }
                 });
                 builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

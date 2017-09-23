@@ -128,6 +128,8 @@ class Migration implements RealmMigration {
         if (oldVersion == 8){
 
             schema.get("AutomaticAmount").removeField("nextMonth");
+            schema.rename("AutomaticAmount","AutomaticTransaction");
+            schema.get("Category").renameField("automaticAmounts","automaticTransactions");
             oldVersion++;
         }
 

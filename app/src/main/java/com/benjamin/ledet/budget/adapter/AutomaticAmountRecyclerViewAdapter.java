@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.benjamin.ledet.budget.R;
-import com.benjamin.ledet.budget.model.AutomaticAmount;
+import com.benjamin.ledet.budget.model.AutomaticTransaction;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -18,11 +18,11 @@ import butterknife.ButterKnife;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
-public class AutomaticAmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<AutomaticAmount, AutomaticAmountRecyclerViewAdapter.MyViewHolder> {
+public class AutomaticAmountRecyclerViewAdapter extends RealmRecyclerViewAdapter<AutomaticTransaction, AutomaticAmountRecyclerViewAdapter.MyViewHolder> {
 
     private Context context;
 
-    public AutomaticAmountRecyclerViewAdapter(OrderedRealmCollection<AutomaticAmount> data, Context context) {
+    public AutomaticAmountRecyclerViewAdapter(OrderedRealmCollection<AutomaticTransaction> data, Context context) {
         super(data, true);
         setHasStableIds(true);
         this.context = context;
@@ -37,7 +37,7 @@ public class AutomaticAmountRecyclerViewAdapter extends RealmRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final AutomaticAmount obj = getItem(position);
+        final AutomaticTransaction obj = getItem(position);
         //noinspection ConstantConditions
         if(obj.getLabel().equals(obj.getCategory().getLabel())){
             holder.label.setText(obj.getLabel());

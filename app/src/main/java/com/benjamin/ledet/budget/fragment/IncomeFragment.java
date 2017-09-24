@@ -15,7 +15,7 @@ import com.benjamin.ledet.budget.R;
 import com.benjamin.ledet.budget.activity.AmountActivity;
 import com.benjamin.ledet.budget.activity.AmountsActivity;
 import com.benjamin.ledet.budget.activity.MainActivity;
-import com.benjamin.ledet.budget.adapter.CategoryRecyclerViewAdapter;
+import com.benjamin.ledet.budget.adapter.CategoryBudgetRecyclerViewAdapter;
 import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
@@ -134,7 +134,7 @@ public class IncomeFragment extends Fragment {
         ((MainActivity)getActivity()).setupSummary(month);
 
         //setup RecyclerView for categories income
-        CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter(categoriesIncomeWithIncomes, month, getContext());
+        CategoryBudgetRecyclerViewAdapter adapter = new CategoryBudgetRecyclerViewAdapter(categoriesIncomeWithIncomes, month, getContext());
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {

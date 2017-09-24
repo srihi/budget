@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity{
 
     //displays information for the selected month
     public void setupSummary(Month month){
-        double totalExpenses = databaseHandler.getSumExpensesOfMonth(month);
+        double totalExpenses = databaseHandler.getSpendingOfMonth(month);
         double totalIncome = databaseHandler.getSumIncomesOfMonth(month);
         double balance = totalIncome - totalExpenses;
         double percentage = 0;

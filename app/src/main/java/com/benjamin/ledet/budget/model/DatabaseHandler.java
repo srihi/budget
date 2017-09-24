@@ -339,7 +339,7 @@ public class DatabaseHandler {
                 .findAll();
     }
 
-    public double getSumAmountsOfMonthOfCategory(Month month, Category category){
+    public double getSpendingOfMonthOfCategory(Month month, Category category){
         double sum = 0;
         for (Amount amount : getAmountsOfMonthOfCategory(month,category)){
             sum += amount.getAmount();
@@ -347,7 +347,7 @@ public class DatabaseHandler {
         return sum;
     }
 
-    public double getSumExpensesOfMonth(Month month){
+    public double getSpendingOfMonth(Month month){
         double sum = 0;
         RealmResults<Amount> list = realm.where(Amount.class)
                 .equalTo("month.id",month.getId())
@@ -372,7 +372,7 @@ public class DatabaseHandler {
     }
 
     public double getBalanceOfMonth(Month month){
-        return getSumIncomesOfMonth(month) - getSumExpensesOfMonth(month);
+        return getSumIncomesOfMonth(month) - getSpendingOfMonth(month);
     }
 
     public void addAmount(final Amount amount){

@@ -66,6 +66,10 @@
     <string name="activity_main_one_income_added">Un revenu automatique à été ajouté.</string>
     <string name="activity_main_several_incomes_added">Des revenus automatiques ont été ajoutés.</string>
     <string name="activity_main_several_incomes_expenses_added">Des revenus et dépenses automatiques ont été ajoutés.</string>
+    <string name="budget">Budget : </string>
+    <string name="spending">Dépensé : </string>
+    <string name="remaining">Restant : </string>
+
 
     <!-- activity_statistic -->
     <string name="activity_statistic_no_data_available">Pas de données disponibles.</string>
@@ -157,28 +161,8 @@
     <string name="new_automatic_income">Nouveau revenu automatique</string>
     <string name="delete_automatic_expense_message">Voulez-vous vraiment supprimer la dépense automatique \"%1$s\" ?</string>
     <string name="delete_automatic_income_message">Voulez-vous vraiment supprimer le revenu automatique \"%1$s\" ?</string>
-
-
-    <string name="fragment_automatic_expense_add_expense_label">Ajouter une dépense automatique</string>
-    <string name="fragment_automatic_expense_add_expense_message">Voulez-vous que la dépense prenne effet ce mois-ci? Si non, elle sera active dès le mois prochain.</string>
-    <string name="fragment_automatic_expense_add_expense_success">La dépense automatique a bien été ajoutée.</string>
-    <string name="fragment_automatic_expense_delete_expense_label">Supprimer une dépense automatique</string>
-    <string name="fragment_automatic_expense_delete_expense_message">Voulez-vous vraiment supprimer la dépense automatique \"%1$s\" ?</string>
-    <string name="fragment_automatic_expense_delete_expense_success">La dépense automatique a bien été supprimée.</string>
-    <string name="fragment_automatic_expense_update_expense_label">Dépense automatique %1$s</string>
-    <string name="fragment_automatic_expense_update_expense_success">La dépense automatique à bien été modifiée.</string>
-
-    <string name="fragment_automatic_income_add_income_label">Ajouter un revenu automatique</string>
-    <string name="fragment_automatic_income_add_income_message">Voulez-vous que le revenu prenne effet ce mois-ci? Si non, il sera actif dès le mois prochain.</string>
-    <string name="fragment_automatic_income_add_income_success">Le revenu automatique a bien été ajouté.</string>
-    <string name="fragment_automatic_income_delete_income_label">Supprimer un revenu automatique</string>
-    <string name="fragment_automatic_income_delete_income_message">Voulez-vous vraiment supprimer le revenu automatique \"%1$s\" ?</string>
-    <string name="fragment_automatic_income_delete_income_success">Le revenu automatique a bien été supprimé.</string>
-    <string name="fragment_automatic_income_update_income_label">Revenu automatique %1$s</string>
-    <string name="fragment_automatic_income_update_income_success">Le revenu automatique à bien été modifié.</string>
-
-    <string name="fragment_automatic_expense_income_first_day_of_month">le 1er du mois.</string>
-    <string name="fragment_automatic_expense_income_day_of_month">le %1$s du mois.</string>
+    <string name="first_day_of_month">le 1er du mois.</string>
+    <string name="day_of_month">le %1$s du mois.</string>
 
     <!-- Months -->
     <string name="month">Mois</string>

@@ -46,9 +46,9 @@ public class AutomaticAmountRecyclerViewAdapter extends RealmRecyclerViewAdapter
         }
 
         if (obj.getDay() == 1){
-            holder.date.setText(context.getString(R.string.fragment_automatic_expense_income_first_day_of_month));
+            holder.date.setText(context.getString(R.string.first_day_of_month));
         }else{
-            holder.date.setText(context.getString(R.string.fragment_automatic_expense_income_day_of_month, String.valueOf(obj.getDay())));
+            holder.date.setText(context.getString(R.string.day_of_month, String.valueOf(obj.getDay())));
         }
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);

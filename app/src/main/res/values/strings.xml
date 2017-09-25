@@ -20,6 +20,7 @@
     <string name="close">Fermer</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="none">Aucun</string>
     <string name="ok">OK</string>
     <string name="error">Erreur</string>
     <string name="expenses">Dépenses</string>
@@ -70,7 +71,6 @@
     <string name="spending">Dépensé : </string>
     <string name="remaining">Restant : </string>
 
-
     <!-- activity_statistic -->
     <string name="activity_statistic_no_data_available">Pas de données disponibles.</string>
     <string name="activity_statistic_enlarge">Agrandir</string>
@@ -114,27 +114,6 @@
     <string name="summary_percentage_label">Pourcentage du revenu dépensé :</string>
     <string name="summary_balance_label">Solde :</string>
 
-    <!-- categories -->
-    <string name="categories">Catégories</string>
-    <string name="archived_categories">Catégories archivées</string>
-    <string name="new_category">Nouvelle catégorie</string>
-    <string name="enter_label">Entrez un libellé</string>
-    <string name="enter_budget_optionnal">Entrez un budget (optionnel)</string>
-    <string name="you_must_enter_label">Vous devez entrer un libellé.</string>
-    <string name="same_label">Une catégorie avec le même libellé existe déjà.</string>
-    <string name="budget_amount">Budget : %1$s €</string>
-    <string name="no_budget_defined">Pas de budget défini</string>
-    <string name="category_added">La catégorie a bien été ajoutée.</string>
-    <string name="category_updated">La catégorie a bien été modifiée.</string>
-    <string name="category_deleted">La catégorie a bien été supprimée.</string>
-    <string name="category_archived">La catégorie a bien été archivée.</string>
-    <string name="category_unarchived">La catégorie a bien été désarchivée.</string>
-    <string name="delete_category_message">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? \n Toutes les données associées à cette catégorie seront définitivement supprimées.</string>
-    <string name="archive_category_message">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? \n La catégorie sera conservée mais ne sera plus utilisable. Vous pourrez la retrouver dans la section Catégories archivées.</string>
-    <string name="unarchive_category_message">Voulez-vous désarchiver la catégorie \"%1$s\" ? \n Elle sera de nouveau disponible dans la section Catégories.</string>
-    <string name="merge_categories">Fusionner des catégories</string>
-    <string name="category_icon">icone de la catégorie</string>
-
     <!-- amounts -->
     <string name="new_expense">Nouvelle dépense</string>
     <string name="new_income">Nouveau revenu</string>
@@ -164,6 +143,42 @@
     <string name="first_day_of_month">le 1er du mois.</string>
     <string name="day_of_month">le %1$s du mois.</string>
 
+    <!-- categories -->
+    <string name="categories">Catégories</string>
+    <string name="archived_categories">Catégories archivées</string>
+    <string name="new_category">Nouvelle catégorie</string>
+    <string name="enter_label">Entrez un libellé</string>
+    <string name="enter_default_budget_optionnal">Entrez un budget par défaut (optionnel)</string>
+    <string name="you_must_enter_label">Vous devez entrer un libellé.</string>
+    <string name="same_label">Une catégorie avec le même libellé existe déjà.</string>
+    <string name="default_budget_amount">Budget par défaut : %1$s €</string>
+    <string name="no_default_budget_defined">Pas de budget par défaut défini</string>
+    <string name="no_budget_defined">Pas de budget défini</string>
+    <string name="category_added">La catégorie a bien été ajoutée.</string>
+    <string name="category_updated">La catégorie a bien été modifiée.</string>
+    <string name="category_deleted">La catégorie a bien été supprimée.</string>
+    <string name="category_archived">La catégorie a bien été archivée.</string>
+    <string name="category_unarchived">La catégorie a bien été désarchivée.</string>
+    <string name="delete_category_message">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? \n Toutes les données associées à cette catégorie seront définitivement supprimées.</string>
+    <string name="archive_category_message">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? \n La catégorie sera conservée mais ne sera plus utilisable. Vous pourrez la retrouver dans la section Catégories archivées.</string>
+    <string name="unarchive_category_message">Voulez-vous désarchiver la catégorie \"%1$s\" ? \n Elle sera de nouveau disponible dans la section Catégories.</string>
+    <string name="merge_categories">Fusionner des catégories</string>
+    <string name="category_icon">icone de la catégorie</string>
+
+    <string name="category_shopping">Courses</string>
+    <string name="category_various_purchases">Achats divers</string>
+    <string name="category_salary">Salaire</string>
+    <string name="category_apl">Apl</string>
+
+    <!-- categories monthly budget -->
+    <string name="actual_budget">Budget actuel : </string>
+    <string name="enter_new_budget">Entrez un nouveau budget</string>
+    <string name="reset_default_budget">Remettre le budget par défaut</string>
+    <string name="category_monthly_budget_added">Le budget mensuel à bien été modifié.</string>
+    <string name="category_monthly_budget_updated">Le budget mensuel à bien été modifié.</string>
+    <string name="category_monthly_budget_deleted">Le budget par défaut à bien été rétabli.</string>
+    <string name="default_budget_for_next_months">Budget par défaut pour les prochains mois</string>
+
     <!-- Months -->
     <string name="month">Mois</string>
     <string name="january"> Janvier </string>
@@ -178,11 +193,5 @@
     <string name="october"> Octobre </string>
     <string name="november"> Novembre </string>
     <string name="december"> Décembre </string>
-
-    <!-- Categories -->
-    <string name="category_shopping">Courses</string>
-    <string name="category_various_purchases">Achats divers</string>
-    <string name="category_salary">Salaire</string>
-    <string name="category_apl">Apl</string>
 
 </resources>

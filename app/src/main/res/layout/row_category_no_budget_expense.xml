@@ -5,7 +5,7 @@
 
 
     <ImageView
-        android:id="@+id/row_category_no_budget_icon"
+        android:id="@+id/row_category_no_budget_expense_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
@@ -15,7 +15,7 @@
         />
 
     <TextView
-        android:id="@+id/row_category_no_budget_label"
+        android:id="@+id/row_category_no_budget_expense_label"
         android:layout_column="2"
         android:layout_columnSpan="2"
         android:layout_columnWeight="1"
@@ -32,7 +32,7 @@
         android:text="@string/spending" />
 
     <TextView
-        android:id="@+id/row_category_no_budget_spending"
+        android:id="@+id/row_category_no_budget_expense_spending"
         android:layout_columnWeight="1"
         android:layout_columnSpan="1"
         android:layout_column="2"

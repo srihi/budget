@@ -38,10 +38,10 @@ public class CategoryExpenseRecyclerViewAdapter extends RealmRecyclerViewAdapter
         final Category obj = getItem(position);
         //noinspection ConstantConditions
         holder.label.setText(obj.getLabel());
-        if (obj.getBudget() != 0){
-            holder.budget.setText(context.getString(R.string.budget_amount, String.valueOf(obj.getBudget())));
+        if (obj.getDefaultBudget() != 0){
+            holder.budget.setText(context.getString(R.string.default_budget_amount, String.valueOf(obj.getDefaultBudget())));
         } else {
-            holder.budget.setText(context.getString(R.string.no_budget_defined));
+            holder.budget.setText(context.getString(R.string.no_default_budget_defined));
         }
         holder.icon.setImageDrawable(obj.getIcon());
 

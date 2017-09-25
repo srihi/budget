@@ -30,13 +30,13 @@ public class CategoryActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.activity_category_expense_label)
+    @BindView(R.id.activity_category_label)
     EditText labelEditText;
 
-    @BindView(R.id.activity_category_expense_budget)
+    @BindView(R.id.activity_category_budget)
     EditText budgetEditText;
 
-    @BindView(R.id.activity_category_expense_error)
+    @BindView(R.id.activity_category_error)
     TextView errorTextview;
 
     private boolean addMode = true;
@@ -88,7 +88,7 @@ public class CategoryActivity extends AppCompatActivity {
                     if (addMode){
                         category.setLabel(labelEditText.getText().toString());
                         if (expenseMode){
-                            category.setBudget(budget);
+                            category.setDefaultBudget(budget);
                         }
                         databaseHandler.addCategory(category);
                     } else {
@@ -178,8 +178,8 @@ public class CategoryActivity extends AppCompatActivity {
             addMode = false;
             category = databaseHandler.getCategory(getIntent().getExtras().getLong("category"));
             labelEditText.setText(category.getLabel());
-            if (category.getBudget() != 0){
-                budgetEditText.setText(String.valueOf(category.getBudget()));
+            if (category.getDefaultBudget() != 0){
+                budgetEditText.setText(String.valueOf(category.getDefaultBudget()));
             }
             toolbar.setTitle(category.getLabel());
         }

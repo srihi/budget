@@ -264,7 +264,7 @@ public class StatisticActivity extends AppCompatActivity {
                 List<BarEntry> barEntries = new ArrayList<>();
 
                 for (int i = 0; i < months.size(); i++){
-                    barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSpendingOfMonthOfCategory(months.get(i),category)));
+                    barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountOfMonthOfCategory(months.get(i),category)));
                 }
 
                 CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel(),false);
@@ -283,7 +283,7 @@ public class StatisticActivity extends AppCompatActivity {
                 List<Entry> lineEntries = new ArrayList<>();
 
                 for (int i = 0; i < months.size(); i++){
-                    lineEntries.add(new Entry((float)i,(float)databaseHandler.getSpendingOfMonthOfCategory(months.get(i),category)));
+                    lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountOfMonthOfCategory(months.get(i),category)));
                 }
 
                 CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel(),false);
@@ -312,7 +312,7 @@ public class StatisticActivity extends AppCompatActivity {
                 List<BarEntry> barEntries = new ArrayList<>();
 
                 for (int i = 0; i < months.size(); i++){
-                    barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSpendingOfMonthOfCategory(months.get(i),category)));
+                    barEntries.add(new BarEntry((float)i,(float)databaseHandler.getSumAmountOfMonthOfCategory(months.get(i),category)));
                 }
 
                 CustomBarChart customBarChart = new CustomBarChart(StatisticActivity.this, category.getLabel(),false);
@@ -330,7 +330,7 @@ public class StatisticActivity extends AppCompatActivity {
                 List<Entry> lineEntries = new ArrayList<>();
 
                 for (int i = 0; i < months.size(); i++){
-                    lineEntries.add(new Entry((float)i,(float)databaseHandler.getSpendingOfMonthOfCategory(months.get(i),category)));
+                    lineEntries.add(new Entry((float)i,(float)databaseHandler.getSumAmountOfMonthOfCategory(months.get(i),category)));
                 }
 
                 CustomLineChart customLineChart = new CustomLineChart(StatisticActivity.this, category.getLabel(),false);

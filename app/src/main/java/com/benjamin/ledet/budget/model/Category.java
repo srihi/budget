@@ -2,6 +2,7 @@ package com.benjamin.ledet.budget.model;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.benjamin.ledet.budget.BudgetApplication;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -17,7 +18,7 @@ public class Category extends RealmObject {
 
     private boolean isIncome;
 
-    private double budget;
+    private double defaultBudget;
 
     private boolean isArchived;
 
@@ -37,11 +38,11 @@ public class Category extends RealmObject {
         this.isIncome = isIncome;
     }
 
-    public Category(int id, String label, boolean isIncome, double budget) {
+    public Category(int id, String label, boolean isIncome, double defaultBudget) {
         this.id = id;
         this.label = label;
         this.isIncome = isIncome;
-        this.budget = budget;
+        this.defaultBudget = defaultBudget;
     }
 
     public long getId() {
@@ -68,12 +69,23 @@ public class Category extends RealmObject {
         isIncome = income;
     }
 
-    public double getBudget() {
-        return budget;
+    public double getDefaultBudget() {
+        return defaultBudget;
     }
 
-    public void setBudget(double budget) {
-        this.budget = budget;
+    public double getMonthlyBudget(Month month){
+        DatabaseHandler databaseHandler = new DatabaseHandler(BudgetApplication.getContext());
+        return databaseHandler.getCategoryMonthlyBudget(this,month).getMonthlyBudget();
+    }
+
+    public boolean hasMonthlyBudget(Month month){
+        DatabaseHandler databaseHandler = new DatabaseHandler(BudgetApplication.getContext());
+        CategoryMonthlyBudget categoryMonthlyBudget = databaseHandler.getCategoryMonthlyBudget(this,month);
+        return categoryMonthlyBudget != null;
+    }
+
+    public void setDefaultBudget(double defaultBudget) {
+        this.defaultBudget = defaultBudget;
     }
 
     public boolean isArchived() {
@@ -117,7 +129,7 @@ public class Category extends RealmObject {
         return  "id : " + id + " - " +
                 "label : " + label + " - " +
                 "income : " + isIncome + " - " +
-                "budget : " + budget + " - " +
+                "defaultBudget : " + defaultBudget + " - " +
                 "archived : " + isArchived;
     }
 

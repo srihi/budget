@@ -113,11 +113,11 @@ class Migration implements RealmMigration {
         if (oldVersion == 7) {
 
             schema.get("Category")
-                    .addField("budget",double.class)
+                    .addField("defaultBudget",double.class)
                     .transform(new RealmObjectSchema.Function() {
                         @Override
                         public void apply(DynamicRealmObject obj) {
-                            obj.setDouble("budget",0);
+                            obj.setDouble("defaultBudget",0);
                         }
                     });
 
@@ -130,6 +130,18 @@ class Migration implements RealmMigration {
             schema.get("AutomaticAmount").removeField("nextMonth");
             schema.rename("AutomaticAmount","AutomaticTransaction");
             schema.get("Category").renameField("automaticAmounts","automaticTransactions");
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 9){
+
+            schema.create("CategoryMonthlyBudget")
+                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
+                    .addRealmObjectField("category", schema.get("Category"))
+                    .addRealmObjectField("month", schema.get("Month"))
+                    .addField("monthlyBudget", double.class);
+
             oldVersion++;
         }
 

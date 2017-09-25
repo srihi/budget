@@ -27,27 +27,51 @@
         android:padding="20dp"
         android:id="@+id/activity_category_ll">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+           >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/actual_budget"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/activity_category_monthly_budget_actual_budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="300€"
+                android:textSize="24sp" />
+
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/activity_category_label"
+            android:id="@+id/activity_category_monthly_budget_new_budget"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/enter_label" />
-
-        <EditText
-            android:id="@+id/activity_category_budget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="@string/enter_default_budget_optionnal" />
+            android:hint="@string/enter_new_budget" />
 
-        <TextView
-            android:id="@+id/activity_category_error"
+        <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_dark" />
+            android:text="@string/default_budget_for_next_months"
+            android:textSize="18sp"
+            android:id="@+id/activity_category_monthly_budget_switch"/>
+
+        <Button
+            android:id="@+id/activity_category_monthly_budget_reset_default_budget"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reset_default_budget" />
+
     </LinearLayout>
 
 </LinearLayout>

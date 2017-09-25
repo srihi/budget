@@ -58,6 +58,9 @@
         <activity android:name="com.benjamin.ledet.budget.activity.AmountActivity" android:windowSoftInputMode="stateVisible">
         </activity>
 
+        <activity android:name="com.benjamin.ledet.budget.activity.CategoryMonthlyBudgetActivity" android:windowSoftInputMode="stateVisible">
+        </activity>
+
     </application>
 
 </manifest>

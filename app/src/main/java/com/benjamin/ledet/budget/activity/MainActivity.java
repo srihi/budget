@@ -139,6 +139,19 @@ public class MainActivity extends AppCompatActivity{
         checkNewMonth();
         checkAutomaticAmounts();
 
+        /*
+        for (Month month: databaseHandler.getMonths()){
+            for(Category category: databaseHandler.getCategoriesExpenseWithExpensesOfMonth(month)){
+                CategoryMonthlyBudget categoryMonthlyBudget = new CategoryMonthlyBudget();
+                categoryMonthlyBudget.setId(databaseHandler.getCategoryMonthlyBudgetNextKey());
+                categoryMonthlyBudget.setCategory(category);
+                categoryMonthlyBudget.setMonth(month);
+                categoryMonthlyBudget.setMonthlyBudget(category.getDefaultBudget());
+                databaseHandler.addCategoryMonthlyBudget(categoryMonthlyBudget);
+            }
+        }
+        */
+
         final Menu menu = navigationView.getMenu();
         setupNavigationViewMenu(menu);
 

@@ -109,10 +109,9 @@
     <string name="activity_preferences_version_label">Version</string>
 
     <!-- summary-->
-    <string name="summary_total_expense_label">Dépenses mensuelles totales :</string>
-    <string name="summary_total_income_label">Revenu mensuel total :</string>
-    <string name="summary_percentage_label">Pourcentage du revenu dépensé :</string>
-    <string name="summary_balance_label">Solde :</string>
+    <string name="summary_income">Revenu : </string>
+    <string name="summary_expenses">Dépenses : </string>
+    <string name="summary_balance">Solde : </string>
 
     <!-- amounts -->
     <string name="new_expense">Nouvelle dépense</string>

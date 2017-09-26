@@ -1,10 +1,8 @@
 package com.benjamin.ledet.budget.activity;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,17 +16,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,6 +37,7 @@ import com.benjamin.ledet.budget.model.Category;
 import com.benjamin.ledet.budget.model.DatabaseHandler;
 import com.benjamin.ledet.budget.model.Month;
 import com.benjamin.ledet.budget.model.User;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.squareup.picasso.Picasso;
 
 import java.math.RoundingMode;
@@ -73,28 +68,15 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.spinner_months)
     Spinner spinnerMonths;
 
-    @BindView(R.id.summary_tv_total_expenses)
-    TextView tvTotalExpenses;
+    @BindView(R.id.summary_income)
+    TextView summaryIncomeTextview;
 
-    @BindView(R.id.summary_tv_total_income)
-    TextView tvTotalIncome;
+    @BindView(R.id.summary_expenses)
+    TextView summaryExpensesTextview;
 
-    @BindView(R.id.summary_tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.summary_progress)
+    DonutProgress summaryDonutProgress;
 
-    @BindView(R.id.summary_tv_percentage)
-    TextView tvPercentage;
-
-    @BindView(R.id.summary_iv_arrow)
-    ImageView ivArrow;
-
-    @BindView(R.id.summary_ll)
-    RelativeLayout llSummary;
-
-    @BindView(R.id.summary_ll_more)
-    LinearLayout llSummaryMore;
-
-    private ValueAnimator animator;
     private ExpenseFragment expenseFragment;
     private IncomeFragment incomeFragment;
     private Bundle bundle;
@@ -281,111 +263,28 @@ public class MainActivity extends AppCompatActivity{
         if (totalIncome == 0 && totalExpenses != 0){
             percentage = 100;
         }
+        if(percentage > 100){
+            percentage = 100;
+        }
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        tvTotalExpenses.setText(getString(R.string.amount,String.valueOf(df.format(totalExpenses))));
-        tvTotalIncome.setText(getString(R.string.amount,String.valueOf(df.format(totalIncome))));
-        tvPercentage.setText(getString(R.string.percentage,String.valueOf(df.format(percentage))));
-        tvPercentage.setTextColor(tvTotalExpenses.getTextColors());
-        if (percentage >= 100){
-            tvPercentage.setTextColor(Color.RED);
-        }
-        tvBalance.setText(getString(R.string.amount,String.valueOf(df.format(balance))));
-        tvBalance.setTextColor(tvTotalExpenses.getTextColors());
+        summaryIncomeTextview.setText(getString(R.string.amount,String.valueOf(df.format(totalIncome))));
+        summaryExpensesTextview.setText(getString(R.string.amount,String.valueOf(df.format(totalExpenses))));
+        summaryDonutProgress.setProgress((float)percentage);
         if (balance < 0){
-            tvBalance.setTextColor(Color.RED);
+            summaryDonutProgress.setFinishedStrokeColor(ContextCompat.getColor(this,android.R.color.holo_red_dark));
+            summaryDonutProgress.setTextColor(ContextCompat.getColor(this,android.R.color.holo_red_dark));
+            summaryDonutProgress.setText("-" + getString(R.string.amount,String.valueOf(df.format(balance))));
+        } else {
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = this.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+            int color = a.getColor(0, 0);
+            a.recycle();
+            summaryDonutProgress.setFinishedStrokeColor(color);
+            summaryDonutProgress.setTextColor(color);
+            summaryDonutProgress.setText("+" + getString(R.string.amount,String.valueOf(df.format(balance))));
         }
 
-        ivArrow.setColorFilter(Color.WHITE);
-
-        //expand or collapse the entire summary
-        llSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (llSummaryMore.getVisibility()==View.GONE){
-                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_up);
-                    expand();
-                }else{
-                    ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
-                    collapse();
-                }
-            }
-        });
-
-        //collapse the entire summary
-        llSummaryMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ivArrow.setImageResource(R.drawable.ic_arrow_drop_down);
-                collapse();
-            }
-        });
-
-        //animation for the entire summary
-        llSummaryMore.getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        llSummaryMore.getViewTreeObserver().removeOnPreDrawListener(this);
-                        llSummaryMore.setVisibility(View.GONE);
-                        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                        llSummaryMore.measure(widthSpec, heightSpec);
-                        animator = slideAnimator(0, llSummaryMore.getMeasuredHeight());
-                        return true;
-                    }
-                });
-    }
-
-    //expand the entire summary
-    private void expand() {
-        llSummaryMore.setVisibility(View.VISIBLE);
-         animator.start();
-    }
-
-    //collapse the entire summary
-    private void collapse() {
-        int finalHeight = llSummaryMore.getHeight();
-
-        ValueAnimator mAnimator = slideAnimator(finalHeight, 0);
-
-        mAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                llSummaryMore.setVisibility(View.GONE);
-            }
-            @Override
-            public void onAnimationStart(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-            }
-        });
-        mAnimator.start();
-    }
-
-    //animation for the entire summary
-    private ValueAnimator slideAnimator(int start, int end) {
-
-        ValueAnimator animator = ValueAnimator.ofInt(start, end);
-
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                //Update Height
-                int value = (Integer) valueAnimator.getAnimatedValue();
-
-                ViewGroup.LayoutParams layoutParams = llSummaryMore.getLayoutParams();
-                layoutParams.height = value;
-                llSummaryMore.setLayoutParams(layoutParams);
-            }
-        });
-        return animator;
     }
 
     public void setupSpinnerMonths(){

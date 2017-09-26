@@ -1,77 +1,79 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:id="@+id/summary_ll"
-     android:background="@color/PrimaryColor"
-     android:clickable="true"
-     android:paddingStart="20dp"
-     android:paddingEnd="20dp">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="10dp">
 
-     <TextView
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/summary_balance_label"
-         android:textColor="@android:color/background_light"
-         android:id="@+id/summary_tv_balance_label"/>
-
-     <TextView
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:id="@+id/summary_tv_balance"
-         android:layout_below="@id/summary_tv_balance_label" />
-
-     <ImageView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:id="@+id/summary_iv_arrow"
-         app:srcCompat="@drawable/ic_arrow_drop_down"
-         android:contentDescription="@string/arrow_drop_down"
-         android:layout_alignParentEnd="true" />
-
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/summary_ll_more"
-        android:background="@color/PrimaryColor"
-        android:clickable="true"
-        android:layout_below="@id/summary_tv_balance"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:id="@+id/summary_progress"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            custom:donut_progress="30"
+            android:layout_rowSpan="4"
+            custom:donut_finished_color="?attr/colorAccent"
+            custom:donut_unfinished_stroke_width="5dp"
+            custom:donut_finished_stroke_width="5dp"
+            custom:donut_text_size="14sp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/summary_total_expense_label"
-            android:textColor="@android:color/background_light" />
+            android:text="@string/summary_income"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:layout_row="1"
+            android:layout_rowWeight="2"
+            android:layout_rowSpan="2"
+            android:layout_column="1" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/summary_tv_total_expenses" />
+            android:id="@+id/summary_income"
+            android:text="1000€ "
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="bottom"
+            android:textColor="?attr/colorAccent"
+            android:textSize="24sp"
+            android:layout_row="1"
+            android:layout_rowWeight="2"
+            android:layout_rowSpan="2"
+            android:layout_column="2" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/summary_total_income_label"
-            android:textColor="@android:color/background_light" />
+            android:text="@string/summary_expenses"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:layout_row="3"
+            android:layout_rowWeight="2"
+            android:layout_rowSpan="2"
+            android:layout_column="1" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/summary_tv_total_income" />
+            android:id="@+id/summary_expenses"
+            android:text="700€ "
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="24sp"
+            android:layout_row="3"
+            android:layout_rowWeight="2"
+            android:layout_rowSpan="2"
+            android:layout_column="2" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/summary_percentage_label"
-            android:textColor="@android:color/background_light" />
+    </GridLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/summary_tv_percentage" />
-
-    </LinearLayout>
-
- </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -48,7 +48,7 @@
                     app:tabGravity="fill"
                     android:background="@color/PrimaryColor"/>
 
-                <include layout="@layout/summary" />
+                <include layout="@layout/summary"/>
 
             </android.support.design.widget.AppBarLayout>
 

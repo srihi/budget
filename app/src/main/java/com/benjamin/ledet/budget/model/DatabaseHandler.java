@@ -140,16 +140,16 @@ public class DatabaseHandler {
                 } else {
                     Toast.makeText(mContext,mContext.getString(R.string.expense_added), Toast.LENGTH_SHORT).show();
                 }
-                if(!amount.getCategory().hasMonthlyBudget(amount.getMonth())){
-                    CategoryMonthlyBudget categoryMonthlyBudget = new CategoryMonthlyBudget();
-                    categoryMonthlyBudget.setId(getCategoryMonthlyBudgetNextKey());
-                    categoryMonthlyBudget.setCategory(amount.getCategory());
-                    categoryMonthlyBudget.setMonth(amount.getMonth());
-                    categoryMonthlyBudget.setMonthlyBudget(amount.getCategory().getDefaultBudget());
-                    addCategoryMonthlyBudget(categoryMonthlyBudget);
-                }
             }
         });
+        if(!amount.getCategory().hasMonthlyBudget(amount.getMonth())){
+            CategoryMonthlyBudget categoryMonthlyBudget = new CategoryMonthlyBudget();
+            categoryMonthlyBudget.setId(getCategoryMonthlyBudgetNextKey());
+            categoryMonthlyBudget.setCategory(amount.getCategory());
+            categoryMonthlyBudget.setMonth(amount.getMonth());
+            categoryMonthlyBudget.setMonthlyBudget(amount.getCategory().getDefaultBudget());
+            addCategoryMonthlyBudget(categoryMonthlyBudget);
+        }
     }
 
     public void updateAmount(final Amount amount, final String label, final int day, final double sum){
@@ -166,6 +166,16 @@ public class DatabaseHandler {
                 } else {
                     Toast.makeText(mContext,mContext.getString(R.string.expense_updated), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    public void updateAmount(final Amount amount, final Category category){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                amount.setCategory(category);
+                realm.insertOrUpdate(amount);
             }
         });
     }
@@ -265,6 +275,16 @@ public class DatabaseHandler {
                 automaticTransaction.setAmount(sum);
                 realm.insertOrUpdate(automaticTransaction);
                 Log.d("update auto amount ", automaticTransaction.toString());
+            }
+        });
+    }
+
+    public void updateAutomaticAmount(final AutomaticTransaction automaticTransaction, final Category category){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                automaticTransaction.setCategory(category);
+                realm.insertOrUpdate(automaticTransaction);
             }
         });
     }
@@ -374,10 +394,28 @@ public class DatabaseHandler {
                 .findFirst();
     }
 
+    public Category findCategoryExpenseByLabel(String label, long id1, long id2){
+        return realm.where(Category.class)
+                .equalTo("label", label, Case.INSENSITIVE)
+                .notEqualTo("id",id1)
+                .notEqualTo("id",id2)
+                .equalTo("isIncome",false)
+                .findFirst();
+    }
+
     public Category findCategoryIncomeByLabel(String label, long id){
         return realm.where(Category.class)
                 .equalTo("label", label, Case.INSENSITIVE)
                 .notEqualTo("id",id)
+                .equalTo("isIncome",true)
+                .findFirst();
+    }
+
+    public Category findCategoryIncomeByLabel(String label, long id1, long id2){
+        return realm.where(Category.class)
+                .equalTo("label", label, Case.INSENSITIVE)
+                .notEqualTo("id",id1)
+                .notEqualTo("id",id2)
                 .equalTo("isIncome",true)
                 .findFirst();
     }
@@ -468,6 +506,24 @@ public class DatabaseHandler {
             }
         });
     }
+
+    public void mergeCategories(final Category category1, final Category category2, final Category newCategory){
+        for (Amount amount : category1.getAmounts()){
+            updateAmount(amount,newCategory);
+        }
+        for (Amount amount : category2.getAmounts()){
+            updateAmount(amount,newCategory);
+        }
+        for (AutomaticTransaction automaticTransaction : category1.getAutomaticTransactions()){
+            updateAutomaticAmount(automaticTransaction,newCategory);
+        }
+        for (AutomaticTransaction automaticTransaction : category2.getAutomaticTransactions()){
+            updateAutomaticAmount(automaticTransaction,newCategory);
+        }
+        deleteCategory(category1);
+        deleteCategory(category2);
+    }
+
     //endregion
 
     //region CategoryMonthlyBudget

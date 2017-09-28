@@ -161,8 +161,15 @@
     <string name="delete_category_message">Voulez-vous vraiment supprimer la catégorie \"%1$s\" ? \n Toutes les données associées à cette catégorie seront définitivement supprimées.</string>
     <string name="archive_category_message">Voulez-vous vraiment archiver la catégorie \"%1$s\" ? \n La catégorie sera conservée mais ne sera plus utilisable. Vous pourrez la retrouver dans la section Catégories archivées.</string>
     <string name="unarchive_category_message">Voulez-vous désarchiver la catégorie \"%1$s\" ? \n Elle sera de nouveau disponible dans la section Catégories.</string>
-    <string name="merge_categories">Fusionner des catégories</string>
     <string name="category_icon">icone de la catégorie</string>
+    <string name="merge_categories">Fusionner des catégories</string>
+    <string name="select_first_category">Sélectionner la première catégorie : </string>
+    <string name="select_second_category">Sélectionner la deuxième catégorie : </string>
+    <string name="new_category_label">Libellé de la nouvelle catégorie</string>
+    <string name="new_category_budget">Budget de la nouvelle catégorie (optionnel)</string>
+    <string name="merge">Fusionner</string>
+    <string name="merge_description">Tous les enregistrements des deux catégories seront regroupés sous la nouvelle catégorie, ils garderont leur libellé.</string>
+    <string name="you_must_choose_different_categories">Vous devez choisir deux catégories différentes.</string>
 
     <string name="category_shopping">Courses</string>
     <string name="category_various_purchases">Achats divers</string>

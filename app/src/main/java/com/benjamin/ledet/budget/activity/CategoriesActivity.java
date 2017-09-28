@@ -1,5 +1,6 @@
 package com.benjamin.ledet.budget.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -33,6 +34,10 @@ public class CategoriesActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_merge:
+                Intent intent = new Intent(CategoriesActivity.this,MergeCategoriesActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
